@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-author-info',
@@ -8,5 +9,8 @@ import { Component } from '@angular/core';
   standalone: true
 })
 export class AuthorInfo {
-
+  constructor(private router: Router) { }
+goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
 }
