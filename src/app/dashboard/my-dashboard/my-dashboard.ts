@@ -13,16 +13,22 @@ export class MyDashboard {
   n: number = 0;
   fibonacci: number[] = [];
 
-  calculateFibonacci() {
-    this.fibonacci = [];
-    if (this.n <= 0) return;
+  updateFibonacci() {
+    this.fibonacci = this.calculateFibonacci(this.n);
+  }
+
+  calculateFibonacci(n: number) {
+    const fibonacci: number[] = [];
+    if (n <= 0) return fibonacci;
 
     let a = 0, b = 1;
-    for (let i = 0; i < this.n; i++) {
-      this.fibonacci.push(a);
+    for (let i = 0; i < n; i++) {
+      fibonacci.push(a);
       const next = a + b;
       a = b;
       b = next;
     }
+
+    return fibonacci
   }
 }

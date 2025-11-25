@@ -1,7 +1,7 @@
 <div class="fibonacci-container">
   <h2>Fibonacci-Rechner Test</h2>
 
-  <input type="number" [(ngModel)]="n" placeholder="Gib n ein" (ngModelChange)="calculateFibonacci()" />
+  <input type="number" [(ngModel)]="n" placeholder="Gib n ein" (ngModelChange)="updateFibonacci()" />
 
   @if (fibonacci.length > 0) {
     <p>Erste {{ n }} Fibonacci-Zahlen: {{ fibonacci.join(', ') }}</p>
