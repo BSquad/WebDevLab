@@ -3,10 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class Utility {
-  
-    constructor() {}
-
+export class Math {
   calculateFibonacci(n: number): number[] {
     const fibonacci: number[] = [];
     if (n <= 0) return fibonacci;
