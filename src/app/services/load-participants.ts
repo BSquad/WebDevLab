@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Participiant, Student, Professor } from '../models/entities';
+import { Participant, Student, Professor } from '../models/entities';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LoadParticipiants {
-  getTeilnehmer(): Participiant[] {
+export class LoadParticipants {
+  getTeilnehmer(): Participant[] {
     return [
       { type: 'student', name: 'Max Mustermann', noten: [1, 2, 1] } as Student,
       { type: 'professor', name: 'Dr. Müller', titel: 'Professor' } as Professor,

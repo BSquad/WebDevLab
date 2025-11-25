@@ -10,4 +10,4 @@ export interface Professor {
   titel: string;
 }
 
-export type Participiant = Student | Professor;
+export type Participant = Student | Professor;

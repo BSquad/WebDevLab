@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoadParticipiants } from './load-participiants';
+import { LoadParticipants } from './load-participiants';
 
-describe('LoadParticipiants', () => {
-  let service: LoadParticipiants;
+describe('LoadParticipants', () => {
+  let service: LoadParticipants;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(LoadParticipiants);
+    service = TestBed.inject(LoadParticipants);
   });
 
   it('should be created', () => {

@@ -1,0 +1,22 @@
+<h2>Teilnehmerliste</h2>
+
+@for (participant of participants; track participant) {
+<div class="teilnehmer-item">
+
+  @if (participant.type === 'student') {
+    <strong>{{ participant.name }}</strong> (Student)
+    <br />
+    Noten: {{ getNoten(participant) }}
+  }
+  @else if (participant.type === 'professor') {
+    <strong>{{ participant.name }}</strong> (Professor)
+    <br />
+    Titel: {{ getTitel(participant) }}
+  }
+  @else {
+    Unbekannter Teilnehmer
+  }
+</div>
+}
+
+<button (click)="goToDashboard()">Dashboard</button>

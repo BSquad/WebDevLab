@@ -19,7 +19,7 @@ export class MyDashboard {
     this.router.navigate(['/fibonacci']);
   }
 
-  goToParticipiantList() {
-    this.router.navigate(['/participiant-list']);
+  goToParticipantList() {
+    this.router.navigate(['/participant-list']);
   }
 }
