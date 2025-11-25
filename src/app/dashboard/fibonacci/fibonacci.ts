@@ -5,14 +5,14 @@ import { Router } from '@angular/router';
 import { Utility } from '../../utility';
 
 @Component({
-  selector: 'app-finbonacci',
+  selector: 'app-fibonacci',
   imports: [FormsModule, CommonModule],
   providers: [Utility],
-  templateUrl: './finbonacci.html',
-  styleUrl: './finbonacci.scss',
+  templateUrl: './fibonacci.html',
+  styleUrl: './fibonacci.scss',
   standalone: true,
 })
-export class Finbonacci {
+export class Fibonacci {
  n: number = 0;
   fibonacci: number[] = [];
 

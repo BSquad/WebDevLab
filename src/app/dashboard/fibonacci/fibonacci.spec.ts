@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Finbonacci } from './finbonacci';
+import { Fibonacci } from './fibonacci';
 
-describe('Finbonacci', () => {
-  let component: Finbonacci;
-  let fixture: ComponentFixture<Finbonacci>;
+describe('Fibonacci', () => {
+  let component: Fibonacci;
+  let fixture: ComponentFixture<Fibonacci>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Finbonacci]
+      imports: [Fibonacci]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Finbonacci);
+    fixture = TestBed.createComponent(Fibonacci);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
