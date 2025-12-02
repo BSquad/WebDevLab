@@ -1,16 +1,16 @@
+/// <reference types="jasmine" />
+ 
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { vi } from 'vitest';
-
 import { Fibonacci } from './fibonacci';
 import { Math } from '../../services/math';
 
 class MockMath {
-  calculateFibonacci = vi.fn().mockReturnValue([0, 1, 1, 2, 3]);
+  calculateFibonacci = jasmine.createSpy('calculateFibonacci').and.returnValue([0, 1, 1, 2, 3]);
 }
 
 class MockRouter {
-  navigate = vi.fn();
+  navigate = jasmine.createSpy('navigate');
 }
 
 describe('Fibonacci Component', () => {
@@ -72,7 +72,6 @@ describe('Fibonacci Component', () => {
   it('should update fibonacci when input changes', () => {
     component.n = 5;
 
-    // simulate update
     component.updateFibonacci();
     fixture.detectChanges();
 

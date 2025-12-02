@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:ci": "ng test --watch=false --coverage",
     "serve:ssr:WebDevLab": "node dist/WebDevLab/server/server.mjs"
   },
   "prettier": {
@@ -41,10 +42,19 @@
     "@angular/cli": "^21.0.0",
     "@angular/compiler-cli": "^21.0.0",
     "@types/express": "^5.0.1",
+    "@types/karma-chrome-launcher": "^3.1.4",
+    "@types/karma-coverage": "^2.0.3",
+    "@types/karma-jasmine": "^4.0.5",
+    "@types/karma-jasmine-html-reporter": "^1.7.3",
     "@types/node": "^20.17.19",
     "@vitest/coverage-v8": "^4.0.14",
+    "jasmine-core": "^5.13.0",
     "jsdom": "^27.1.0",
-    "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.1",
+    "karma-jasmine": "^5.1.0",
+    "karma-jasmine-html-reporter": "^2.1.0",
+    "typescript": "~5.9.2"
   }
 }

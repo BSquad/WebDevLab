@@ -1,50 +1,52 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { provideRouter } from '@angular/router';
-import { vi } from 'vitest';
 import { MyDashboard } from './my-dashboard';
+
+class MockRouter {
+  navigate = jasmine.createSpy('navigate');
+}
 
 describe('MyDashboard', () => {
   let component: MyDashboard;
   let fixture: ComponentFixture<MyDashboard>;
-  let router: Router;
+  let router: MockRouter;
 
   beforeEach(async () => {
+    router = new MockRouter();
+
     await TestBed.configureTestingModule({
       imports: [MyDashboard],
       providers: [
-        provideRouter([])
+        { provide: Router, useValue: router },
+        provideRouter([]) // falls notwendig, sonst entfernen
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MyDashboard);
     component = fixture.componentInstance;
-    await fixture.whenStable();
-    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
   it('should navigate to /fibonacci when goToFibonacci is called', () => {
-    const spy = vi.spyOn(router, 'navigate');
     component.goToFibonacci();
-    expect(spy).toHaveBeenCalledWith(['/fibonacci']);
+    expect(router.navigate).toHaveBeenCalledWith(['/fibonacci']);
   });
 
   it('should navigate to /author-info when goToAuthorInfo is called', () => {
-    const spy = vi.spyOn(router, 'navigate');
     component.goToAuthorInfo();
-    expect(spy).toHaveBeenCalledWith(['/author-info']);
+    expect(router.navigate).toHaveBeenCalledWith(['/author-info']);
   });
 
   it('should navigate to /participant-list when goToParticipantList is called', () => {
-    const spy = vi.spyOn(router, 'navigate');
     component.goToParticipantList();
-    expect(spy).toHaveBeenCalledWith(['/participant-list']);
+    expect(router.navigate).toHaveBeenCalledWith(['/participant-list']);
   });
 
   it('should render the correct amount of dashboard tiles', () => {
