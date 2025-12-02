@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoadParticipants } from './load-participiants';
+import { LoadParticipants } from './load-participants';
 
 describe('LoadParticipants', () => {
   let service: LoadParticipants;
