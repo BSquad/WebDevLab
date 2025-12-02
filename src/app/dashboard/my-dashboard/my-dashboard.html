@@ -1,5 +1,17 @@
+<h1 class="dashboard-title">Dashboard</h1>
+
 <div class="dashboard-container">
-  <button (click)="goToFibonacci()">Zum Fibonacci Rechner</button>
-  <button (click)="goToAuthorInfo()">Zu Author Info</button>
-  <button (click)="goToParticipantList()">Teilnehmer</button>
+
+  <div class="dashboard-tile" (click)="goToFibonacci()">
+    <h2>Fibonacci Rechner</h2>
+  </div>
+
+  <div class="dashboard-tile" (click)="goToAuthorInfo()">
+    <h2>Author Info</h2>
+  </div>
+
+  <div class="dashboard-tile" (click)="goToParticipantList()">
+    <h2>Teilnehmerliste</h2>
+  </div>
+
 </div>
