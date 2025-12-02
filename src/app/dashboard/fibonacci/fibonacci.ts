@@ -7,7 +7,6 @@ import { Math } from '../../services/math';
 @Component({
   selector: 'app-fibonacci',
   imports: [FormsModule, CommonModule],
-  providers: [Math],
   templateUrl: './fibonacci.html',
   styleUrl: './fibonacci.scss',
   standalone: true,
