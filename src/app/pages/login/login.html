@@ -1,0 +1,22 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" [(ngModel)]="username" required />
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" [(ngModel)]="password" required />
+    </div>
+
+    <button type="submit">Login</button>
+  </form>
+
+  @if (submitted) {
+    <p>Login erfolgreich für {{ username }}</p>
+  } @else {
+    <p>Bitte Benutzername und Passwort eingeben</p>
+  }
+</div>
