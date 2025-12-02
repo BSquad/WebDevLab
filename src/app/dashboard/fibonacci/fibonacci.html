@@ -1,11 +1,12 @@
+<div class="fibonacci-container">
   <h2>Fibonacci-Rechner Test</h2>
-
   <input type="number" [(ngModel)]="n" placeholder="Gib n ein" (ngModelChange)="updateFibonacci()" />
 
   @if (fibonacci.length > 0) {
-    <p>Erste {{ n }} Fibonacci-Zahlen: {{ fibonacci.join(', ') }}</p>
+  <p>Erste {{ n }} Fibonacci-Zahlen: {{ fibonacci.join(', ') }}</p>
   } @else {
-    <p>Keine Daten vorhanden</p>
+  <p>Keine Daten vorhanden</p>
   }
 
   <button (click)="goToDashboard()">Dashboard</button>
+</div>
