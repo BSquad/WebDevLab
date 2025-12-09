@@ -2,6 +2,7 @@ export interface Student {
   type: 'student';
   name: string;
   noten: number[];
+  semester: number;
 }
 
 export interface Professor {
