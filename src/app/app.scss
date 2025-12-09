@@ -1,47 +1,12 @@
-/* Farben */
-$color-primary: #3f51b5;
-$color-primary-dark: #2c3a8c;
-$color-accent: #2196f3;
-$color-accent-dark: #1976d2;
+.page-title {
+  text-align: center;
+  margin: 16px 0;
 
-$color-bg-light: #e0f7fa;
-$color-bg-light2: #80deea;
-
-$color-success: #00796b;
-$color-success-dark: #004d40;
-
-$color-text-dark: #333;
-$color-white: #fff;
-
-$color-placeholder: rgba(255,255,255,0.7);
-$color-input-background: rgba(255,255,255,0.15);
-
-/* Layout & Sizes */
-$radius-small: 4px;
-$radius-medium: 8px;
-$radius-large: 16px;
-
-$shadow-light: 0 4px 10px rgba(0, 0, 0, 0.1);
-$shadow-medium: 
-  0 6px 10px rgba(0,0,0,0.2),
-  0 2px 4px rgba(0,0,0,0.15);
-
-$shadow-strong:
-  0 12px 18px rgba(0,0,0,0.28),
-  0 4px 8px rgba(0,0,0,0.18);
-
-/* Gradients */
-$gradient-dashboard: linear-gradient(145deg, $color-primary, #673ab7, $color-accent);
-$gradient-login: linear-gradient(135deg, $color-bg-light, $color-bg-light2);
-
-.success {
-  color: #c8ffcb;
-  font-weight: 600;
-}
-
-.error {
-  color: #ffb3b3;
-  font-weight: 600;
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $color-primary;
+  }
 }
 
 .dashboard-button {
@@ -71,38 +36,4 @@ $gradient-login: linear-gradient(135deg, $color-bg-light, $color-bg-light2);
     transform: translateX(-50%) translateY(0);
     box-shadow: none;
   }
-}
-
-.page-title {
-  text-align: center;
-  margin: 16px 0;
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: $color-primary;
-  }
-}
-
-/* Button Mixin */
-@mixin button-basic($bg, $bg-hover) {
-  padding: 0.5rem;
-  border: none;
-  border-radius: $radius-small;
-  color: $color-white;
-  background-color: $bg;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $bg-hover;
-  }
-}
-
-/* Global Font & Body Styles */
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  margin: 0;
-  padding: 0;
-  color: $color-text-dark;
 }

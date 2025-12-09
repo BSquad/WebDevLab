@@ -1,19 +1,19 @@
 @use "sass:color";
-@use '../../app.scss' as app;
+
 
 .login-container {
   max-width: 400px;
   margin: 2rem auto;
   padding: 1.5rem;
 
-  border-radius: app.$radius-medium;
+  border-radius: $radius-medium;
   background: linear-gradient(
     150deg,
-    color.scale(app.$color-primary, $lightness: 15%),
-    app.$color-accent
+    color.scale($color-primary, $lightness: 15%),
+    $color-accent
   );
-  box-shadow: app.$shadow-medium;
-  color: app.$color-white;
+  box-shadow: $shadow-medium;
+  color: $color-white;
 
   form {
     display: flex;
@@ -25,26 +25,26 @@
       label {
         display: block;
         margin-bottom: 0.25rem;
-        color: app.$color-white;
+        color: $color-white;
         font-weight: 500;
       }
 
       input {
         width: 100%;
         padding: 0.6rem;
-        border-radius: app.$radius-small;
+        border-radius: $radius-small;
         border: none;
-        background: app.$color-input-background;
-        color: app.$color-white;
+        background: $color-input-background;
+        color: $color-white;
 
         &::placeholder {
-          color: app.$color-placeholder;
+          color: $color-placeholder;
         }
       }
     }
 
     button {
-      @include app.button-basic(app.$color-primary, app.$color-primary-dark);
+      @include button-basic($color-primary, $color-primary-dark);
       margin-top: 0.5rem;
       font-weight: 600;
     }
@@ -53,7 +53,7 @@
   p {
     margin-top: 1rem;
     text-align: center;
-    color: app.$color-white;
+    color: $color-white;
     font-weight: 600;
   }
 }
