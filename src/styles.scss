@@ -25,9 +25,7 @@ $shadow-strong:
   0 12px 18px rgba(0,0,0,0.28),
   0 4px 8px rgba(0,0,0,0.18);
 
-/* Gradients */
-$gradient-dashboard: linear-gradient(145deg, $color-primary, #673ab7, $color-accent);
-$gradient-login: linear-gradient(135deg, $color-bg-light, $color-bg-light2);
+$gradient: linear-gradient(145deg, $color-primary, #673ab7, $color-accent);
 
 .success {
   color: #c8ffcb;
@@ -37,4 +35,138 @@ $gradient-login: linear-gradient(135deg, $color-bg-light, $color-bg-light2);
 .error {
   color: #ffb3b3;
   font-weight: 600;
+}
+
+/* Login */
+.login-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: $radius-medium;
+  background: $gradient;
+  box-shadow: $shadow-medium;
+  color: $color-white;
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    div {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: $color-white;
+        font-weight: 500;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.6rem;
+        border-radius: $radius-small;
+        border: none;
+        background: $color-white;
+        color: $color-primary;
+
+        &::placeholder {
+          color: $color-placeholder;
+        }
+      }
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: $radius-small;
+      background-color: $color-primary;
+      color: white;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $color-primary-dark;
+      }
+    }
+  }
+
+  p {
+    margin-top: 1rem;
+    text-align: center;
+    color: $color-white;
+    font-weight: 600;
+  }
+}
+
+/* Dashboard */
+.dashboard-tile {
+  background: $gradient;
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  color: $color-white;
+  padding: 2rem;
+  border-radius: $radius-large;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: $shadow-medium;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $shadow-strong;
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* App / Page Title */
+.page-title {
+  text-align: center;
+  margin: 16px 0;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $color-primary;
+  }
+}
+
+/* Floating Dashboard Button */
+.dashboard-button {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #5d92ff, #a455ff);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    transform: translateX(-50%) translateY(0);
+    box-shadow: none;
+  }
 }
