@@ -1,9 +1,11 @@
+@import '../../app.scss';
+
 .dashboard-title {
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #3f51b5;
+  color: $color-primary;
 }
 
 .dashboard-container {
@@ -14,19 +16,17 @@
 }
 
 .dashboard-tile {
-  background: linear-gradient(145deg, #3f51b5, #673ab7, #2196f3);
+  background: $gradient-dashboard;
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
 
-  color: white;
+  color: $color-white;
   padding: 2rem;
-  border-radius: 16px;
+  border-radius: $radius-large;
   text-align: center;
   cursor: pointer;
 
-  box-shadow:
-    0 6px 10px rgba(0, 0, 0, 0.2),
-    0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: $shadow-medium;
 
   transition:
     transform 0.2s ease,
@@ -40,9 +40,7 @@
 
   &:hover {
     transform: translateY(-6px);
-    box-shadow:
-      0 12px 18px rgba(0, 0, 0, 0.28),
-      0 4px 8px rgba(0, 0, 0, 0.18);
+    box-shadow: $shadow-strong;
   }
 
   &:active {
