@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginService } from '../../services/login-service';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,10 @@ import { LoginService } from '../../services/login-service';
   standalone: true,
 })
 export class Login {
-  constructor(private router: Router, private loginService: LoginService) { }
+  constructor(
+    private router: Router, 
+    private loginService: LoginService, 
+    private toast: ToastService) { }
 
   username: string = '';
   password: string = '';
@@ -28,8 +32,10 @@ export class Login {
 
       if (this.loginSuccess) {
         this.router.navigate(['/dashboard']);
+        this.toast.show('Login successful!', 'success');
       } else {
         this.loginError = true;
+        this.toast.show('Incorrect username or password.', 'error');
       }
     }
   }

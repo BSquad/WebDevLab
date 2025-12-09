@@ -15,17 +15,5 @@
     <button type="submit">
       Login
     </button>
-  </form>
-
-  @if (submitted && loginSuccess) {
-  <p class="success">Login successful. Welcome {{ username }}!</p>
-  }
-
-  @if (submitted && loginError) {
-  <p class="error">Incorrect username or password.</p>
-  }
-
-  @if (!submitted) {
-  <p>Please enter username and password.</p>
-  }
+  </form> 
 </div>
