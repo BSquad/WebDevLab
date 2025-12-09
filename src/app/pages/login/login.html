@@ -1,5 +1,6 @@
 <div class="login-container">
   <h2>Login</h2>
+
   <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <div>
       <label for="username">Username:</label>
@@ -11,12 +12,20 @@
       <input type="password" id="password" name="password" [(ngModel)]="password" required />
     </div>
 
-    <button type="submit">Login</button>
+    <button type="submit">
+      Login
+    </button>
   </form>
 
-  @if (submitted) {
-    <p>Login succesful for {{ username }}</p>
-  } @else {
-    <p>Please enter username and password</p>
+  @if (submitted && loginSuccess) {
+  <p class="success">Login successful. Welcome {{ username }}!</p>
+  }
+
+  @if (submitted && loginError) {
+  <p class="error">Incorrect username or password.</p>
+  }
+
+  @if (!submitted) {
+  <p>Please enter username and password.</p>
   }
 </div>

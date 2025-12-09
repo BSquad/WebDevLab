@@ -34,6 +34,16 @@ $shadow-strong:
 $gradient-dashboard: linear-gradient(145deg, $color-primary, #673ab7, $color-accent);
 $gradient-login: linear-gradient(135deg, $color-bg-light, $color-bg-light2);
 
+.success {
+  color: #c8ffcb;
+  font-weight: 600;
+}
+
+.error {
+  color: #ffb3b3;
+  font-weight: 600;
+}
+
 /* Button Mixin */
 @mixin button-basic($bg, $bg-hover) {
   padding: 0.5rem;
