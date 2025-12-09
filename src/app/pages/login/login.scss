@@ -1,22 +1,26 @@
-@import '../../app.scss';
+@use "sass:color";
+@use '../../app.scss';
 
 .login-container {
   max-width: 400px;
   margin: 2rem auto;
   padding: 1.5rem;
 
-  /* Farben und Stil ans Dashboard angepasst */
-  border-radius: $radius-medium;
-  background: linear-gradient(150deg, color.scale($color-primary, $lightness: 15%), $color-accent);
-  box-shadow: $shadow-medium;
-  color: $color-white;
+  border-radius: app.$radius-medium;
+  background: linear-gradient(
+    150deg,
+    color.scale(app.$color-primary, $lightness: 15%),
+    app.$color-accent
+  );
+  box-shadow: app.$shadow-medium;
+  color: app.$color-white;
 
   h2 {
     text-align: center;
     margin-bottom: 1.2rem;
     font-size: 1.8rem;
     font-weight: 600;
-    color: $color-white;
+    color: app.$color-white;
   }
 
   form {
@@ -29,26 +33,26 @@
       label {
         display: block;
         margin-bottom: 0.25rem;
-        color: $color-white;
+        color: app.$color-white;
         font-weight: 500;
       }
 
       input {
         width: 100%;
         padding: 0.6rem;
-        border-radius: $radius-small;
+        border-radius: app.$radius-small;
         border: none;
-        background: $color-input-background;
-        color: $color-white;
+        background: app.$color-input-background;
+        color: app.$color-white;
 
         &::placeholder {
-          color: $color-placeholder;
+          color: app.$color-placeholder;
         }
       }
     }
 
     button {
-      @include button-basic($color-primary, $color-primary-dark);
+      @include app.button-basic(app.$color-primary, app.$color-primary-dark);
       margin-top: 0.5rem;
       font-weight: 600;
     }
@@ -57,7 +61,7 @@
   p {
     margin-top: 1rem;
     text-align: center;
-    color: $color-white;
+    color: app.$color-white;
     font-weight: 600;
   }
 }
