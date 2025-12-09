@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { LoadParticipants } from '../../services/load-participants';
 import { Participant, Student, Professor } from '../../models/entities';
 
@@ -14,12 +13,8 @@ import { Participant, Student, Professor } from '../../models/entities';
 export class ParticipantList { 
   participants: Participant[] = [];
 
-  constructor(private service: LoadParticipants, private router: Router) {
+  constructor(private service: LoadParticipants) {
     this.participants = this.service.getTeilnehmer();
-  }
-
-  goToDashboard() {
-    this.router.navigate(['/dashboard']);
   }
 
   getNoten(student: Participant): number[] {

@@ -47,12 +47,6 @@ describe('Fibonacci Component', () => {
     expect(math.calculateFibonacci).toHaveBeenCalledWith(5);
   });
 
-  it('should navigate to /dashboard when goToDashboard is called', () => {
-    component.goToDashboard();
-
-    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
-  });
-
   it('should render placeholder text when no fibonacci numbers exist', () => {
     component.fibonacci = [];
     fixture.detectChanges();
