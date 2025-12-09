@@ -1,8 +1,4 @@
-<h2>Teilnehmerliste</h2>
-
 @for (participant of participants; track participant) {
-
-
   @if (participant.type === 'student') {
     <div class="teilnehmer-item student">
     <strong>{{ participant.name }}</strong> (Student)

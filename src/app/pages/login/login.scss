@@ -15,14 +15,6 @@
   box-shadow: app.$shadow-medium;
   color: app.$color-white;
 
-  h2 {
-    text-align: center;
-    margin-bottom: 1.2rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: app.$color-white;
-  }
-
   form {
     display: flex;
     flex-direction: column;

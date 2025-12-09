@@ -11,12 +11,14 @@
   })
   export class App {
     currentUrl: string = '';
+    pageTitle: string = '';
 
     constructor(private router: Router) {
       this.router.events
         .pipe(filter(event => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
           this.currentUrl = event.urlAfterRedirects;
+          this.pageTitle = this.router.routerState.snapshot.root.firstChild?.data['title'] || '';
         });
     }
 

@@ -73,6 +73,17 @@ $gradient-login: linear-gradient(135deg, $color-bg-light, $color-bg-light2);
   }
 }
 
+.page-title {
+  text-align: center;
+  margin: 16px 0;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $color-primary;
+  }
+}
+
 /* Button Mixin */
 @mixin button-basic($bg, $bg-hover) {
   padding: 0.5rem;
