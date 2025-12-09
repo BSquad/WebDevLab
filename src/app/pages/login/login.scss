@@ -7,7 +7,7 @@
 
   /* Farben und Stil ans Dashboard angepasst */
   border-radius: $radius-medium;
-  background: linear-gradient(150deg, lighten($color-primary, 15%), $color-accent);
+  background: linear-gradient(150deg, color.scale($color-primary, $lightness: 15%), $color-accent);
   box-shadow: $shadow-medium;
   color: $color-white;
 
