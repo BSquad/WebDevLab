@@ -44,6 +44,30 @@ $gradient-login: linear-gradient(135deg, $color-bg-light, $color-bg-light2);
   font-weight: 600;
 }
 
+.dashboard-button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #5d92ff, #a455ff);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
 /* Button Mixin */
 @mixin button-basic($bg, $bg-hover) {
   padding: 0.5rem;
