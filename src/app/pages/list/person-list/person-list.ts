@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, Signal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RestApi } from '../../../api/rest-api';
 import { Person } from '../../../models/person';
@@ -11,7 +11,7 @@ import { Person } from '../../../models/person';
   standalone: true
 })
 export class PersonList {
-  persons: any = signal<Person[]>([]);
+  persons: Signal<Person[]> = signal<Person[]>([]);
 
   constructor(private restApi: RestApi) {  }
 
