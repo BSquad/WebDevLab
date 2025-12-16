@@ -22,4 +22,8 @@ export class MyDashboard {
   goToParticipantList() {
     this.router.navigate(['/participant-list']);
   }
+
+  goToPersonList() {
+    this.router.navigate(['/person-list']);
+  }
 }

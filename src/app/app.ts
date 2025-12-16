@@ -1,10 +1,11 @@
   import { Component, signal } from '@angular/core';
   import { Router, RouterOutlet, NavigationEnd, RouterModule } from '@angular/router';
+  import { HttpClientModule } from '@angular/common/http';
   import { filter } from 'rxjs/operators';
 
   @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, RouterModule],
+    imports: [RouterOutlet, RouterModule, HttpClientModule],
     templateUrl: './app.html',
     styleUrl: './app.scss',
     standalone: true,

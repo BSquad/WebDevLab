@@ -3,6 +3,7 @@ import { MyDashboard } from './dashboard/my-dashboard/my-dashboard';
 import { AuthorInfo } from './dashboard/author-info/author-info';
 import { Fibonacci } from './dashboard/fibonacci/fibonacci';
 import { ParticipantList } from './lists/participant-list/participant-list';
+import { PersonList } from './pages/list/person-list/person-list';
 import { Login } from './pages/login/login';
 
 export const routes: Routes = [
@@ -12,4 +13,5 @@ export const routes: Routes = [
   { path: 'author-info', component: AuthorInfo, data: { title: 'Author Info' } },
   { path: 'fibonacci', component: Fibonacci, data: { title: 'Fibonacci Calculator' } },
   { path: 'participant-list', component: ParticipantList, data: { title: 'Participant List' } },
+  { path: 'person-list', component: PersonList, data: { title: 'Person List' } },
 ];
