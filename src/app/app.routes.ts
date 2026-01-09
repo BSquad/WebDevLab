@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { MyDashboard } from './dashboard/my-dashboard/my-dashboard';
-import { AuthorInfo } from './dashboard/author-info/author-info';
-import { Fibonacci } from './dashboard/fibonacci/fibonacci';
-import { ParticipantList } from './lists/participant-list/participant-list';
+import { MyDashboard } from './pages/my-dashboard/my-dashboard';
+import { AuthorInfo } from './pages/author-info/author-info';
+import { Fibonacci } from './pages/fibonacci/fibonacci';
+import { ParticipantList } from './pages/list/participant-list/participant-list';
 import { PersonList } from './pages/list/person-list/person-list';
 import { Login } from './pages/login/login';
 

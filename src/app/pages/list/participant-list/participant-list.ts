@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoadParticipants } from '../../services/load-participants';
-import { Participant, Student, Professor } from '../../models/entities';
+import { LoadParticipants } from '../../../services/load-participants';
+import { Participant, Student, Professor } from '../../../models/entities';
 
 @Component({
   selector: 'app-participant-list',
