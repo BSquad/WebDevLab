@@ -19,7 +19,7 @@ export async function initDB() {
   await db.exec(`
     CREATE TABLE IF NOT EXISTS GAME (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      titel TEXT NOT NULL,
+      titel TEXT NOT NULL UNIQUE,
       genre TEXT,
       tags TEXT,
       achievementanzahl INTEGER DEFAULT 0,
