@@ -26,4 +26,8 @@ export class MyDashboard {
   goToPersonList() {
     this.router.navigate(['/person-list']);
   }
+
+  goToGameList() {
+    this.router.navigate(['/game-list']);
+  }
 }

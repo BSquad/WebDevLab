@@ -1,0 +1,11 @@
+@for (game of games(); track game) {
+    <div class="game-item">
+    titel: <strong>{{ game.titel }}</strong>
+    <br />
+    genre: {{ game.genre }}
+    <br />
+    tags: {{ game.tags }}
+    </div>
+} @empty {
+  <li>No games</li>
+}
