@@ -2,10 +2,14 @@ import sqlite3 from 'sqlite3';
 import { Database, open } from 'sqlite';
 
 export async function initDB() {
-  const db = await open({
+  return await open({
     filename: './database.sqlite',
     driver: sqlite3.Database
   });
+}
+
+export async function setupDatabase() {
+  const db = await initDB();
 
   await db.exec(`
     CREATE TABLE IF NOT EXISTS USER (
@@ -14,9 +18,7 @@ export async function initDB() {
       email TEXT NOT NULL UNIQUE,
       passwort TEXT NOT NULL
     );
-  `);
 
-  await db.exec(`
     CREATE TABLE IF NOT EXISTS GAME (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       titel TEXT NOT NULL UNIQUE,
@@ -29,7 +31,7 @@ export async function initDB() {
     );
   `);
 
-  return db;
+  await db.close();
 }
 
 export async function createInitialData() {
@@ -43,13 +45,6 @@ export async function createInitialData() {
   `);
 }
 
-/**
- * Führt ein SQL-Statement aus.
- * @param sql SQL-Statement mit Platzhaltern (?, ?, ...)
- * @param params Werte für die Platzhalter
- * @param single Wenn true, wird db.get() benutzt, sonst db.all()
- * @returns Ergebnis des Statements
- */
 export async function executeSQL(
   sql: string,
   params: any[] = [],
@@ -58,6 +53,7 @@ export async function executeSQL(
   const db: Database<sqlite3.Database, sqlite3.Statement> = await initDB();
 
   let result;
+  
   try {
     if (sql.trim().toUpperCase().startsWith('SELECT')) {
       result = single ? await db.get(sql, params) : await db.all(sql, params);

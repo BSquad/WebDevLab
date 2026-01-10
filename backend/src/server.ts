@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import { addUser, getUserByEmail, getUsers } from './user.ts';
-import { getGames } from './games.ts';
-import { createInitialData } from './db.ts';
+import { getGames } from './game.ts';
+import { createInitialData, setupDatabase } from './db.ts';
 
 const app = express();
 const PORT = 3000;
@@ -10,6 +10,7 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+await setupDatabase();
 await createInitialData();
 
 app.get('/api/games', async (req, res) => {
