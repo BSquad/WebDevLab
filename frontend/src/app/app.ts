@@ -25,7 +25,7 @@
     protected readonly title = signal('WebDevLab');
 
     showDashboardButton(): boolean {
-      return this.currentUrl !== '/login' && this.currentUrl !== '/dashboard';
+      return this.currentUrl !== '/login' && this.currentUrl !== '/register' && this.currentUrl !== '/dashboard';
     }
 
     goToDashboard() {

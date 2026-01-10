@@ -1,8 +1,13 @@
-<div class="login-container">
+<div class="register-container">
   <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <div>
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" [(ngModel)]="username" required />
+    </div>
+
+    <div>
+      <label for="email">E-Mail:</label>
+      <input type="text" id="email" name="email" [(ngModel)]="email" required />
     </div>
 
     <div>
@@ -11,13 +16,13 @@
     </div>
 
     <button type="submit">
-      Login
+      Register
     </button>
   </form>
 
   <p class="link">
-    Noch kein Account?
-    <a routerLink="/register">Jetzt registrieren</a>
+    Bereits registriert?
+    <a routerLink="/login">Zum Login</a>
   </p>
-
+  
 </div>

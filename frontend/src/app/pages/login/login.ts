@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginService } from '../../services/login-service';
 import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
   standalone: true,
 })
 export class Login {
   constructor(
-    private router: Router, 
-    private loginService: LoginService, 
+    private router: Router,
+    private loginService: LoginService,
     private toast: ToastService) { }
 
   username: string = '';
@@ -23,12 +23,12 @@ export class Login {
   loginSuccess: boolean = false;
   loginError: boolean = false;
 
-  onSubmit(form: NgForm) {
+  async onSubmit(form: NgForm) {
     if (form.valid) {
       this.submitted = true;
       this.loginError = false;
 
-      this.loginSuccess = this.loginService.validateCredentials(this.username, this.password);
+      this.loginSuccess = await this.loginService.validateCredentials(this.username, this.password);
 
       if (this.loginSuccess) {
         this.router.navigate(['/dashboard']);

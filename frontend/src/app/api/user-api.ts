@@ -6,13 +6,18 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class UserApi {
   private apiUrl = 'http://localhost:3000/api/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   async getUsers(): Promise<User[]> {
     const data = this.http.get<User[]>(this.apiUrl);
+    return await firstValueFrom(data);
+  }
+
+  async getUserByName(name: string): Promise<User> {
+    const data = this.http.get<User>(`${this.apiUrl}/${name}`);
     return await firstValueFrom(data);
   }
 

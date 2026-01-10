@@ -16,7 +16,7 @@ export async function setupDatabase() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
-      passwort TEXT NOT NULL
+      password TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS GAME (
@@ -38,10 +38,14 @@ export async function createInitialData() {
   const db = await initDB();
 
   await db.exec(`
+    INSERT OR IGNORE INTO USER (name, email, password) 
+    VALUES 
+    ('sa', 'sa@sa.de', 'sa');
+
     INSERT OR IGNORE INTO GAME (titel, genre, tags, achievementanzahl, beschreibung, erscheinungsjahr, plattform) 
     VALUES 
     ('The Legend of Zelda: Breath of the Wild', 'Action-Adventure', 'Open World, Exploration, Fantasy', 120, 'Ein Open-World-Abenteuer in der Welt von Hyrule.', 2017, 'Nintendo Switch, Wii U'),
-    ('God of War', 'Action', 'Mythology, Combat, Story-Driven', 90, 'Ein episches Abenteuer in der Welt der nordischen Mythologie.', 2018, 'PlayStation 4')
+    ('God of War', 'Action', 'Mythology, Combat, Story-Driven', 90, 'Ein episches Abenteuer in der Welt der nordischen Mythologie.', 2018, 'PlayStation 4');
   `);
 }
 

@@ -38,6 +38,7 @@ $gradient: linear-gradient(145deg, $color-primary, #673ab7, $color-accent);
 }
 
 /* Login */
+.register-container,
 .login-container {
   max-width: 400px;
   margin: 2rem auto;
