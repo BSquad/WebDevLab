@@ -28,7 +28,7 @@ export class Login {
       this.submitted = true;
       this.loginError = false;
 
-      this.loginSuccess = await this.loginService.validateCredentials(this.username, this.password);
+      this.loginSuccess = await this.loginService.loginWithCredentials(this.username, this.password);
 
       if (this.loginSuccess) {
         this.router.navigate(['/dashboard']);

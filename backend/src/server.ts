@@ -23,37 +23,26 @@ app.get('/api/games', async (req, res) => {
   }
 });
 
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await getUsers();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Fehler beim Laden der User' });
+app.post('/api/login', async (req, res) => {
+  const { name, password } = req.body;
+  const user = await getUserByName(name);
+
+  if (!user || user.password !== password) {
+    return res.status(401).json({ success: false });
   }
+
+  res.json({ success: true });
 });
 
-app.get('/api/users/:name', async (req, res) => {
-  try {
-    const name = req.params.name;
-    const user = await getUserByName(name);
+app.post('/api/register', async (req, res) => {
+  const { name, email, password } = req.body;
 
-    res.json(user);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Fehler beim Laden des Users' });
+  if (!name || !email || !password) {
+    return res.status(400).json({ success: false, error: 'Fehlende Felder' });
   }
-});
 
-app.post('/api/users', async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    await addUser(name, email, password);
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Fehler beim Anlegen des Users' });
-  }
+  await addUser(name, email, password);
+  res.json({ success: true });
 });
 
 app.listen(PORT, () => console.log(`Backend läuft auf http://localhost:${PORT}`));

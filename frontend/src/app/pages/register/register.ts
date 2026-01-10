@@ -36,10 +36,9 @@ export class Register {
         password: this.password
       };
 
-      this.registerSuccess = await this.registerService.canUserRegister(user);
+      this.registerSuccess = await this.registerService.registerUser(user);
 
       if (this.registerSuccess) {
-        await this.registerService.registerUser(user);
         this.router.navigate(['/dashboard']);
         this.toast.show('Registration successful!', 'success');
       } else {

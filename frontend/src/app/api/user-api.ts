@@ -7,22 +7,29 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
   providedIn: 'root',
 })
 export class UserApi {
-  private apiUrl = 'http://localhost:3000/api/users';
+  private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) { }
 
-  async getUsers(): Promise<User[]> {
-    const data = this.http.get<User[]>(this.apiUrl);
-    return await firstValueFrom(data);
+  async login(name: string, password: string): Promise<boolean> {
+    try {
+      const res = await firstValueFrom(
+        this.http.post<{ success: boolean }>(`${this.apiUrl}/login`, { name, password })
+      );
+      return res.success;
+    } catch (err) {
+      return false;
+    }
   }
 
-  async getUserByName(name: string): Promise<User> {
-    const data = this.http.get<User>(`${this.apiUrl}/${name}`);
-    return await firstValueFrom(data);
-  }
-
-  async addUser(user: User): Promise<any> {
-    const data = this.http.post(this.apiUrl, user);
-    return await firstValueFrom(data);
+  async register(user: User): Promise<boolean> {
+    try {
+      const res = await firstValueFrom(
+        this.http.post<{ success: boolean }>(`${this.apiUrl}/register`, user)
+      );
+      return res.success;
+    } catch (err) {
+      return false;
+    }
   }
 }

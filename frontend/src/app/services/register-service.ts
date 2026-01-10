@@ -8,13 +8,8 @@ import { UserApi } from '../api/user-api';
 export class RegisterService {
   constructor(private userApi: UserApi) {}
 
-  async canUserRegister(user: User): Promise<boolean> {
-    const users: User[] = await this.userApi.getUsers();
-    const emailExists = users.some(u => u.email === user.email);
-    return !emailExists;
-  }
-
-  async registerUser(user: User) {
-    await this.userApi.addUser(user);
+  async registerUser(user: User): Promise<boolean> {
+    const success: boolean = await this.userApi.register(user);
+    return success;
   }
 }
