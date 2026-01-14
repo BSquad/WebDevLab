@@ -1,4 +1,4 @@
-import { executeSQL } from './db.ts';
+import { executeSQL } from '../db.ts';
 
 export async function addUser(name: string, email: string, password: string) {
   await executeSQL(

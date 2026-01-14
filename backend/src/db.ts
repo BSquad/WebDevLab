@@ -1,15 +1,15 @@
 import sqlite3 from 'sqlite3';
 import { Database, open } from 'sqlite';
 
-export async function initDB() {
+async function openDB() {
   return await open({
     filename: './database.sqlite',
     driver: sqlite3.Database
   });
 }
 
-export async function setupDatabase() {
-  const db = await initDB();
+async function setupDatabase() {
+  const db = await openDB();
 
   await db.exec(`
     CREATE TABLE IF NOT EXISTS USER (
@@ -34,8 +34,8 @@ export async function setupDatabase() {
   await db.close();
 }
 
-export async function createInitialData() {
-  const db = await initDB();
+async function createInitialData() {
+  const db = await openDB();
 
   await db.exec(`
     INSERT OR IGNORE INTO USER (name, email, password) 
@@ -49,12 +49,17 @@ export async function createInitialData() {
   `);
 }
 
+export async function initDB() {
+  await setupDatabase();
+  await createInitialData();
+}
+
 export async function executeSQL(
   sql: string,
   params: any[] = [],
   single: boolean = false
 ): Promise<any> {
-  const db: Database<sqlite3.Database, sqlite3.Statement> = await initDB();
+  const db: Database<sqlite3.Database, sqlite3.Statement> = await openDB();
 
   let result;
   
