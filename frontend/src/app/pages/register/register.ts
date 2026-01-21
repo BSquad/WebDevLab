@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastService } from '../../services/toast-service';
-import { RegisterService } from '../../services/register-service';
+import { AuthService } from '../../services/auth-service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../../../../shared/models/user';
@@ -15,7 +15,7 @@ import { HashService } from '../../services/hash-service';
 export class Register {
   constructor(
     private router: Router,
-    private registerService: RegisterService,
+    private authService: AuthService,
     private hashService: HashService,
     private toast: ToastService) { }
 
@@ -40,7 +40,7 @@ export class Register {
         passwordHash: passwordHash,
       };
 
-      this.registerSuccess = await this.registerService.registerUser(user);
+      this.registerSuccess = await this.authService.registerUser(user);
 
       if (this.registerSuccess) {
         this.router.navigate(['/dashboard']);

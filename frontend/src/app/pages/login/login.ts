@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import { LoginService } from '../../services/login-service';
+import { AuthService } from '../../services/auth-service';
 import { ToastService } from '../../services/toast-service';
 import { HashService } from '../../services/hash-service';
 
@@ -15,7 +15,7 @@ import { HashService } from '../../services/hash-service';
 export class Login {
   constructor(
     private router: Router,
-    private loginService: LoginService,
+    private authService: AuthService,
     private hashService: HashService,
     private toast: ToastService) { }
 
@@ -31,7 +31,7 @@ export class Login {
       this.loginError = false;
 
       const passwordHash = await this.hashService.hashPassword(this.password);
-      this.loginSuccess = await this.loginService.loginWithCredentials(this.username, passwordHash);
+      this.loginSuccess = await this.authService.loginWithCredentials(this.username, passwordHash);
 
       if (this.loginSuccess) {
         this.router.navigate(['/dashboard']);
