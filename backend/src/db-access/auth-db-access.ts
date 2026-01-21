@@ -18,3 +18,7 @@ export async function getUserByEmail(email: string) {
 export async function getUserByName(name: string) {
   return await executeSQL(`SELECT * FROM USERS WHERE NAME = ?`, [name], true);
 }
+
+export async function getUserByNameAndPW(name: string, passwordHash: string) {
+  return await executeSQL(`SELECT * FROM USERS WHERE NAME = ? AND PASSWORDHASH = ?`, [name, passwordHash], true);
+}

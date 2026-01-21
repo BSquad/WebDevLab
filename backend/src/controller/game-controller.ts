@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
-import { getGames } from '../services/game-service.ts';
+import { getAllGames } from '../services/game-service.ts';
 
 export async function listGames(req: Request, res: Response) {
   try {
-    const games = await getGames();
+    const games = await getAllGames();
     res.json(games);
   } catch (err) {
     console.error(err);

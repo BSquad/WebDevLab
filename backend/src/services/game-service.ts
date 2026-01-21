@@ -1,5 +1,5 @@
-import { executeSQL } from '../db.ts';
+import { getGames } from "../db-access/game-db-access.ts";
 
-export async function getGames() {
-  return await executeSQL(`SELECT * FROM GAMES`);
+export async function getAllGames(){
+  return await getGames();
 }

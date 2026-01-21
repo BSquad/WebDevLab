@@ -1,18 +1,16 @@
 import type { Request, Response } from 'express';
-import { addUser, getUserByName } from '../services/user-service.ts';
+import { isUserRegistered, registerUser } from '../services/auth-service.ts';
 
 export async function login(req: Request, res: Response) {
   const { name, passwordHash } = req.body;
-
-  console.log(`Login attempt for user: ${name} with hash: ${passwordHash}`);
 
   if (!name || !passwordHash) {
     return res.status(400).json({ success: false });
   }
 
-  const user = await getUserByName(name);
+  const isRegistered: boolean = await isUserRegistered(name, passwordHash);
 
-  if (!user || user.passwordHash !== passwordHash) {
+  if (!isRegistered) {
     return res.status(401).json({ success: false });
   }
 
@@ -26,6 +24,6 @@ export async function register(req: Request, res: Response) {
     return res.status(400).json({ success: false });
   }
 
-  await addUser(name, email, passwordHash);
+  await registerUser(name, email, passwordHash);
   res.json({ success: true });
 }
