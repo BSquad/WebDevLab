@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { GameApi } from '../../../api/game-api';
-import { Game } from '../../../models/game';
+import { Game } from '../../../../../../shared/models/game';
 
 @Component({
   selector: 'app-game-list',

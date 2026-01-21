@@ -3,7 +3,7 @@ import { ToastService } from '../../services/toast-service';
 import { RegisterService } from '../../services/register-service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import { User } from '../../models/user';
+import { User } from '../../../../../shared/models/user';
 import { HashService } from '../../services/hash-service';
 
 @Component({
