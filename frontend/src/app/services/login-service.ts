@@ -7,8 +7,8 @@ import { UserApi } from '../api/user-api';
 export class LoginService {
   constructor(private userApi: UserApi) { }
 
-  async loginWithCredentials(username: string, password: string): Promise<boolean> {
-    const success: boolean = await this.userApi.login(username, password);
+  async loginWithCredentials(username: string, passwordHash: string): Promise<boolean> {
+    const success: boolean = await this.userApi.login(username, passwordHash);
     return success;
   }
 }

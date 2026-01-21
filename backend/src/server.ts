@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { login, register } from './controller/user-controller.ts';
+import { login, register } from './controller/auth-controller.ts';
 import { listGames } from './controller/game-controller.ts';
 import { initDB } from './db.ts';
 

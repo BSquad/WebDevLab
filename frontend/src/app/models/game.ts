@@ -1,10 +1,12 @@
 export interface Game {
-  id: number;
-  titel: string;
-  genre: string;
-  tags: string;
-  achievementanzahl: number;
-  beschreibung: string;
-  erscheinungsjahr: number;
-  plattform: string;
+  id?: number;
+  title: string;
+  description?: string;
+  genre?: string;
+  tags?: string;
+  platform?: string;
+  developer: string;
+  publisher?: string;
+  releaseDate: string;
+  popularityScore?: number;
 }

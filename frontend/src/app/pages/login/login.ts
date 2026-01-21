@@ -28,7 +28,9 @@ export class Login {
       this.submitted = true;
       this.loginError = false;
 
-      this.loginSuccess = await this.loginService.loginWithCredentials(this.username, this.password);
+      const passwordHash = await this.hashPassword(this.password);
+
+      this.loginSuccess = await this.loginService.loginWithCredentials(this.username, passwordHash);
 
       if (this.loginSuccess) {
         this.router.navigate(['/dashboard']);
@@ -38,5 +40,13 @@ export class Login {
         this.toast.show('Incorrect username or password.', 'error');
       }
     }
+  }
+
+  async hashPassword(password: string): Promise<string> { //TODO in Service auslagern
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 }

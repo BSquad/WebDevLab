@@ -11,10 +11,10 @@ export class UserApi {
 
   constructor(private http: HttpClient) { }
 
-  async login(name: string, password: string): Promise<boolean> {
+  async login(name: string, passwordHash: string): Promise<boolean> {
     try {
       const res = await firstValueFrom(
-        this.http.post<{ success: boolean }>(`${this.apiUrl}/login`, { name, password })
+        this.http.post<{ success: boolean }>(`${this.apiUrl}/login`, { name, passwordHash })
       );
       return res.success;
     } catch (err) {

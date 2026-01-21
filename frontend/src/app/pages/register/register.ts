@@ -12,7 +12,7 @@ import { User } from '../../models/user';
   styleUrl: './register.scss',
 })
 export class Register {
- constructor(
+  constructor(
     private router: Router,
     private registerService: RegisterService,
     private toast: ToastService) { }
@@ -29,11 +29,13 @@ export class Register {
       this.submitted = true;
       this.registerError = false;
 
+      const passwordHash = await this.hashPassword(this.password);
+
       const user: User = {
         id: 0,
         name: this.username,
         email: this.email,
-        password: this.password
+        passwordHash: passwordHash,
       };
 
       this.registerSuccess = await this.registerService.registerUser(user);
@@ -46,5 +48,13 @@ export class Register {
         this.toast.show('Registration failed.', 'error');
       }
     }
+  }
+
+  async hashPassword(password: string): Promise<string> { //TODO in Service auslagern
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 }
