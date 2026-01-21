@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 @Injectable({
   providedIn: 'root',
 })
-export class UserApi {
+export class AuthApi {
   private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) { }
@@ -22,7 +22,7 @@ export class UserApi {
     }
   }
 
-  async register(user: User): Promise<boolean> {
+  async registerUser(user: User): Promise<boolean> {
     try {
       const res = await firstValueFrom(
         this.http.post<{ success: boolean }>(`${this.apiUrl}/register`, user)

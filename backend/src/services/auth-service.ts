@@ -1,3 +1,4 @@
+import type { User } from "../../../shared/models/user.ts";
 import { addUser, getUserByNameAndPW } from "../db-access/auth-db-access.ts";
 
 export async function isUserRegistered(name: string, passwordHash: string): Promise<boolean> {
@@ -10,6 +11,6 @@ export async function isUserRegistered(name: string, passwordHash: string): Prom
   return true;
 }
 
-export async function registerUser(name: string, email: string, passwordHash: string) {
-  await addUser(name, email, passwordHash);
+export async function registerUser(user: User) {
+  await addUser(user);
 }

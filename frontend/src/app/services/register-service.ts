@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../../../shared/models/user';
-import { UserApi } from '../api/user-api';
+import { AuthApi } from '../api/auth-api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RegisterService {
-  constructor(private userApi: UserApi) {}
+  constructor(private authApi: AuthApi) {}
 
   async registerUser(user: User): Promise<boolean> {
-    const success: boolean = await this.userApi.register(user);
+    const success: boolean = await this.authApi.registerUser(user);
     return success;
   }
 }

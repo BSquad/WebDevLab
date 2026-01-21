@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { isUserRegistered, registerUser } from '../services/auth-service.ts';
+import type { User } from "../../../shared/models/user.ts";
 
 export async function login(req: Request, res: Response) {
   const { name, passwordHash } = req.body;
@@ -18,12 +19,12 @@ export async function login(req: Request, res: Response) {
 }
 
 export async function register(req: Request, res: Response) {
-  const { name, email, passwordHash } = req.body;
-
-  if (!name || !email || !passwordHash) {
+  const user = req.body as User;
+  
+  if (!user) {
     return res.status(400).json({ success: false });
   }
 
-  await registerUser(name, email, passwordHash);
+  await registerUser(user);
   res.json({ success: true });
 }
