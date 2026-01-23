@@ -100,35 +100,6 @@ body {
   }
 }
 
-/* Dashboard */
-.dashboard-tile {
-  background: $gradient;
-  background-size: 200% 200%;
-  animation: gradientShift 8s ease infinite;
-  color: $color-white;
-  padding: 2rem;
-  border-radius: $radius-large;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: $shadow-medium;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  h2 {
-    margin: 0;
-    font-size: 1.4rem;
-    font-weight: 600;
-  }
-
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow: $shadow-strong;
-  }
-
-  &:active {
-    transform: translateY(-2px);
-  }
-}
-
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
@@ -155,32 +126,6 @@ body {
   }
 }
 
-.dashboard-button {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 20px;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  background: linear-gradient(135deg, #5d92ff, #a455ff);
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateX(-50%) translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  }
-
-  &:active {
-    transform: translateX(-50%) translateY(0);
-    box-shadow: none;
-  }
-}
-
 /* Header */
 .header {
   display: flex;
@@ -195,7 +140,7 @@ body {
   top: 0;
   z-index: 1000;
 
-  .logout-button {
+  .header-button {
     background-color: $color-primary-dark;
     color: $color-white;
     border: none;

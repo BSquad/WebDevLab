@@ -14,6 +14,7 @@ import { User } from '../../../shared/models/user';
 })
 export class App {
   protected readonly title = signal('WebDevLab');
+  profileDropdownOpen = false;
   currentUrl: string = '';
   pageTitle: string = '';
   userSignal: any = signal<User | null>(null);
@@ -28,20 +29,24 @@ export class App {
       });
   }
 
-  showDashboardButton(): boolean {
-    return this.currentUrl !== '/login' && this.currentUrl !== '/register' && this.currentUrl !== '/dashboard';
-  }
-
   showHeader(): boolean {
     return this.currentUrl !== '/login' && this.currentUrl !== '/register';
   }
 
-  goToDashboard() {
-    this.router.navigate(['/dashboard']);
+  goToGameList() {
+    this.router.navigate(['/game-list']);
+  }
+
+  goToUserPage() {
+    this.router.navigate(['/user-page']);
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleProfileDropdown(): void {
+    this.profileDropdownOpen = !this.profileDropdownOpen;
   }
 }

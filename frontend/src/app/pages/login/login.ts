@@ -34,7 +34,7 @@ export class Login {
       this.loginSuccess = await this.authService.loginWithCredentials(this.username, passwordHash);
 
       if (this.loginSuccess) {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/game-list']);
         this.toast.show('Login successful!', 'success');
       } else {
         this.loginError = true;

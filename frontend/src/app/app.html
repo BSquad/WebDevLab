@@ -1,8 +1,19 @@
 <main class="main">
 @if (showHeader()) {
   <header class="header">
-    <button class="logout-button" (click)="logout()">Logout</button>
-    <div class="profile-name">{{ userSignal()?.name || 'not logged in' }}</div>
+    <button class="header-button" (click)="goToGameList()">Browse Games</button>
+    <button class="header-button" (click)="goToUserPage()">My Guides</button>
+    <div class="profile-wrapper" (click)="toggleProfileDropdown()">
+      <div class="profile-name">
+        {{ userSignal()?.name || 'not logged in' }}
+      </div>
+
+      @if (profileDropdownOpen) {
+        <div class="profile-dropdown" (click)="$event.stopPropagation()">
+          <button class="dropdown-item" (click)="logout()">Logout</button>
+        </div>
+      }
+    </div>
   </header>
 }
 
@@ -13,10 +24,4 @@
   <div class="content">
     <router-outlet />
   </div>
-
-  @if (showDashboardButton()) {
-  <button class="dashboard-button" (click)="goToDashboard()">
-    Dashboard
-  </button>
-  }
 </main>
