@@ -3,7 +3,7 @@ import { MyDashboard } from './pages/my-dashboard/my-dashboard';
 import { AuthorInfo } from './pages/author-info/author-info';
 import { Fibonacci } from './pages/fibonacci/fibonacci';
 import { Login } from './pages/login/login';
-import { GameList } from './pages/list/game-list/game-list';
+import { GameList } from './pages/game-list/game-list';
 import { Register } from './pages/register/register';
 
 export const routes: Routes = [
