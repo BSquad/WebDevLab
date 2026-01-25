@@ -7,10 +7,10 @@ export class AuthService {
 
   getUserByCredentials = async (name: string, password: string): Promise<User | null> => {
     const passwordHash = await this.hashPassword(password);
-    return await this.authDbAccess.getUserByNameAndPW(name, passwordHash);
+    return await this.authDbAccess.getUserByNameAndPWHash(name, passwordHash);
   }
 
-  registerUser = async (registerData: RegisterData) => {
+  register = async (registerData: RegisterData) => {
     const passwordHash = await this.hashPassword(registerData.password);
     await this.authDbAccess.addUser(registerData.name, registerData.email, passwordHash);
   }
