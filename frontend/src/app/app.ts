@@ -17,10 +17,10 @@ export class App {
   profileDropdownOpen = false;
   currentUrl: string = '';
   pageTitle: string = '';
-  userSignal: any = signal<User | null>(null);
+  user: any = signal<User | null>(null);
 
   constructor(private router: Router, private authService: AuthService) {
-    this.userSignal = toSignal(this.authService.currentUser$);
+    this.user = toSignal(this.authService.currentUser$);
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {

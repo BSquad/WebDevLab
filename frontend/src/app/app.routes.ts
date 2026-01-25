@@ -11,5 +11,5 @@ export const routes: Routes = [
   { path: 'register', component: RegisterPage, data: { title: 'Register' } },
   { path: 'games', component: GameListPage, data: { title: 'Game List' } },
   { path: 'games/:id', component: GameDetailPage, data: { title: 'Game Detail' } },
-  { path: 'user/:id', component: UserPage, data: { title: 'User Page' } }
+  { path: 'user', component: UserPage, data: { title: 'User Page' } }
 ];

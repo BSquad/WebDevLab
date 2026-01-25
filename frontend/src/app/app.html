@@ -5,7 +5,7 @@
     <button class="header-button" (click)="goToUserPage()">My Guides</button>
     <div class="profile-wrapper" (click)="toggleProfileDropdown()">
       <div class="profile-name">
-        {{ userSignal()?.name || 'not logged in' }}
+        {{ user()?.name || 'not logged in' }}
       </div>
 
       @if (profileDropdownOpen) {
