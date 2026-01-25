@@ -20,28 +20,21 @@ export class RegisterPage {
   username: string = '';
   email: string = '';
   password: string = '';
-  submitted: boolean = false;
-  registerSuccess: boolean = false;
-  registerError: boolean = false;
 
   async onSubmit(form: NgForm) {
     if (form.valid) {
-      this.submitted = true;
-      this.registerError = false;
-
       const registerData: RegisterData = {
         name: this.username,
         email: this.email,
         password: this.password,
       };
 
-      this.registerSuccess = await this.authService.register(registerData);
+      const success = await this.authService.register(registerData);
 
-      if (this.registerSuccess) {
+      if (success) {
         this.router.navigate(['/games']);
         this.toast.showSuccess('Registration successful!');
       } else {
-        this.registerError = true;
         this.toast.showError('Registration failed.');
       }
     }
