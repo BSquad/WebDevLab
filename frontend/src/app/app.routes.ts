@@ -7,7 +7,7 @@ import { UserPage } from './pages/user-page/user-page';
 import { GuideEditorPage } from './pages/guide-editor-page/guide-editor-page';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/games', pathMatch: 'full' },
   { path: 'login', component: LoginPage, data: { title: 'Login' } },
   { path: 'register', component: RegisterPage, data: { title: 'Register' } },
   { path: 'games', component: GameListPage, data: { title: 'Game List' } },

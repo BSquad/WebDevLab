@@ -26,11 +26,8 @@ export class App {
       .subscribe((event: NavigationEnd) => {
         this.currentUrl = event.urlAfterRedirects;
         this.pageTitle = this.router.routerState.snapshot.root.firstChild?.data['title'] || '';
+        this.profileDropdownOpen = false;
       });
-  }
-
-  showHeader(): boolean {
-    return this.currentUrl !== '/login' && this.currentUrl !== '/register';
   }
 
   goToGameList() {
@@ -39,6 +36,10 @@ export class App {
 
   goToUserPage() {
     this.router.navigate(['/user']);
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 
   logout() {
