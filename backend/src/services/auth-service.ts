@@ -11,8 +11,17 @@ export class AuthService {
   }
 
   register = async (registerData: RegisterData) => {
-    const passwordHash = await this.hashPassword(registerData.password);
-    await this.authDbAccess.addUser(registerData.name, registerData.email, passwordHash);
+    try {
+      const passwordHash = await this.hashPassword(registerData.password);
+      await this.authDbAccess.addUser(registerData.name, registerData.email, passwordHash);
+    } catch (err: any) {
+      if (err.code === 'SQLITE_CONSTRAINT') {
+        if (err.message.includes('users.name')) throw new Error('the username is already taken..');
+        if (err.message.includes('users.email')) throw new Error('the email address is already taken.');
+        throw new Error('Name or email already taken.');
+      }
+      throw err
+    }
   }
 
   hashPassword = async (password: string): Promise<string> => {
