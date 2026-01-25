@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { login, register } from './controller/auth-controller.ts';
-import { listGames } from './controller/game-controller.ts';
-import { initDB } from './db.ts';
+import { AuthController } from './controller/auth-controller.ts';
+import { GameController } from './controller/game-controller.ts';
+import { Db } from './db.ts';
 
 const app = express();
 const PORT = 3000;
@@ -10,10 +10,14 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-await initDB();
+const db = new Db();
+await db.initDB();
 
-app.get('/api/games', listGames);
-app.post('/api/login', login);
-app.post('/api/register', register);
+const authController = new AuthController();
+const gameController = new GameController();
+
+app.get('/api/games', gameController.listGames);
+app.post('/api/login', authController.login);
+app.post('/api/register', authController.register);
 
 app.listen(PORT, () => console.log(`Backend läuft auf http://localhost:${PORT}`));

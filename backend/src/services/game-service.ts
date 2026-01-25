@@ -1,6 +1,10 @@
 import type { Game } from "../../../shared/models/game.ts";
-import { getGames } from "../db-access/game-db-access.ts";
+import { GameDbAccess } from "../db-access/game-db-access.ts";
 
-export async function getAllGames() : Promise<Game[]> {
-  return await getGames();
+export class GameService {
+  private gameDbAccess: GameDbAccess = new GameDbAccess();
+
+  getAllGames = async (): Promise<Game[]> => {
+    return await this.gameDbAccess.getGames();
+  }
 }

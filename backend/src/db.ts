@@ -1,17 +1,18 @@
 import sqlite3 from 'sqlite3';
 import { Database, open } from 'sqlite';
 
-async function openDB() {
-  return await open({
-    filename: './database.sqlite',
-    driver: sqlite3.Database
-  });
-}
+export class Db {
+  openDB = async () => {
+    return await open({
+      filename: './database.sqlite',
+      driver: sqlite3.Database
+    });
+  }
 
-async function setupDatabase() {
-  const db = await openDB();
+  setupDatabase = async () => {
+    const db = await this.openDB();
 
-  await db.exec(`
+    await db.exec(`
     PRAGMA foreign_keys = ON;
 
     CREATE TABLE IF NOT EXISTS users (
@@ -102,13 +103,13 @@ async function setupDatabase() {
     );
   `);
 
-  await db.close();
-}
+    await db.close();
+  }
 
-async function createInitialData() {
-  const db = await openDB();
+  createInitialData = async () => {
+    const db = await this.openDB();
 
-  await db.exec(`
+    await db.exec(`
     PRAGMA foreign_keys = ON;
 
     INSERT OR IGNORE INTO games
@@ -193,36 +194,37 @@ async function createInitialData() {
       (5, 'Der End', 'Besiege den Enderdrachen.', '/icons/the_end.png'),
       (5, 'Redstone-Ingenieur', 'Baue eine komplexe Redstone-Maschine.', '/icons/redstone_engineer.png');
   `);
-}
-
-export async function initDB() {
-  await setupDatabase();
-  await createInitialData();
-}
-
-export async function executeSQL(
-  sql: string,
-  params: any[] = [],
-  single: boolean = false
-): Promise<any> {
-  const db: Database<sqlite3.Database, sqlite3.Statement> = await openDB();
-
-  await db.exec(`PRAGMA foreign_keys = ON;`);
-
-  let result;
-
-  try {
-    if (sql.trim().toUpperCase().startsWith('SELECT')) {
-      result = single ? await db.get(sql, params) : await db.all(sql, params);
-    } else {
-      result = await db.run(sql, params);
-    }
-  } catch (err) {
-    console.error('SQL Fehler:', err);
-    throw err;
-  } finally {
-    await db.close();
   }
 
-  return result;
+  initDB = async () => {
+    await this.setupDatabase();
+    await this.createInitialData();
+  }
+
+  executeSQL = async (
+    sql: string,
+    params: any[] = [],
+    single: boolean = false
+  ): Promise<any> => {
+    const db: Database<sqlite3.Database, sqlite3.Statement> = await this.openDB();
+
+    await db.exec(`PRAGMA foreign_keys = ON;`);
+
+    let result;
+
+    try {
+      if (sql.trim().toUpperCase().startsWith('SELECT')) {
+        result = single ? await db.get(sql, params) : await db.all(sql, params);
+      } else {
+        result = await db.run(sql, params);
+      }
+    } catch (err) {
+      console.error('SQL Fehler:', err);
+      throw err;
+    } finally {
+      await db.close();
+    }
+
+    return result;
+  }
 }
