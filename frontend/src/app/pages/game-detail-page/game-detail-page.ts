@@ -21,12 +21,12 @@ export class GameDetailPage {
       const data = await this.gameService.getGame(id);
       this.game.set(data);
     } catch (err) {
-      this.toastService.showError('Fehler beim Laden: ' + err);
+      this.toastService.showError('Error: ' + err);
     }
   }
 
   goToCreateGuide() {
     const gameId = this.game().id;
-    this.router.navigate(['/create-guide', gameId], { state: { gameName: this.game().title } });
+    this.router.navigate(['/create-guide', gameId], { state: { game: this.game() } });
   }
 }

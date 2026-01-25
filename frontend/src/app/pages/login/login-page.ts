@@ -9,7 +9,6 @@ import { ToastService } from '../../services/toast-service';
   imports: [FormsModule, RouterModule],
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss',
-  standalone: true,
 })
 export class LoginPage {
   constructor(

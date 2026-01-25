@@ -3,7 +3,7 @@ export interface Guide {
   authorId: number;
   gameId: number;
   title: string;
-  content?: string;
+  content: string;
   pdfPath?: string;
   createdAt?: string;
 }

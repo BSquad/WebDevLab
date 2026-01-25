@@ -20,7 +20,7 @@ export class GameListPage {
       const data = await this.gameService.getGames();
       this.games.set(data);
     } catch (err) {
-      this.toastService.showError('Fehler beim Laden: ' + err);
+      this.toastService.showError('Error: ' + err);
     }
   }
 
