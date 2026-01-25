@@ -39,10 +39,10 @@ export class RegisterPage {
 
       if (this.registerSuccess) {
         this.router.navigate(['/game-list']);
-        this.toast.show('Registration successful!', 'success');
+        this.toast.showSuccess('Registration successful!');
       } else {
         this.registerError = true;
-        this.toast.show('Registration failed.', 'error');
+        this.toast.showError('Registration failed.');
       }
     }
   }

@@ -32,10 +32,10 @@ export class LoginPage {
 
       if (this.loginSuccess) {
         this.router.navigate(['/game-list']);
-        this.toast.show('Login successful!', 'success');
+        this.toast.showSuccess('Login successful!');
       } else {
         this.loginError = true;
-        this.toast.show('Incorrect username or password.', 'error');
+        this.toast.showError('Incorrect username or password.');
       }
     }
   }

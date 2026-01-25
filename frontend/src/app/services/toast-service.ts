@@ -11,7 +11,15 @@ export class ToastService {
 
   constructor(private overlay: Overlay, private injector: Injector) { }
 
-  show(message: string, type: 'success' | 'error' = 'success') {
+  showSuccess(message: string) {
+    this.show(message, 'success');
+  }
+
+  showError(message: string) {
+    this.show(message, 'error');
+  }
+
+  show(message: string, type: 'success' | 'error') {
     this.overlayRef?.dispose();
 
     const position = this.overlay.position()
