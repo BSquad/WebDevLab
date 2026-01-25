@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { ToastService } from '../../services/toast-service';
 import { GameService } from '../../services/game-service';
 import { Game } from '../../../../../shared/models/game';
-import { ActivatedRoute  } from '@angular/router';
+import { ActivatedRoute, Router  } from '@angular/router';
 
 @Component({
   selector: 'app-game-detail-page',
@@ -13,7 +13,7 @@ import { ActivatedRoute  } from '@angular/router';
 export class GameDetailPage {
   game: any = signal<Game | null>(null);
 
-  constructor(private route: ActivatedRoute, private gameService: GameService, private toastService: ToastService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private gameService: GameService, private toastService: ToastService) { }
 
   async ngOnInit() {
     try {
@@ -23,5 +23,10 @@ export class GameDetailPage {
     } catch (err) {
       this.toastService.showError('Fehler beim Laden: ' + err);
     }
+  }
+
+  goToCreateGuide() {
+    const gameId = this.game().id;
+    this.router.navigate(['/create-guide', gameId], { state: { gameName: this.game().title } });
   }
 }
