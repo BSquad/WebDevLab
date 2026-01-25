@@ -38,7 +38,7 @@ export class App {
   }
 
   goToUserPage() {
-    this.router.navigate(['/user-page']);
+    this.router.navigate(['/user']);
   }
 
   logout() {

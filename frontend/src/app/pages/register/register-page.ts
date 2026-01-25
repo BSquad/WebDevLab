@@ -8,10 +8,10 @@ import { RegisterData } from '../../../../../shared/models/register-data';
 @Component({
   selector: 'app-register',
   imports: [FormsModule, RouterModule],
-  templateUrl: './register.html',
-  styleUrl: './register.scss',
+  templateUrl: './register-page.html',
+  styleUrl: './register-page.scss',
 })
-export class Register {
+export class RegisterPage {
   constructor(
     private router: Router,
     private authService: AuthService,

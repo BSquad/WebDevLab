@@ -7,11 +7,11 @@ import { ToastService } from '../../services/toast-service';
 @Component({
   selector: 'app-login',
   imports: [FormsModule, RouterModule],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './login-page.html',
+  styleUrl: './login-page.scss',
   standalone: true,
 })
-export class Login {
+export class LoginPage {
   constructor(
     private router: Router,
     private authService: AuthService,

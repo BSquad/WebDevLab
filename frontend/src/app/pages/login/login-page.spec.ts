@@ -1,19 +1,19 @@
 /// <reference types="jasmine" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Login } from './login';
+import { LoginPage } from './login-page';
 
 describe('Login', () => {
-  let component: Login;
-  let fixture: ComponentFixture<Login>;
+  let component: LoginPage;
+  let fixture: ComponentFixture<LoginPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Login, FormsModule]
+      imports: [LoginPage, FormsModule]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Login);
+    fixture = TestBed.createComponent(LoginPage);
     component = fixture.componentInstance;
     await fixture.whenStable();
     fixture.detectChanges();

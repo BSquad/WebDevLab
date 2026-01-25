@@ -5,10 +5,10 @@ import { Game } from '../../../../../shared/models/game';
 @Component({
   selector: 'app-game-list',
   imports: [],
-  templateUrl: './game-list.html',
-  styleUrl: './game-list.scss',
+  templateUrl: './game-list-page.html',
+  styleUrl: './game-list-page.scss',
 })
-export class GameList {
+export class GameListPage {
 games: any = signal<Game[]>([]);
 
   constructor(private restApi: GameApi) {  }
