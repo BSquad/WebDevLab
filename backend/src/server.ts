@@ -16,8 +16,9 @@ await db.initDB();
 const authController = new AuthController();
 const gameController = new GameController();
 
-app.get('/api/games', gameController.listGames);
 app.post('/api/login', authController.login);
 app.post('/api/register', authController.register);
+app.get('/api/games', gameController.getGames);
+app.get('/api/games/:id', gameController.getGameById);
 
 app.listen(PORT, () => console.log(`Backend läuft auf http://localhost:${PORT}`));

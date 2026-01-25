@@ -7,4 +7,8 @@ export class GameService {
   getAllGames = async (): Promise<Game[]> => {
     return await this.gameDbAccess.getGames();
   }
+
+  getGameById = async (gameId: number): Promise<Game> => {
+    return await this.gameDbAccess.getGameById(gameId);
+  }
 }

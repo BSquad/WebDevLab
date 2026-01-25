@@ -7,12 +7,17 @@ import { Game } from '../../../../shared/models/game';
   providedIn: 'root',
 })
 export class GameApi {
-  private apiUrl = 'http://localhost:3000/api/games';
+  private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
   async getGames(): Promise<Game[]> {
-    const data = this.http.get<Game[]>(this.apiUrl);
+    const data = this.http.get<Game[]>(`${this.apiUrl}/games`);
+    return await firstValueFrom(data);
+  }
+
+  async getGame(id: number): Promise<Game> {
+    const data = this.http.get<Game>(`${this.apiUrl}/games/${id}`);
     return await firstValueFrom(data);
   }
 }

@@ -34,7 +34,7 @@ export class App {
   }
 
   goToGameList() {
-    this.router.navigate(['/game-list']);
+    this.router.navigate(['/games']);
   }
 
   goToUserPage() {

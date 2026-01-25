@@ -7,4 +7,8 @@ export class GameDbAccess {
   getGames = async (): Promise<Game[]> => {
     return await this.db.executeSQL(`SELECT * FROM GAMES`) as Promise<Game[]>;
   }
+
+  getGameById = async (gameId: number): Promise<Game> => {
+    return await this.db.executeSQL(`SELECT * FROM GAMES WHERE id = ?`, [gameId], true) as Promise<Game>;
+  }
 }

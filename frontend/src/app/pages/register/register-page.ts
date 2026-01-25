@@ -38,7 +38,7 @@ export class RegisterPage {
       this.registerSuccess = await this.authService.register(registerData);
 
       if (this.registerSuccess) {
-        this.router.navigate(['/game-list']);
+        this.router.navigate(['/games']);
         this.toast.showSuccess('Registration successful!');
       } else {
         this.registerError = true;

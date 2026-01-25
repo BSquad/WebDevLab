@@ -1,8 +1,6 @@
 @for (game of games(); track game) {
-    <div class="game-item">
+    <div class="game-item" (click)="goToGame(game.id)">
     title: <strong>{{ game.title }}</strong>
-    <br />
-    description: {{ game.description }}
     <br />
     genre: {{ game.genre }}
     <br />
