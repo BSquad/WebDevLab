@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './guide-editor-page.scss',
 })
 export class GuideEditorPage {
-  gameName: string = history.state.gameName || 'Unknown Game';
+  gameName: string = '';
+
+  ngOnInit() {
+    this.gameName = history.state.gameName || 'Unknown Game';
+  }
 }
