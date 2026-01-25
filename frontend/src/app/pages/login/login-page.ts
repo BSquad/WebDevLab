@@ -20,15 +20,20 @@ export class LoginPage {
   password: string = '';
 
   async onSubmit(form: NgForm) {
-    if (form.valid) {
-      const success = await this.authService.loginWithCredentials(this.username, this.password);
+    try {
+      if (form.valid) {
+        const success = await this.authService.loginWithCredentials(this.username, this.password);
 
-      if (success) {
-        this.router.navigate(['/games']);
-        this.toast.showSuccess('Login successful!');
-      } else {
-        this.toast.showError('Incorrect username or password.');
+        if (success) {
+          this.router.navigate(['/games']);
+          this.toast.showSuccess('Login successful!');
+        } else {
+          this.toast.showError('Incorrect username or password.');
+        }
       }
+    } catch (err: any) {
+      this.toast.showError('Login error: ' + err.message);
+      return;
     }
   }
 }

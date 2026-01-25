@@ -20,8 +20,8 @@ export class GameDetailPage {
       const id = Number(this.route.snapshot.paramMap.get('id'));
       const data = await this.gameService.getGame(id);
       this.game.set(data);
-    } catch (err) {
-      this.toastService.showError('Error: ' + err);
+    } catch (err: any) {
+      this.toastService.showError('Error: ' + err.message);
     }
   }
 

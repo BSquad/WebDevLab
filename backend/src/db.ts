@@ -219,7 +219,6 @@ export class Db {
         result = await db.run(sql, params);
       }
     } catch (err) {
-      console.error('SQL Fehler:', err);
       throw err;
     } finally {
       await db.close();

@@ -22,21 +22,26 @@ export class RegisterPage {
   password: string = '';
 
   async onSubmit(form: NgForm) {
-    if (form.valid) {
-      const registerData: RegisterData = {
-        name: this.username,
-        email: this.email,
-        password: this.password,
-      };
+    try {
+      if (form.valid) {
+        const registerData: RegisterData = {
+          name: this.username,
+          email: this.email,
+          password: this.password,
+        };
 
-      const success = await this.authService.register(registerData);
-
-      if (success) {
-        this.router.navigate(['/games']);
-        this.toast.showSuccess('Registration successful!');
-      } else {
-        this.toast.showError('Registration failed.');
+        const success = await this.authService.register(registerData);
+        if (success) {
+          this.router.navigate(['/games']);
+          this.toast.showSuccess('Registration successful!');
+        } else {
+          this.toast.showError('Registration failed.');
+        }
       }
+    }
+    catch (err: any) {
+      this.toast.showError('Registration error: ' + err.message);
+      return;
     }
   }
 }

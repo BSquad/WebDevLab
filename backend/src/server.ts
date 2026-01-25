@@ -1,4 +1,5 @@
 import express from 'express';
+import type { ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import { AuthController } from './controller/auth-controller.ts';
 import { GameController } from './controller/game-controller.ts';
@@ -23,5 +24,12 @@ app.post('/api/register', authController.register);
 app.get('/api/games', gameController.getGames);
 app.get('/api/games/:id', gameController.getGameById);
 app.post('/api/create-guide', guideController.createGuide);
+
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ message: err.message ?? 'Unknown server error' });
+};
+
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Backend läuft auf http://localhost:${PORT}`));
