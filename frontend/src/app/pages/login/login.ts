@@ -3,7 +3,6 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 import { ToastService } from '../../services/toast-service';
-import { HashService } from '../../services/hash-service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +15,6 @@ export class Login {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private hashService: HashService,
     private toast: ToastService) { }
 
   username: string = '';
@@ -30,8 +28,7 @@ export class Login {
       this.submitted = true;
       this.loginError = false;
 
-      const passwordHash = await this.hashService.hashPassword(this.password);
-      this.loginSuccess = await this.authService.loginWithCredentials(this.username, passwordHash);
+      this.loginSuccess = await this.authService.loginWithCredentials(this.username, this.password);
 
       if (this.loginSuccess) {
         this.router.navigate(['/game-list']);

@@ -2,10 +2,10 @@
 import type { User } from '../../../shared/models/user.ts';
 import { executeSQL } from '../db.ts';
 
-export async function addUser(user: User) {
+export async function addUser(name: string, email: string, passwordHash: string) {
   await executeSQL(
     `INSERT INTO USERS (NAME, EMAIL, PASSWORDHASH) VALUES (?, ?, ?)`,
-    [user.name, user.email, user.passwordHash]
+    [name, email, passwordHash]
   );
 }
 

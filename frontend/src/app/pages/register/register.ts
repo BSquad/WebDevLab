@@ -3,8 +3,7 @@ import { ToastService } from '../../services/toast-service';
 import { AuthService } from '../../services/auth-service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import { User } from '../../../../../shared/models/user';
-import { HashService } from '../../services/hash-service';
+import { RegisterData } from '../../../../../shared/models/register-data';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +15,6 @@ export class Register {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private hashService: HashService,
     private toast: ToastService) { }
 
   username: string = '';
@@ -31,16 +29,13 @@ export class Register {
       this.submitted = true;
       this.registerError = false;
 
-      const passwordHash = await this.hashService.hashPassword(this.password);
-
-      const user: User = {
-        id: 0,
+      const registerData: RegisterData = {
         name: this.username,
         email: this.email,
-        passwordHash: passwordHash,
+        password: this.password,
       };
 
-      this.registerSuccess = await this.authService.registerUser(user);
+      this.registerSuccess = await this.authService.register(registerData);
 
       if (this.registerSuccess) {
         this.router.navigate(['/game-list']);

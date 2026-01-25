@@ -3,6 +3,7 @@ import { AuthApi } from '../api/auth-api';
 import { User } from '../../../../shared/models/user';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { isPlatformBrowser } from '@angular/common';
+import { RegisterData } from '../../../../shared/models/register-data';
 
 @Injectable({
   providedIn: 'root',
@@ -26,8 +27,8 @@ export class AuthService {
     }
   }
 
-  async loginWithCredentials(username: string, passwordHash: string): Promise<boolean> {
-    const user: User | null = await this.authApi.login(username, passwordHash);
+  async loginWithCredentials(username: string, password: string): Promise<boolean> {
+    const user: User | null = await this.authApi.login(username, password);
 
     if (user) {
       this.currentUser.next(user);
@@ -47,12 +48,11 @@ export class AuthService {
     }
   }
 
-  async registerUser(user: User): Promise<boolean> {
-    const success: boolean = await this.authApi.registerUser(user);
+  async register(registerData: RegisterData): Promise<boolean> {
+    const success: boolean = await this.authApi.register(registerData);
 
     if (success) {
-      this.currentUser.next(user);
-      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.loginWithCredentials(registerData.name, registerData.password);
     }
 
     return success;
