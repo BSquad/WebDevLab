@@ -6,13 +6,13 @@ import { Guide } from '../../../../shared/models/guide';
   providedIn: 'root',
 })
 export class GuideService {
-  constructor(private guideApi: GuideApi) {}
+  constructor(private guideApi: GuideApi) { }
 
-  async getGuides(gameId: number) : Promise<Guide[]> {
+  async getGuides(gameId: number): Promise<Guide[]> {
     return await this.guideApi.getGuides(gameId);
   }
 
-  async createGuide(guide: Guide) : Promise<boolean> {
-    return await this.guideApi.register(guide);
+  async createGuide(guide: Guide): Promise<boolean> {
+    return await this.guideApi.createGuide(guide);
   }
 }

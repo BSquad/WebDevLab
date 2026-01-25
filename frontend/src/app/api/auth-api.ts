@@ -12,25 +12,11 @@ export class AuthApi {
 
   constructor(private http: HttpClient) { }
 
-  async login(name: string, password: string): Promise<User | null> {
-    try {
-      const res = await firstValueFrom(
-        this.http.post<{ user: User }>(`${this.apiUrl}/login`, { name, password })
-      );
-      return res.user;
-    } catch (err) {
-      return null;
-    }
+  async login(name: string, password: string) : Promise<User | null> {
+    return await firstValueFrom(this.http.post<User | null>(`${this.apiUrl}/login`, { name, password }));
   }
 
-  async register(registerData: RegisterData): Promise<boolean> {
-    try {
-      const res = await firstValueFrom(
-        this.http.post<{ success: boolean }>(`${this.apiUrl}/register`, registerData)
-      );
-      return res.success;
-    } catch (err) {
-      return false;
-    }
+  async register(data: RegisterData) : Promise<boolean> {
+    return await firstValueFrom(this.http.post<boolean>(`${this.apiUrl}/register`, data));
   }
 }

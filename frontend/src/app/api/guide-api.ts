@@ -9,21 +9,13 @@ import { Guide } from '../../../../shared/models/guide';
 export class GuideApi {
   private apiUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   async getGuides(gameId: number): Promise<Guide[]> {
-    const data = this.http.get<Guide[]>(`${this.apiUrl}/guides/${gameId}`);
-    return await firstValueFrom(data);
+    return await firstValueFrom(this.http.get<Guide[]>(`${this.apiUrl}/guides/${gameId}`));
   }
 
-  async register(guide: Guide): Promise<boolean> {
-      try {
-        const res = await firstValueFrom(
-          this.http.post<{ success: boolean }>(`${this.apiUrl}/create-guide`, guide)
-        );
-        return res.success;
-      } catch (err) {
-        return false;
-      }
-    }
+  async createGuide(guide: Guide): Promise<boolean> {
+    return await firstValueFrom(this.http.post<boolean>(`${this.apiUrl}/create-guide`, guide));
+  }
 }

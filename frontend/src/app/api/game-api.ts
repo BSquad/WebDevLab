@@ -12,12 +12,10 @@ export class GameApi {
   constructor(private http: HttpClient) {}
 
   async getGames(): Promise<Game[]> {
-    const data = this.http.get<Game[]>(`${this.apiUrl}/games`);
-    return await firstValueFrom(data);
+    return await firstValueFrom(this.http.get<Game[]>(`${this.apiUrl}/games`));
   }
 
   async getGame(id: number): Promise<Game> {
-    const data = this.http.get<Game>(`${this.apiUrl}/games/${id}`);
-    return await firstValueFrom(data);
+    return await firstValueFrom(this.http.get<Game>(`${this.apiUrl}/games/${id}`));
   }
 }
