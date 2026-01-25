@@ -13,6 +13,6 @@ export class AuthDbAccess {
   }
 
   getUserByNameAndPW = async (name: string, passwordHash: string): Promise<User | null> => {
-    return await this.db.executeSQL(`SELECT * FROM USERS WHERE NAME = ? AND PASSWORDHASH = ?`, [name, passwordHash], true) as User;
+    return await this.db.executeSQL(`SELECT ID, NAME, EMAIL, PROFILEPICTUREPATH FROM USERS WHERE NAME = ? AND PASSWORDHASH = ?`, [name, passwordHash], true) as User;
   }
 }
