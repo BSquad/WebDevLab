@@ -174,25 +174,98 @@ export class Db {
     INSERT OR IGNORE INTO achievements
       (gameId, title, description, iconPath)
     VALUES
-      (1, 'Elden Lord', 'Beende das Spiel und werde Elden Lord.', '/icons/elden_lord.png'),
-      (1, 'Legendärer Krieger', 'Besiege 50 optionale Bosse.', '/icons/legendary_warrior.png'),
-      (1, 'Runenmeister', 'Sammle insgesamt 1.000.000 Runen.', '/icons/rune_master.png'),
+      (
+        (SELECT id FROM games WHERE title = 'Elden Ring'),
+        'Elden Lord',
+        'Beende das Spiel und werde Elden Lord.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Elden Ring'),
+        'Legendärer Krieger',
+        'Besiege 50 optionale Bosse.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Elden Ring'),
+        'Runenmeister',
+        'Sammle insgesamt 1.000.000 Runen.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'The Witcher 3'),
+        'Hexer auf dem Pfad',
+        'Schließe die Hauptstory ab.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'The Witcher 3'),
+        'Gwent-Meister',
+        'Gewinne alle wichtigen Gwent-Turniere.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'The Witcher 3'),
+        'Monsterjäger',
+        'Töte 100 Monster.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Stardew Valley'),
+        'Erster Ertrag',
+        'Ernte deine erste Feldfrucht.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Stardew Valley'),
+        'Gemeinschaftsheld',
+        'Schließe das Community Center ab.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Stardew Valley'),
+        'Millionär',
+        'Verdiene insgesamt 1.000.000 Gold.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Hades'),
+        'Fluchtversuch',
+        'Erreiche die Oberfläche zum ersten Mal.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Hades'),
+        'Gott des Todes',
+        'Beende das Spiel vollständig.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Hades'),
+        'Olympischer Segen',
+        'Erhalte Segen aller olympischen Götter.',
+        'TODO'
+      ),
 
-      (2, 'Hexer auf dem Pfad', 'Schließe die Hauptstory ab.', '/icons/witcher_path.png'),
-      (2, 'Gwent-Meister', 'Gewinne alle wichtigen Gwent-Turniere.', '/icons/gwent_master.png'),
-      (2, 'Monsterjäger', 'Töte 100 Monster.', '/icons/monster_hunter.png'),
-
-      (3, 'Erster Ertrag', 'Ernte deine erste Feldfrucht.', '/icons/first_harvest.png'),
-      (3, 'Gemeinschaftsheld', 'Schließe das Community Center ab.', '/icons/community_hero.png'),
-      (3, 'Millionär', 'Verdiene insgesamt 1.000.000 Gold.', '/icons/millionaire.png'),
-
-      (4, 'Fluchtversuch', 'Erreiche die Oberfläche zum ersten Mal.', '/icons/escape_attempt.png'),
-      (4, 'Gott des Todes', 'Beende das Spiel vollständig.', '/icons/god_of_dead.png'),
-      (4, 'Olympischer Segen', 'Erhalte Segen aller olympischen Götter.', '/icons/olympian_blessing.png'),
-
-      (5, 'Holz sammeln', 'Schlage deinen ersten Baum.', '/icons/chop_wood.png'),
-      (5, 'Der End', 'Besiege den Enderdrachen.', '/icons/the_end.png'),
-      (5, 'Redstone-Ingenieur', 'Baue eine komplexe Redstone-Maschine.', '/icons/redstone_engineer.png');
+      /* Minecraft */
+      (
+        (SELECT id FROM games WHERE title = 'Minecraft'),
+        'Holz sammeln',
+        'Schlage deinen ersten Baum.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Minecraft'),
+        'Der End',
+        'Besiege den Enderdrachen.',
+        'TODO'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Minecraft'),
+        'Redstone-Ingenieur',
+        'Baue eine komplexe Redstone-Maschine.',
+        'TODO'
+      );
   `);
   }
 
