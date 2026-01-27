@@ -266,6 +266,82 @@ export class Db {
         'Baue eine komplexe Redstone-Maschine.',
         'TODO'
       );
+
+    INSERT OR IGNORE INTO users
+      (name, email, passwordHash, profilePicturePath)
+    VALUES
+      (
+        'sa',
+        'sa@test.de',
+        '4cf6829aa93728e8f3c97df913fb1bfa95fe5810e2933a05943f8312a98d9cf2', --sa
+        'TODO'
+      ),
+      (
+        'test',
+        'test@test.de',
+        '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', --test
+        'TODO'
+      );
+
+    INSERT OR IGNORE INTO guides 
+      (authorId, gameId, title, content, pdfPath, createdAt)
+    VALUES
+      (
+        (SELECT id FROM users WHERE name = 'sa'), 
+        (SELECT id FROM games WHERE title = 'Elden Ring'), 
+        'Beginner Guide', 
+        'Elden Ring ist ein riesiges Open-World-Action-RPG. In diesem Guide behandeln wir die grundlegenden Spielmechaniken, wie das Bewegen, Kämpfen und Leveln. Außerdem geben wir Tipps für die ersten Gebiete, wie man Ressourcen effizient nutzt, erste Bosse besiegt und Fallen vermeidet. Spieler lernen, welche Klassen für den Einstieg geeignet sind, wie man die Karte optimal erkundet und welche NPCs hilfreich sind. Der Guide geht auch auf Waffen, Magie und Buffs ein, damit Anfänger nicht frustriert werden.', 
+        'TODO', 
+        datetime('now')
+      ),
+      (
+        (SELECT id FROM users WHERE name = 'test'), 
+        (SELECT id FROM games WHERE title = 'Elden Ring'), 
+        'Boss Guide', 
+        'Dieser Guide konzentriert sich auf die großen Bosskämpfe in Elden Ring. Wir geben Schritt-für-Schritt-Anleitungen für die Taktiken gegen die wichtigsten Bosse der ersten Spielregionen. Dabei werden Angriffsmuster, Schwächen und empfohlene Ausrüstung beschrieben. Außerdem Tipps zu Summons, Coop-Mechaniken und wie man Bosskampffrust reduziert, damit der Fortschritt flüssig bleibt.', 
+        'TODO', 
+        datetime('now')
+      ),
+      (
+        (SELECT id FROM users WHERE name = 'sa'), 
+        (SELECT id FROM games WHERE title = 'Elden Ring'), 
+        'Secrets & Easter Eggs', 
+        'Dieser Guide deckt geheime Orte, versteckte Bosse und seltene Items in Elden Ring ab. Wir zeigen, wie man versteckte Pfade entdeckt, welche NPC-Quests zu besonderen Belohnungen führen, und wie man geheime Skills und Waffen freischaltet. Außerdem Hinweise zu Easter Eggs, die Anspielungen auf andere Spiele enthalten. Spieler erhalten hier wertvolle Hinweise, um das Spiel vollständig zu erkunden.', 
+        'TODO', 
+        datetime('now')
+      ),
+      (
+        (SELECT id FROM users WHERE name = 'sa'), 
+        (SELECT id FROM games WHERE title = 'The Witcher 3'), 
+        'Main Story Walkthrough', 
+        'Dieser Guide behandelt die Hauptquests von The Witcher 3: Wild Hunt. Wir führen den Spieler durch alle Kapitel und zeigen, wie man Entscheidungen trifft, die Einfluss auf das Spielende haben. Dazu Tipps zu Kämpfen, Hexer-Zeichen, Tränken und Ausrüstung. Außerdem behandeln wir die wichtigsten Story-Entscheidungen, um die maximale Erfahrung und bestmögliche Belohnungen zu erhalten.', 
+        'TODO', 
+        datetime('now')
+      ),
+      (
+        (SELECT id FROM users WHERE name = 'sa'), 
+        (SELECT id FROM games WHERE title = 'The Witcher 3'), 
+        'Gwent Strategy Guide', 
+        'Ein umfassender Guide zum Kartenspiel Gwent in The Witcher 3. Hier erfährt man, wie man die besten Decks zusammenstellt, Gegner analysiert und Karten effizient sammelt. Wir erklären die Spielmechanik, Strategien gegen spezielle Gegner und geben Tipps für Turniere in Novigrad und Kaer Morhen.', 
+        'TODO', 
+        datetime('now')
+      ),
+      (
+        (SELECT id FROM users WHERE name = 'test'), 
+        (SELECT id FROM games WHERE title = 'Hades'), 
+        'Beginner Hades Guide', 
+        'Hades ist ein roguelike Dungeon-Crawler. In diesem Guide erfahren Anfänger, wie man die ersten Runs überlebt, welche Waffen sich für den Einstieg eignen, wie man die Götterboons sinnvoll kombiniert und welche Upgrades langfristig helfen. Außerdem Tipps zu Heilung, Gegnergruppen und Bossen in den ersten Leveln. Ziel ist es, den Spieler optimal auf spätere, schwierigere Runs vorzubereiten.', 
+        'TODO', 
+        datetime('now')
+      ),
+      (
+        (SELECT id FROM users WHERE name = 'test'), 
+        (SELECT id FROM games WHERE title = 'Hades'), 
+        'Advanced Hades Tactics', 
+        'Dieser Guide richtet sich an erfahrene Spieler von Hades. Wir analysieren die fortgeschrittenen Builds, synergistische Boons, die optimalen Waffen und die beste Strategie gegen die finalen Bosse. Außerdem geben wir Hinweise zu seltenen Upgrades, Chamber-Kompositionen und Geheimnissen in der Unterwelt, um maximale Highscores zu erreichen.', 
+        'TODO', 
+        datetime('now')
+      );
   `);
   }
 
