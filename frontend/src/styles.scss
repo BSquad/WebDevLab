@@ -41,11 +41,11 @@ body {
 }
 
 .success {
-  background: &$color-success;
+  background: $color-success;
 }
 
 .error {
-  background: &$color-error;
+  background: $color-error;
 }
 
 @keyframes fadeInOut {
