@@ -17,7 +17,7 @@ export class GameController {
 
   getAchievementsByGameId = async (req: Request, res: Response) => {
     const gameId = Number(req.params.gameId);
-    const userId = Number(req.params.userId) || null;
+    const userId = Number(req.params.userId) || undefined;
     const achievements = await this.gameService.getAchievementsByGameId(gameId, userId);
     res.json(achievements);
   }
