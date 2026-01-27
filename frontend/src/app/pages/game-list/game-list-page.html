@@ -8,6 +8,11 @@
     title: <strong>{{ game.title }}</strong>
     <br />
     genre: {{ game.genre }}
+    @if (user()) {
+    <button class="track-button" [class.filled]="game.isTracked" (click)="toggleTrackGame(game, $event)">
+      ★
+    </button>
+    }
   </div>
   } @empty {
   <li>No games</li>

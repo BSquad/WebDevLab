@@ -9,12 +9,12 @@ import { Achievement } from '../../../../shared/models/achievement';
 export class GameService {
   constructor(private gameApi: GameApi) {}
   
-  async getGames() : Promise<Game[]> {
-    return await this.gameApi.getGames();
+  async getGames(userId?: number) : Promise<Game[]> {
+    return await this.gameApi.getGames(userId);
   }
 
-  async getGame(id: number) : Promise<Game> {
-    return await this.gameApi.getGame(id);
+  async getGame(id: number, userId?: number) : Promise<Game> {
+    return await this.gameApi.getGame(id, userId);
   }
 
   async getAchievementsByGameId(gameId: number, userId?: number) : Promise<Achievement[]> {
@@ -23,5 +23,9 @@ export class GameService {
 
   async completeAchievement(achievementId: number, userId: number): Promise<boolean> {
     return await this.gameApi.completeAchievement(achievementId, userId);
+  }
+
+  async toggleTrackGame(gameId: number, userId: number, isTracked: boolean): Promise<boolean> {
+    return await this.gameApi.toggleTrackGame(gameId, userId, isTracked);
   }
 }

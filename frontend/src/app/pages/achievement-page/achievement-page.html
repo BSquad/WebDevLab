@@ -18,7 +18,7 @@
           <div class="achievement-description">{{ achievement.description }}</div>
         </div>
         @if (user() && !achievement.isCompleted) {
-        <button class="normal-button" (click)="completeAchievement(achievement.id)">Complete</button>
+        <button class="normal-button" (click)="completeAchievement(achievement)">Complete</button>
         }
       </li>
       } @empty {

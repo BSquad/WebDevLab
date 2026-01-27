@@ -21,13 +21,16 @@ const guideController = new GuideController();
 
 app.post("/api/login", authController.login);
 app.post("/api/register", authController.register);
-app.get("/api/games", gameController.getGames);
-app.get("/api/games/:gameId", gameController.getGameById);
 app.post("/api/create-guide", guideController.createGuide);
-app.get("/api/guides/:gameId", guideController.getGuidesByGameId);
+app.post("/api/achievements/:achievementId/complete", gameController.completeAchievement);
+app.get("/api/games", gameController.getGames);
+app.get("/api/games/user/:userId", gameController.getGames);
+app.get("/api/games/:gameId", gameController.getGameById);
+app.get("/api/games/:gameId/user/:userId", gameController.getGameById);
 app.get("/api/games/:gameId/achievements", gameController.getAchievementsByGameId);
 app.get("/api/games/:gameId/achievements/user/:userId", gameController.getAchievementsByGameId);
-app.post("/api/achievements/:achievementId/complete", gameController.completeAchievement);
+app.get("/api/guides/:gameId", guideController.getGuidesByGameId);
+app.post("/api/games/:gameId/track", gameController.toggleTrackGame);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);

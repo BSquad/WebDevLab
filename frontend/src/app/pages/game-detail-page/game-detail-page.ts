@@ -17,7 +17,7 @@ import { User } from '../../../../../shared/models/user';
   styleUrl: './game-detail-page.scss',
 })
 export class GameDetailPage {
-  game: any = signal<Game | null>(null);
+  game = signal<Game | null>(null);
   guides: any = signal<Guide[]>([]);
   user: any = signal<User | null>(null);
 
@@ -34,7 +34,7 @@ export class GameDetailPage {
   async ngOnInit() {
     try {
       const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
-      const gameData = await this.gameService.getGame(gameId);
+      const gameData = await this.gameService.getGame(gameId, this.user()?.id);
       this.game.set(gameData);
       const guidesData = await this.guideService.getGuidesByGameId(gameId);
       this.guides.set(guidesData);
@@ -57,12 +57,21 @@ export class GameDetailPage {
   }
 
   goToCreateGuide() {
-    const gameId = this.game().id;
+    const gameId = this.game()?.id;
     this.router.navigate(['/create-guide', gameId], { state: { game: this.game() } });
   }
 
   goToAchievements() {
     const gameId = this.game()?.id;
     this.router.navigate(['/achievements', gameId]);
+  }
+
+  async toggleTrackGame(event: Event) {
+    event.stopPropagation();
+    const success = await this.gameService.toggleTrackGame(this.game()!.id, this.user()!.id, this.game()!.isTracked);
+
+    if (success) {
+      this.game.update(g => g ? { ...g, isTracked: !g.isTracked } : null);
+    }
   }
 }

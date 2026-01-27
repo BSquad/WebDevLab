@@ -59,5 +59,10 @@
         }
       </div>
       <button class="normal-button" (click)="goToAchievements()">Achievements</button>
+      @if (user()) {
+      <button class="track-button" [class.filled]="game()?.isTracked" (click)="toggleTrackGame($event)">
+        ★
+      </button>
+      }
     </div>
   </div>

@@ -7,12 +7,12 @@ import { Achievement } from '../../../../shared/models/achievement';
   providedIn: 'root',
 })
 export class GameApi extends BaseApi {
-  async getGames(): Promise<Game[]> {
-    return await this.request(this.http.get<Game[]>(`${this.apiUrl}/games`));
+  async getGames(userId?: number): Promise<Game[]> {
+    return await this.request(this.http.get<Game[]>(`${this.apiUrl}/games${userId ? `/user/${userId}` : ''}`));
   }
 
-  async getGame(id: number): Promise<Game> {
-    return await this.request(this.http.get<Game>(`${this.apiUrl}/games/${id}`));
+  async getGame(id: number, userId?: number): Promise<Game> {
+    return await this.request(this.http.get<Game>(`${this.apiUrl}/games/${id}${userId ? `/user/${userId}` : ''}`));
   }
 
   async getAchievementsByGameId(gameId: number, userId?: number): Promise<Achievement[]> {
@@ -21,5 +21,9 @@ export class GameApi extends BaseApi {
 
   async completeAchievement(achievementId: number, userId: number): Promise<boolean> {
     return await this.request(this.http.post<boolean>(`${this.apiUrl}/achievements/${achievementId}/complete`, { userId }));
+  }
+
+  async toggleTrackGame(gameId: number, userId: number, isTracked: boolean): Promise<boolean> {
+    return await this.request(this.http.post<boolean>(`${this.apiUrl}/games/${gameId}/track`, { userId, isTracked }));
   }
 }

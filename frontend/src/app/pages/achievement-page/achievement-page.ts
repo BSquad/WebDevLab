@@ -39,13 +39,13 @@ export class AchievementPage {
     this.router.navigate(['/games', this.route.snapshot.paramMap.get('gameId')]);
   }
 
-  async completeAchievement(achievementId: number) {
-    const success = await this.gameService.completeAchievement(achievementId, this.user()!.id);
+  async completeAchievement(achievement: Achievement) {
+    const success = await this.gameService.completeAchievement(achievement.id, this.user()!.id);
 
     if (success) {
       this.achievements.update(list =>
         list.map(a =>
-          a.id === achievementId ? { ...a, isCompleted: true } : a
+          a.id === achievement.id ? { ...a, isCompleted: true } : a
         )
       );
     }

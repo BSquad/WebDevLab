@@ -5,19 +5,27 @@ import { GameDbAccess } from "../db-access/game-db-access.js";
 export class GameService {
   private gameDbAccess: GameDbAccess = new GameDbAccess();
 
-  getAllGames = async (): Promise<Game[]> => {
-    return await this.gameDbAccess.getGames();
+  getAllGames = async (userId?: number): Promise<Game[]> => {
+    return await this.gameDbAccess.getGames(userId);
   }
 
-  getGameById = async (gameId: number): Promise<Game> => {
-    return await this.gameDbAccess.getGameById(gameId);
+  getGameById = async (gameId: number, userId?: number): Promise<Game> => {
+    return await this.gameDbAccess.getGameById(gameId, userId);
   }
 
   getAchievementsByGameId = async (gameId: number, userId?: number): Promise<Achievement[]> => {
-    return await this.gameDbAccess.getAchievementsByGameIdForUser(gameId, userId);
+    return await this.gameDbAccess.getAchievementsByGameId(gameId, userId);
   }
 
   completeAchievement = async (achievementId: number, userId: number) => {
     await this.gameDbAccess.competeAchievement(achievementId, userId);
+  }
+
+  toggleTrackGame = async (gameId: number, userId: number, isTracked: boolean) => {
+    if (isTracked) {
+      await this.gameDbAccess.unTrackGame(gameId, userId);
+    } else {
+      await this.gameDbAccess.trackGame(gameId, userId);
+    }
   }
 }
