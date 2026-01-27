@@ -2,21 +2,33 @@
   <div class="page-title">
     <h1>{{ game()?.title }}</h1>
   </div>
-  
+
   <div class="game-detail-page">
 
     <div class="guides-panel">
       <h2>Guides</h2>
 
       <button class="normal-button" (click)="goToCreateGuide()">Create Guide</button>
-      <button class="normal-button" (click)="goToAchievements()">Achievements</button>
 
       <ul class="guides-list">
         @for (guide of guides(); track guide) {
         <li class="guide-item">
-          <span>{{ guide.title }}</span>
-          <button (click)="goToReadGuide(guide.id)">Read</button>
-          <button (click)="goToEditGuide(guide.id)" hidden disabled>Edit</button>
+          <div class="guide-header">
+            <div class="guide-left">
+              <div class="guide-title">{{ guide.title }}</div>
+              <div class="guide-meta">
+                <span class="guide-author">by {{ guide.author }}</span>
+                <span class="guide-date"> from {{ guide.createdAt | date:'mediumDate' }}</span>
+              </div>
+            </div>
+            <div class="guide-actions">
+              <button (click)="goToEditGuide(guide)" [hidden]="!isGuideOwner(guide)">Edit</button>
+              <button (click)="goToReadGuide(guide)">Read</button>
+            </div>
+          </div>
+          <div class="guide-content">
+            {{ guide.content.length > 370 ? (guide.content | slice:0:370) + '...' : guide.content }}
+          </div>
         </li>
         } @empty {
         <li class="empty-list">No guides yet</li>
@@ -46,6 +58,6 @@
         <span class="game-tag">No platforms</span>
         }
       </div>
+      <button class="normal-button" (click)="goToAchievements()">Achievements</button>
     </div>
   </div>
-</div>

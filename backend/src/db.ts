@@ -54,7 +54,8 @@ export class Db {
       pdfPath TEXT,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (authorId) REFERENCES users(id),
-      FOREIGN KEY (gameId) REFERENCES games(id)
+      FOREIGN KEY (gameId) REFERENCES games(id),
+      UNIQUE(authorId, gameId, title)
     );
 
     CREATE TABLE IF NOT EXISTS user_games (

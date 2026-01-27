@@ -11,4 +11,10 @@ export class GuideController {
     await this.guideService.createGuide(guide);
     res.json(true);
   }
+
+  getGuidesByGameId = async (req: Request, res: Response) => {
+    const gameId = Number(req.params.gameId);
+    const guides = await this.guideService.getGuidesByGameId(gameId);
+    res.json(guides);
+  }
 }

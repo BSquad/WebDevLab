@@ -24,6 +24,7 @@ app.post("/api/register", authController.register);
 app.get("/api/games", gameController.getGames);
 app.get("/api/games/:id", gameController.getGameById);
 app.post("/api/create-guide", guideController.createGuide);
+app.get("/api/guides/:gameId", guideController.getGuidesByGameId);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);

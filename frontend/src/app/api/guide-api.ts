@@ -7,7 +7,7 @@ import { BaseApi } from './base-api';
 })
 export class GuideApi extends BaseApi {
 
-  async getGuides(gameId: number): Promise<Guide[]> {
+  async getGuidesByGameId(gameId: number): Promise<Guide[]> {
     return await this.request(this.http.get<Guide[]>(`${this.apiUrl}/guides/${gameId}`));
   }
 

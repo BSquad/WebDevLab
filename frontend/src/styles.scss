@@ -279,35 +279,87 @@ body {
       }
 
       .guide-item {
-        display: flex;
+        display: block;
         justify-content: space-between;
         align-items: center;
         padding: 0.6rem 0.8rem;
         margin-bottom: 0.5rem;
+        margin-right: 2rem;
         border-radius: $radius-small;
-        background-color: $color-white;
-        color: $color-primary;
+        background: $gradient;
+        color: $color-white;
         font-weight: 500;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-        button {
-          margin-left: 0.5rem;
-          padding: 0.3rem 0.6rem;
-          border-radius: $radius-small;
-          border: none;
-          cursor: pointer;
-          font-size: 0.85rem;
-          transition: all 0.15s ease;
+        .guide-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
 
-          &:hover {
-            opacity: 0.85;
+          .guide-left {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+
+            .guide-title {
+              font-size: 1.2rem;
+              font-weight: 700;
+            }
+
+            .guide-meta {
+              display: flex;
+              gap: 0.5rem;
+              font-size: 0.85rem;
+              color: lighten($color-white, 25%);
+              margin-top: 0.2rem;
+
+              .guide-author {
+                text-decoration: underline;
+                cursor: pointer;
+                color: lighten($color-white, 25%);
+
+                &:hover {
+                  color: lighten($color-white, 40%);
+                }
+              }
+
+              .guide-date {}
+            }
           }
 
-          &:disabled {
-            background-color: $color-button-deactivated-background;
-            color: $color-button-deactivated-text;
-            cursor: not-allowed;
+          .guide-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-left: 1rem;
+
+            button {
+              background-color: $color-primary-dark;
+              color: $color-white;
+              padding: 0.3rem 0.6rem;
+              border: none;
+              border-radius: $radius-small;
+              cursor: pointer;
+              font-size: 0.85rem;
+              transition: all 0.15s ease;
+
+              &:hover {
+                opacity: 0.85;
+              }
+
+              &:disabled {
+                background-color: $color-button-deactivated-background;
+                color: $color-button-deactivated-text;
+                cursor: not-allowed;
+              }
+            }
           }
+        }
+
+        .guide-content {
+          margin-top: 0.5rem;
+          font-size: 0.9rem;
+          color: $color-white;
+          line-height: 1.4;
         }
       }
     }
@@ -342,6 +394,10 @@ body {
         font-size: 0.85rem;
         border-radius: $radius-small;
       }
+    }
+
+    button {
+      margin-top: 1rem;
     }
   }
 }
