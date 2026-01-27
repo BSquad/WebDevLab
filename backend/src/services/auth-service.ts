@@ -1,6 +1,6 @@
 import type { User } from "../../../shared/models/user.ts";
 import type { RegisterData } from '../../../shared/models/register-data.ts';
-import { AuthDbAccess } from '../db-access/auth-db-access.ts';
+import { AuthDbAccess } from '../db-access/auth-db-access.js';
 
 export class AuthService {
   private authDbAccess: AuthDbAccess = new AuthDbAccess();

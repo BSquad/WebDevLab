@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import type { User } from "../../../shared/models/user.ts";
 import type { RegisterData } from '../../../shared/models/register-data.ts';
-import { AuthService } from '../services/auth-service.ts';
+import { AuthService } from '../services/auth-service.js';
 
 export class AuthController {
   private authService: AuthService = new AuthService();

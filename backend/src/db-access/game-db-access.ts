@@ -1,4 +1,4 @@
-import { Db } from '../db.ts';
+import { Db } from '../db.js';
 import type { Game } from '../../../shared/models/game.ts';
 import type { Achievement } from '../../../shared/models/achievement.ts';
 

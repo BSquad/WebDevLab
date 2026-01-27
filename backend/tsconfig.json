@@ -4,7 +4,7 @@
     "target": "ES2022",                // Support modern JS features
     "module": "NodeNext",              // Required for proper ESM (import/export)
     "moduleResolution": "NodeNext",    // Ensures .js extensions in imports work
-    "rootDir": "./src",                // Where your code lives
+    "rootDir": "..",                   // Where your code lives, one level up to include shared (a quick and dirty solution to removed IDE warnings)
     "outDir": "./dist",                // Where compiled code will go
     
     /* Strictness & Safety */
@@ -13,5 +13,8 @@
     "skipLibCheck": true,              // Speeds up compilation
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "../shared/**/*"
+  ]
 }

@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { GameService } from '../services/game-service.ts';
+import { GameService } from '../services/game-service.js';
 
 export class GameController {
   private gameService: GameService = new GameService();

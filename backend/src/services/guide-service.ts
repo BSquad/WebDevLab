@@ -1,5 +1,5 @@
 import type { Guide } from "../../../shared/models/guide.ts";
-import { GuideDbAccess } from "../db-access/guide-db-access.ts";
+import { GuideDbAccess } from "../db-access/guide-db-access.js";
 
 export class GuideService {
   private guideDbAccess: GuideDbAccess = new GuideDbAccess();

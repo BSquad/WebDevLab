@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { GuideService } from '../services/guide-service.ts';
+import { GuideService } from '../services/guide-service.js';
 import type { Guide } from '../../../shared/models/guide.ts';
 
 

@@ -1,6 +1,6 @@
 import type { Achievement } from "../../../shared/models/achievement.ts";
 import type { Game } from "../../../shared/models/game.ts";
-import { GameDbAccess } from "../db-access/game-db-access.ts";
+import { GameDbAccess } from "../db-access/game-db-access.js";
 
 export class GameService {
   private gameDbAccess: GameDbAccess = new GameDbAccess();
