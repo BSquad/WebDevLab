@@ -2,7 +2,7 @@ export interface Achievement {
   id: number;
   gameId: number;
   title: string;
-  description?: string;
+  description: string;
   iconPath?: string;
-  isCompleted?: boolean; // for the current user
+  isCompleted: boolean; // for the current user
 }
