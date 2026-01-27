@@ -1,12 +1,17 @@
 {
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  },
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2022",
-    "esModuleInterop": true
-  }
+    /* Basic Options */
+    "target": "ES2022",                // Support modern JS features
+    "module": "NodeNext",              // Required for proper ESM (import/export)
+    "moduleResolution": "NodeNext",    // Ensures .js extensions in imports work
+    "rootDir": "./src",                // Where your code lives
+    "outDir": "./dist",                // Where compiled code will go
+    
+    /* Strictness & Safety */
+    "strict": true,                    // Keeps your code high quality
+    "esModuleInterop": true,           // Fixes compatibility with older libraries
+    "skipLibCheck": true,              // Speeds up compilation
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
 }
