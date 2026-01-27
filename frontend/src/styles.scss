@@ -41,10 +41,6 @@ body {
   margin: 0;
 }
 
-.main {
-  background: $color-primary-dark;
-}
-
 /* Login */
 .register-container,
 .login-container {
@@ -123,13 +119,18 @@ body {
 /* App / Page Title */
 .page-title {
   text-align: center;
-  margin: 16px 0;
 
   h1 {
     font-size: 2rem;
     font-weight: 600;
     color: $color-white;
   }
+}
+
+.page {
+  min-height: 100vh;
+  background: $color-primary-dark;
+  padding: 1rem 2rem 2rem 2rem;
 }
 
 /* Header */
@@ -256,7 +257,6 @@ body {
   background: $color-primary-dark;
   min-height: 100vh;
   display: flex;
-  padding: 2rem;
   color: $color-text-dark;
 
   .guides-panel {

@@ -1,9 +1,15 @@
-@for (game of games(); track game) {
-    <div class="game-item" (click)="goToGame(game.id)">
+<div class="page">
+  <div class="page-title">
+    <h1>Game List</h1>
+  </div>
+
+  @for (game of games(); track game) {
+  <div class="game-item" (click)="goToGame(game.id)">
     title: <strong>{{ game.title }}</strong>
     <br />
     genre: {{ game.genre }}
-    </div>
-} @empty {
+  </div>
+  } @empty {
   <li>No games</li>
-}
+  }
+</div>

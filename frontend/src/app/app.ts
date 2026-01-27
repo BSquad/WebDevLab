@@ -25,7 +25,6 @@ export class App {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.currentUrl = event.urlAfterRedirects;
-        this.pageTitle = this.router.routerState.snapshot.root.firstChild?.data['title'] || '';
         this.profileDropdownOpen = false;
       });
   }

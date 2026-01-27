@@ -16,6 +16,7 @@ export class ToastService {
   }
 
   showError(message: string) {
+    console.error(message);
     this.show(message, 'error');
   }
 

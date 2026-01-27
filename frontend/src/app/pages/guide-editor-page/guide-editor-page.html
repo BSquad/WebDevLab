@@ -1,5 +1,9 @@
-<p>Guide for {{ game()?.title }}</p>
-<form #guideCreationForm="ngForm" (ngSubmit)="onSubmit(guideCreationForm)">
+<div class="page">
+  <div class="page-title">
+    <h1>Create Guide for {{ game()?.title }}</h1>
+  </div>
+
+  <form #guideCreationForm="ngForm" (ngSubmit)="onSubmit(guideCreationForm)">
     <div>
       <label for="title">Title:</label>
       <input type="text" id="title" name="title" [(ngModel)]="title" required />
@@ -14,3 +18,4 @@
       Create Guide
     </button>
   </form>
+</div>

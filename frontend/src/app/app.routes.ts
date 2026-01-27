@@ -8,10 +8,10 @@ import { GuideEditorPage } from './pages/guide-editor-page/guide-editor-page';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/games', pathMatch: 'full' },
-  { path: 'login', component: LoginPage, data: { title: 'Login' } },
-  { path: 'register', component: RegisterPage, data: { title: 'Register' } },
-  { path: 'games', component: GameListPage, data: { title: 'Game List' } },
-  { path: 'games/:id', component: GameDetailPage, data: { title: 'Game Detail' } },
-  { path: 'user', component: UserPage, data: { title: 'User Page' } },
-  { path: 'create-guide/:gameId', component: GuideEditorPage, data: { title: 'Create Guide' } },
+  { path: 'login', component: LoginPage },
+  { path: 'register', component: RegisterPage },
+  { path: 'games', component: GameListPage },
+  { path: 'games/:id', component: GameDetailPage },
+  { path: 'user', component: UserPage },
+  { path: 'create-guide/:gameId', component: GuideEditorPage },
 ];
