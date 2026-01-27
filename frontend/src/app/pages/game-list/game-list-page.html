@@ -3,18 +3,29 @@
     <h1>Game List</h1>
   </div>
 
-  @for (game of games(); track game) {
-  <div class="game-item" (click)="goToGame(game.id)">
-    title: <strong>{{ game.title }}</strong>
-    <br />
-    genre: {{ game.genre }}
-    @if (user()) {
-    <button class="track-button" [class.filled]="game.isTracked" (click)="toggleTrackGame(game, $event)">
-      ★
-    </button>
+  <div class="game-list-page">
+
+    @for (game of games(); track game) {
+    <div class="game-item" (click)="goToGame(game.id)">
+      <img class="game-image-small" [src]="getGameImagePath(game.imageName)" />
+
+      <div class="game-info">
+        <div class="game-title">
+          <strong>{{ game.title }}</strong>
+        </div>
+        <div class="game-genre">
+          {{ game.genre }}
+        </div>
+      </div>
+
+      @if (user()) {
+      <button class="track-button" [class.filled]="game.isTracked" (click)="toggleTrackGame(game, $event)">
+        ★
+      </button>
+      }
+    </div>
+    } @empty {
+    <li>No games</li>
     }
   </div>
-  } @empty {
-  <li>No games</li>
-  }
 </div>

@@ -238,19 +238,40 @@ body {
 }
 
 // Game List Page
-.game-item {
-  padding: 1rem 1rem;
-  border-radius: $radius-medium;
-  margin-bottom: 0.5rem;
-  color: $color-white;
-  background: $gradient;
+.game-list-page {
+  .game-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 1rem;
+    border-radius: $radius-medium;
+    margin-bottom: 0.5rem;
+    color: $color-white;
+    background: $gradient;
+    cursor: pointer;
+  }
+
+  .game-info {
+    flex: 1;
+  }
+
+  .game-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .game-genre {
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
 }
 
 .track-button {
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: $color-button-deactivated-text;
 
   &.filled {
@@ -260,6 +281,21 @@ body {
   &:hover {
     color: $color-yellow;
   }
+}
+
+.game-image-big {
+  width: 100%;
+  border-radius: $radius-medium;
+  box-shadow: $shadow-medium;
+  // object-fit: cover;
+}
+
+.game-image-small {
+  width: 80px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: $radius-small;
+  box-shadow: $shadow-medium;
 }
 
 // Game Detail Page

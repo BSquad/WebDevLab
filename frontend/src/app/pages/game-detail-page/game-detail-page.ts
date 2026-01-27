@@ -3,12 +3,13 @@ import { ToastService } from '../../services/toast-service';
 import { GameService } from '../../services/game-service';
 import { GuideService } from '../../services/guide-service';
 import { Game } from '../../../../../shared/models/game';
-import { ActivatedRoute, Router  } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Guide } from '../../../../../shared/models/guide';
 import { DatePipe, SlicePipe } from '@angular/common';
 import { AuthService } from '../../services/auth-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../../../shared/models/user';
+import { PathBuilder } from '../../services/path-builder';
 
 @Component({
   selector: 'app-game-detail-page',
@@ -22,14 +23,15 @@ export class GameDetailPage {
   user: any = signal<User | null>(null);
 
   constructor(
-    private route: ActivatedRoute, 
-    private router: Router, 
-    private gameService: GameService, 
+    private route: ActivatedRoute,
+    private router: Router,
+    private gameService: GameService,
     private guideService: GuideService,
     private authService: AuthService,
-    private toastService: ToastService) {
-      this.user = toSignal(this.authService.currentUser$);
-     }
+    private toastService: ToastService,
+    private pathBuilder: PathBuilder) {
+    this.user = toSignal(this.authService.currentUser$);
+  }
 
   async ngOnInit() {
     try {
@@ -73,5 +75,9 @@ export class GameDetailPage {
     if (success) {
       this.game.update(g => g ? { ...g, isTracked: !g.isTracked } : null);
     }
+  }
+
+  getGameImagePath(imageName?: string): string {
+    return this.pathBuilder.getGameImagePath(imageName);
   }
 }

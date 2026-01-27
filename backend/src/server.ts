@@ -1,16 +1,23 @@
 import express from "express";
 import type { ErrorRequestHandler } from "express";
 import cors from "cors";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { Db } from "./db.js";
 import { AuthController } from "./controller/auth-controller.js";
 import { GameController } from "./controller/game-controller.js";
-import { Db } from "./db.js";
 import { GuideController } from "./controller/guide-controller.js";
 
 const app = express();
 const PORT = 3000;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 app.use(cors());
 app.use(express.json());
+app.use("/images", express.static(path.join(__dirname, "../images")));
 
 const db = new Db();
 await db.initDB();

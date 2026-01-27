@@ -37,6 +37,7 @@
     </div>
 
     <div class="game-info-panel">
+      <img class="game-image-big" [src]="getGameImagePath(game()?.imageName)" />
       <p><strong>Description:</strong> {{ game()?.description }}</p>
       <p><strong>Genre:</strong> {{ game()?.genre }}</p>
       <p><strong>Publisher:</strong> {{ game()?.publisher }}</p>

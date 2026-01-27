@@ -6,6 +6,7 @@ import { GameService } from '../../services/game-service';
 import { User } from '../../../../../shared/models/user';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../services/auth-service';
+import { PathBuilder } from '../../services/path-builder';
 
 @Component({
   selector: 'app-game-list',
@@ -21,7 +22,8 @@ export class GameListPage {
     private router: Router,
     private gameService: GameService,
     private toastService: ToastService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private pathBuilder: PathBuilder) {
     this.user = toSignal(this.authService.currentUser$);
   }
 
@@ -49,5 +51,9 @@ export class GameListPage {
         )
       );
     }
+  }
+
+  getGameImagePath(imageName?: string): string {
+    return this.pathBuilder.getGameImagePath(imageName);
   }
 }

@@ -26,13 +26,14 @@ export class Db {
     CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL UNIQUE,
-      description TEXT,
-      genre TEXT,
-      tags TEXT,
-      platform TEXT,
+      description TEXT NOT NULL,
+      genre TEXT NOT NULL,
+      tags TEXT NOT NULL,
+      platform TEXT NOT NULL,
       developer TEXT NOT NULL,
-      publisher TEXT,
+      publisher TEXT NOT NULL,
       releaseDate DATETIME NOT NULL,
+      imageName TEXT,
       popularityScore FLOAT
     );
 
@@ -40,7 +41,7 @@ export class Db {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       gameId INTEGER NOT NULL,
       title TEXT NOT NULL,
-      description TEXT,
+      description TEXT NOT NULL,
       iconPath TEXT,
       FOREIGN KEY (gameId) REFERENCES games(id),
       UNIQUE(gameId, title)
@@ -51,7 +52,7 @@ export class Db {
       authorId INTEGER NOT NULL,
       gameId INTEGER NOT NULL,
       title TEXT NOT NULL,
-      content TEXT,
+      content TEXT NOT NULL,
       pdfPath TEXT,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (authorId) REFERENCES users(id),
@@ -119,7 +120,7 @@ export class Db {
     PRAGMA foreign_keys = ON;
 
     INSERT OR IGNORE INTO games
-      (title, description, genre, tags, platform, developer, publisher, releaseDate, popularityScore)
+      (title, description, genre, tags, platform, developer, publisher, releaseDate, imageName, popularityScore)
     VALUES
       (
         'Elden Ring',
@@ -130,6 +131,7 @@ export class Db {
         'FromSoftware',
         'Bandai Namco',
         '2022-02-25',
+        'EldenRing.jpg',
         9.8
       ),
       (
@@ -141,6 +143,7 @@ export class Db {
         'CD Projekt Red',
         'CD Projekt',
         '2015-05-19',
+        'TheWitcher3.jpg',
         9.7
       ),
       (
@@ -152,6 +155,7 @@ export class Db {
         'ConcernedApe',
         'ConcernedApe',
         '2016-02-26',
+        'StardewValley.jpg',
         9.2
       ),
       (
@@ -163,6 +167,7 @@ export class Db {
         'Supergiant Games',
         'Supergiant Games',
         '2020-09-17',
+        'Hades.webp',
         9.4
       ),
       (
@@ -174,6 +179,7 @@ export class Db {
         'Mojang',
         'Microsoft',
         '2011-11-18',
+        'Minecraft.jpg',
         9.5
       );
 

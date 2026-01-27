@@ -8,6 +8,7 @@ export interface Game {
   developer: string;
   publisher: string;
   releaseDate: string;
+  imageName: string;
   popularityScore?: number;
   isTracked: boolean; // for the current user
   isFavorite: boolean; // for the current user
