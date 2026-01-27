@@ -1,21 +1,20 @@
 /* Farben */
 $color-primary: #3f51b5;
-$color-primary-dark: #2c3a8c;
 $color-accent: #2196f3;
-$color-accent-dark: #1976d2;
-$color-success: #c8ffcb;
-$color-error: #ffb3b3;
+$color-background: #2c3a8c;
+$color-button-hover: #1976d2;
+$color-gradient-middle: #673ab7;
+$color-success: #36ab18;
+$color-error: #ff4d4d;
 $color-white: #fff;
 $color-black: #000;
-$color-placeholder: rgba(255, 255, 255, 0.7);
-$color-input-background: rgba(255, 255, 255, 0.15);
+$color-input-background: rgba(63, 47, 47, 0.15);
 $color-button-deactivated-background: #716f6f;
 $color-button-deactivated-text: #313030;
 
 /* Layout & Sizes */
 $radius-small: 4px;
 $radius-medium: 8px;
-$radius-large: 16px;
 
 $shadow-medium: 0 6px 10px rgba(0, 0, 0, 0.2),
   0 2px 4px rgba(0, 0, 0, 0.15);
@@ -23,95 +22,49 @@ $shadow-medium: 0 6px 10px rgba(0, 0, 0, 0.2),
 $shadow-strong: 0 12px 18px rgba(0, 0, 0, 0.28),
   0 4px 8px rgba(0, 0, 0, 0.18);
 
-$gradient: linear-gradient(145deg, $color-primary, #673ab7, $color-accent);
-
-.success {
-  color: $color-success;
-  font-weight: 600;
-}
-
-.error {
-  color: $color-error;
-  font-weight: 600;
-}
+$gradient: linear-gradient(145deg, $color-primary, $color-gradient-middle, $color-accent);
 
 body {
   margin: 0;
-  background-color: $color-primary-dark;
+  background-color: $color-background;
 }
 
-/* Login */
-.register-container,
-.login-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  border-radius: $radius-medium;
-  background: $gradient;
+.toast {
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
   box-shadow: $shadow-medium;
-  color: $color-white;
-
-  form {
-    display: flex;
-    flex-direction: column;
-
-    div {
-      margin-bottom: 1rem;
-
-      label {
-        display: block;
-        margin-bottom: 0.25rem;
-        color: $color-white;
-        font-weight: 500;
-      }
-
-      input {
-        width: 100%;
-        padding: 0.6rem;
-        border-radius: $radius-small;
-        border: none;
-        background: $color-white;
-        color: $color-primary;
-
-        &::placeholder {
-          color: $color-placeholder;
-        }
-      }
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: $radius-small;
-      background-color: $color-accent;
-      color: white;
-      cursor: pointer;
-
-      &:hover {
-        background-color: $color-primary-dark;
-      }
-    }
-  }
-
-  p {
-    margin-top: 1rem;
-    text-align: center;
-    color: $color-white;
-    font-weight: 600;
-  }
+  animation: fadeInOut 2.5s ease forwards;
 }
 
-@keyframes gradientShift {
+.success {
+  background: &$color-success;
+}
+
+.error {
+  background: &$color-error;
+}
+
+@keyframes fadeInOut {
   0% {
-    background-position: 0% 50%;
+    opacity: 0;
+    transform: translateY(-10px);
   }
 
-  50% {
-    background-position: 100% 50%;
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  90% {
+    opacity: 1;
   }
 
   100% {
-    background-position: 0% 50%;
+    opacity: 0;
+    transform: translateY(-10px);
   }
 }
 
@@ -149,9 +102,8 @@ body {
   }
 }
 
-.normal-button,
-.header-button {
-  background-color: $color-primary-dark;
+.normal-button {
+  background-color: $color-primary;
   color: $color-white;
   border: none;
   padding: 0.5rem 1rem;
@@ -161,15 +113,11 @@ body {
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: $color-accent-dark;
+    background-color: $color-button-hover;
   }
 }
 
-.normal-button {
-  background: $color-primary;
-}
-
-.header-button:disabled {
+.normal-button:disabled {
   background-color: $color-button-deactivated-background;
   color: $color-button-deactivated-text;
   cursor: not-allowed;
@@ -201,10 +149,7 @@ body {
   min-width: 160px;
   padding: 6px 0;
 
-  background: linear-gradient(145deg,
-      $color-primary-dark,
-      $color-primary );
-
+  background: $color-primary;
   border-radius: $radius-medium;
   box-shadow: $shadow-strong;
   z-index: 2000;
@@ -245,13 +190,63 @@ body {
   width: 12px;
   height: 12px;
 
-  background: $color-primary-dark;
+  background: $color-primary;
   transform: rotate(45deg);
   border-radius: 2px;
 }
 
+/* Login */
+.register-container,
+.login-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: $radius-medium;
+  background: $gradient;
+  box-shadow: $shadow-medium;
+  color: $color-white;
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    div {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: $color-white;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.6rem;
+        border-radius: $radius-small;
+        border: none;
+        background: $color-white;
+      }
+    }
+  }
+
+  p {
+    margin-top: 1rem;
+    text-align: center;
+    color: $color-white;
+  }
+}
+
+// Game List Page
+.game-item {
+  padding: 1rem 1rem;
+  border-radius: $radius-medium;
+  margin-bottom: 0.5rem;
+  color: $color-white;
+  background: $gradient;
+}
+
+// Game Detail Page
 .game-detail-page {
-  background: $color-primary-dark;
   display: flex;
 
   .guides-panel {
@@ -283,8 +278,7 @@ body {
         border-radius: $radius-small;
         background: $gradient;
         color: $color-white;
-        font-weight: 500;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: $shadow-medium;
 
         .guide-header {
           display: flex;
@@ -320,27 +314,6 @@ body {
             display: flex;
             gap: 0.4rem;
             margin-left: 1rem;
-
-            button {
-              background-color: $color-primary-dark;
-              color: $color-white;
-              padding: 0.3rem 0.6rem;
-              border: none;
-              border-radius: $radius-small;
-              cursor: pointer;
-              font-size: 0.85rem;
-              transition: all 0.15s ease;
-
-              &:hover {
-                opacity: 0.85;
-              }
-
-              &:disabled {
-                background-color: $color-button-deactivated-background;
-                color: $color-button-deactivated-text;
-                cursor: not-allowed;
-              }
-            }
           }
         }
 
@@ -443,9 +416,7 @@ body {
 
     .empty-list {
       text-align: center;
-      color: $color-placeholder;
-      font-style: italic;
-      margin-top: 2rem;
+      color: $color-white;
     }
   }
 

@@ -22,8 +22,8 @@
               </div>
             </div>
             <div class="guide-actions">
-              <button (click)="goToEditGuide(guide)" [hidden]="!isGuideOwner(guide)">Edit</button>
-              <button (click)="goToReadGuide(guide)">Read</button>
+              <button class="normal-button" (click)="goToEditGuide(guide)" [hidden]="!isGuideOwner(guide)">Edit</button>
+              <button class="normal-button" (click)="goToReadGuide(guide)">Read</button>
             </div>
           </div>
           <div class="guide-content">

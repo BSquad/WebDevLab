@@ -1,7 +1,7 @@
 <main class="main">
   <header class="header">
-    <button class="header-button" (click)="goToGameList()">Browse Games</button>
-    <button class="header-button" (click)="goToUserPage()" [disabled]="!user()">My Guides</button>
+    <button class="normal-button" (click)="goToGameList()">Browse Games</button>
+    <button class="normal-button" (click)="goToUserPage()" [disabled]="!user()">My Guides</button>
     <div class="profile-wrapper" (click)="toggleProfileDropdown()">
       <div class="profile-name">
         @if (user()) {
@@ -12,7 +12,7 @@
         </div>
         }
         } @else {
-        <button class="header-button" (click)="goToLogin()" [disabled]="user()">Login</button>
+        <button class="normal-button" (click)="goToLogin()" [disabled]="user()">Login</button>
         }
       </div>
     </div>
