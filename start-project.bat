@@ -5,6 +5,6 @@ echo Starte Backend und Frontend...
 start cmd /k "cd frontend && ng serve"
 
 :: Backend starten
-start cmd /k "cd backend && npx ts-node src/server.ts"
+start cmd /k "cd backend && npm run dev"
 
 echo Beide Prozesse gestartet.
