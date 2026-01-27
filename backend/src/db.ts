@@ -42,7 +42,8 @@ export class Db {
       title TEXT NOT NULL,
       description TEXT,
       iconPath TEXT,
-      FOREIGN KEY (gameId) REFERENCES games(id)
+      FOREIGN KEY (gameId) REFERENCES games(id),
+      UNIQUE(gameId, title)
     );
 
     CREATE TABLE IF NOT EXISTS guides (
@@ -64,16 +65,18 @@ export class Db {
       isFavorite BOOLEAN,
       PRIMARY KEY (userId, gameId),
       FOREIGN KEY (userId) REFERENCES users(id),
-      FOREIGN KEY (gameId) REFERENCES games(id)
+      FOREIGN KEY (gameId) REFERENCES games(id),
+      UNIQUE (userId, gameId)
     );
 
     CREATE TABLE IF NOT EXISTS user_achievements (
       userId INTEGER NOT NULL,
       achievementId INTEGER NOT NULL,
-      completionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      completedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (userId, achievementId),
       FOREIGN KEY (userId) REFERENCES users(id),
-      FOREIGN KEY (achievementId) REFERENCES achievements(id)
+      FOREIGN KEY (achievementId) REFERENCES achievements(id),
+      UNIQUE (userId, achievementId)
     );
 
     CREATE TABLE IF NOT EXISTS guide_rating (
@@ -93,14 +96,16 @@ export class Db {
       commentText TEXT,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) REFERENCES users(id),
-      FOREIGN KEY (guideId) REFERENCES guides(id)
+      FOREIGN KEY (guideId) REFERENCES guides(id),
+      UNIQUE (userId, guideId, commentText)
     );
 
     CREATE TABLE IF NOT EXISTS screenshots (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       guideId INTEGER NOT NULL,
       filePath TEXT,
-      FOREIGN KEY (guideId) REFERENCES guides(id)
+      FOREIGN KEY (guideId) REFERENCES guides(id),
+      UNIQUE (guideId, filePath)
     );
   `);
 

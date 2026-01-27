@@ -10,8 +10,28 @@ export class GameController {
   }
 
   getGameById = async (req: Request, res: Response) => {
-    const gameId = Number(req.params.id);
+    const gameId = Number(req.params.gameId);
     const game = await this.gameService.getGameById(gameId);
     res.json(game);
+  }
+
+  getAchievementsByGameId = async (req: Request, res: Response) => {
+    const gameId = Number(req.params.gameId);
+    const achievements = await this.gameService.getAchievementsByGameId(gameId);
+    res.json(achievements);
+  }
+
+  getAchievementsByGameIdForUser = async (req: Request, res: Response) => {
+    const gameId = Number(req.params.gameId);
+    const userId = Number(req.params.userId);
+    const achievements = await this.gameService.getAchievementsByGameIdForUser(gameId, userId);
+    res.json(achievements);
+  }
+
+  completeAchievement = async (req: Request, res: Response) => {
+    const achievementId = Number(req.params.achievementId);
+    const userId = Number(req.body.userId);
+    await this.gameService.completeAchievement(achievementId, userId);
+    res.json(true);
   }
 }

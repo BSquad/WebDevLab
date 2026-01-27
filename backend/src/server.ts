@@ -22,9 +22,12 @@ const guideController = new GuideController();
 app.post("/api/login", authController.login);
 app.post("/api/register", authController.register);
 app.get("/api/games", gameController.getGames);
-app.get("/api/games/:id", gameController.getGameById);
+app.get("/api/games/:gameId", gameController.getGameById);
 app.post("/api/create-guide", guideController.createGuide);
 app.get("/api/guides/:gameId", guideController.getGuidesByGameId);
+app.get("/api/games/:gameId/achievements", gameController.getAchievementsByGameId);
+app.get("/api/games/:gameId/achievements/user/:userId", gameController.getAchievementsByGameIdForUser);
+app.post("/api/achievements/:achievementId/complete", gameController.completeAchievement);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
@@ -33,6 +36,4 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () =>
-  console.log(`Backend läuft auf http://localhost:${PORT}`),
-);
+app.listen(PORT, () => console.log(`Backend läuft auf http://localhost:${PORT}`));

@@ -1,0 +1,28 @@
+<div class="page">
+  <div class="page-title">
+    <h1>Achievements for {{ game()?.title }}</h1>
+  </div>
+
+  <div class="achievement-page">
+
+    <button class="normal-button back-button" (click)="goBack()">Back to Game Details</button>
+
+    <ul class="achievements-list">
+      @for (achievement of achievements(); track achievement) {
+      <li class="achievement-item">
+        <!-- <div class="achievement-icon">
+          <img [src]="achievement.iconPath"/>
+        </div> -->
+        <div class="achievement-info">
+          <div class="achievement-name">{{ achievement.name }}</div>
+          <div class="achievement-description">{{ achievement.description }}</div>
+        </div>
+        @if (user() && !achievement.isCompleted) {
+        <button class="normal-button" (click)="completeAchievement(achievement.id)">Complete</button>
+        }
+      </li>
+      } @empty {
+      <li class="empty-list">No achievements available for this game.</li>
+      }
+    </ul>
+  </div>

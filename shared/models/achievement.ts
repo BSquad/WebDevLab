@@ -4,4 +4,5 @@ export interface Achievement {
   title: string;
   description?: string;
   iconPath?: string;
+  isCompleted?: boolean; // for the current user
 }

@@ -306,17 +306,11 @@ body {
               display: flex;
               gap: 0.5rem;
               font-size: 0.85rem;
-              color: lighten($color-white, 25%);
               margin-top: 0.2rem;
 
               .guide-author {
                 text-decoration: underline;
                 cursor: pointer;
-                color: lighten($color-white, 25%);
-
-                &:hover {
-                  color: lighten($color-white, 40%);
-                }
               }
 
               .guide-date {}

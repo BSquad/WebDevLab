@@ -33,10 +33,10 @@ export class GameDetailPage {
 
   async ngOnInit() {
     try {
-      const id = Number(this.route.snapshot.paramMap.get('id'));
-      const gameData = await this.gameService.getGame(id);
+      const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
+      const gameData = await this.gameService.getGame(gameId);
       this.game.set(gameData);
-      const guidesData = await this.guideService.getGuidesByGameId(id);
+      const guidesData = await this.guideService.getGuidesByGameId(gameId);
       this.guides.set(guidesData);
     } catch (err: any) {
       this.toastService.showError('Error: ' + err.message);
