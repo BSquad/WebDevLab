@@ -285,9 +285,11 @@ body {
 
 .game-image-big {
   width: 100%;
+  max-width: 1000px;
+  max-height: 600px;
   border-radius: $radius-medium;
   box-shadow: $shadow-medium;
-  // object-fit: cover;
+  object-fit: cover;
 }
 
 .game-image-small {
