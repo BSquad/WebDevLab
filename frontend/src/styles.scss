@@ -41,6 +41,10 @@ body {
   margin: 0;
 }
 
+.main {
+  background: $color-primary-dark;
+}
+
 /* Login */
 .register-container,
 .login-container {
@@ -124,7 +128,7 @@ body {
   h1 {
     font-size: 2rem;
     font-weight: 600;
-    color: $color-primary;
+    color: $color-white;
   }
 }
 
@@ -142,32 +146,37 @@ body {
   top: 0;
   z-index: 1000;
 
-  .header-button {
-    background-color: $color-primary-dark;
-    color: $color-white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: $radius-small;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: $color-accent-dark;
-    }
-  }
-
-  .header-button:disabled {
-    background-color: $color-button-deactivated-background;
-    color: $color-button-deactivated-text;
-    cursor: not-allowed;
-    opacity: 0.7;
-    pointer-events: none;
-  }
-
   .profile-name {
     font-size: 1rem;
   }
+}
+
+.normal-button,
+.header-button {
+  background-color: $color-primary-dark;
+  color: $color-white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: $radius-small;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: $color-accent-dark;
+  }
+}
+
+.normal-button {
+  background: $color-primary;
+}
+
+.header-button:disabled {
+  background-color: $color-button-deactivated-background;
+  color: $color-button-deactivated-text;
+  cursor: not-allowed;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 /* Profile Dropdown */
@@ -241,4 +250,98 @@ body {
   background: $color-primary-dark;
   transform: rotate(45deg);
   border-radius: 2px;
+}
+
+.game-detail-page {
+  background: $color-primary-dark;
+  min-height: 100vh;
+  display: flex;
+  padding: 2rem;
+  color: $color-text-dark;
+
+  .guides-panel {
+    flex: 1;
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: $color-white;
+    }
+
+    .guides-list {
+      list-style: none;
+      padding: 0;
+
+      li {
+        &.empty-list {
+          color: $color-white;
+        }
+      }
+
+      .guide-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 0.8rem;
+        margin-bottom: 0.5rem;
+        border-radius: $radius-small;
+        background-color: $color-white;
+        color: $color-primary;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        button {
+          margin-left: 0.5rem;
+          padding: 0.3rem 0.6rem;
+          border-radius: $radius-small;
+          border: none;
+          cursor: pointer;
+          font-size: 0.85rem;
+          transition: all 0.15s ease;
+
+          &:hover {
+            opacity: 0.85;
+          }
+
+          &:disabled {
+            background-color: $color-button-deactivated-background;
+            color: $color-button-deactivated-text;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+
+  .game-info-panel {
+    flex: 0.5;
+
+    h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      color: $color-white;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      color: $color-white;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.3rem;
+
+      .game-tag {
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        background-color: $color-primary;
+        color: $color-white;
+        font-size: 0.85rem;
+        border-radius: $radius-small;
+      }
+    }
+  }
 }

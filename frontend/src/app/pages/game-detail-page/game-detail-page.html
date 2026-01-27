@@ -1,4 +1,46 @@
-<p>game-detail-page works! {{ game()?.title }}</p>
-<p>Description: {{ game()?.description }}</p>
+<div class="game-detail-page">
 
-<button (click)="goToCreateGuide()">Create Guide</button>
+  <div class="guides-panel">
+    <h2>Guides</h2>
+
+    <button class="normal-button" (click)="goToCreateGuide()">Create Guide</button>
+    <button class="normal-button" (click)="goToAchievements()">Achievements</button>
+
+    <ul class="guides-list">
+      @for (guide of guides(); track guide) {
+      <li class="guide-item">
+        <span>{{ guide.title }}</span>
+        <button (click)="goToReadGuide(guide.id)">Read</button>
+        <button (click)="goToEditGuide(guide.id)" hidden disabled>Edit</button>
+      </li>
+      } @empty {
+      <li class="empty-list">No guides yet</li>
+      }
+    </ul>
+  </div>
+
+  <div class="game-info-panel">
+    <h1>{{ game()?.title }}</h1>
+    <p><strong>Description:</strong> {{ game()?.description }}</p>
+    <p><strong>Genre:</strong> {{ game()?.genre }}</p>
+    <p><strong>Publisher:</strong> {{ game()?.publisher }}</p>
+    <p><strong>Developer:</strong> {{ game()?.developer }}</p>
+    <p><strong>Release Date:</strong> {{ game()?.releaseDate }}</p>
+    <p><strong>Tags:</strong></p>
+    <div class="tags-container">
+      @for (tag of game()?.tags; track tag) {
+      <span class="game-tag">{{ tag }}</span>
+      } @empty {
+      <span class="game-tag">No tags</span>
+      }
+    </div>
+    <p><strong>Platforms:</strong></p>
+    <div class="tags-container">
+      @for (platform of game()?.platform; track platform) {
+      <span class="game-tag">{{ platform }}</span>
+      } @empty {
+      <span class="game-tag">No platforms</span>
+      }
+    </div>
+  </div>
+</div>
