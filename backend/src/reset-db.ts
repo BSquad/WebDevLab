@@ -16,7 +16,6 @@ async function resetDatabase() {
 
   const db = new Db();
   await db.initDB();
-  await db.createInitialData();
   console.log("Datenbank neu initialisiert.");
 }
 
