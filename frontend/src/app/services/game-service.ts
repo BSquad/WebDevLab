@@ -17,12 +17,8 @@ export class GameService {
     return await this.gameApi.getGame(id);
   }
 
-  async getAchievementsByGameId(gameId: number) : Promise<Achievement[]> {
-    return await this.gameApi.getAchievementsByGameId(gameId);
-  }
-
-  async getAchievementsByGameIdForUser(gameId: number, userId: number) : Promise<Achievement[]> {
-    return await this.gameApi.getAchievementsByGameIdForUser(gameId, userId);
+  async getAchievementsByGameId(gameId: number, userId?: number) : Promise<Achievement[]> {
+    return await this.gameApi.getAchievementsByGameId(gameId, userId);
   }
 
   async completeAchievement(achievementId: number, userId: number): Promise<boolean> {

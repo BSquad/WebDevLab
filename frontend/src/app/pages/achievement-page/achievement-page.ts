@@ -31,14 +31,8 @@ export class AchievementPage {
     const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
     const gameData = await this.gameService.getGame(gameId);
     this.game.set(gameData);
-
-    if (this.user()) {
-      const achievementsData = await this.gameService.getAchievementsByGameIdForUser(gameId, this.user()!.id);
-      this.achievements.set(achievementsData);
-    } else {
-      const achievementsData = await this.gameService.getAchievementsByGameId(gameId);
-      this.achievements.set(achievementsData);
-    }
+    const achievementsData = await this.gameService.getAchievementsByGameId(gameId, this.user()?.id);
+    this.achievements.set(achievementsData);
   }
 
   goBack() {

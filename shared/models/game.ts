@@ -9,4 +9,5 @@ export interface Game {
   publisher?: string;
   releaseDate: string;
   popularityScore?: number;
+  isTracked?: boolean; // for the current user
 }

@@ -26,7 +26,7 @@ app.get("/api/games/:gameId", gameController.getGameById);
 app.post("/api/create-guide", guideController.createGuide);
 app.get("/api/guides/:gameId", guideController.getGuidesByGameId);
 app.get("/api/games/:gameId/achievements", gameController.getAchievementsByGameId);
-app.get("/api/games/:gameId/achievements/user/:userId", gameController.getAchievementsByGameIdForUser);
+app.get("/api/games/:gameId/achievements/user/:userId", gameController.getAchievementsByGameId);
 app.post("/api/achievements/:achievementId/complete", gameController.completeAchievement);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {

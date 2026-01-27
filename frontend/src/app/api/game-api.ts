@@ -15,12 +15,8 @@ export class GameApi extends BaseApi {
     return await this.request(this.http.get<Game>(`${this.apiUrl}/games/${id}`));
   }
 
-  async getAchievementsByGameId(gameId: number): Promise<Achievement[]> {
-    return await this.request(this.http.get<Achievement[]>(`${this.apiUrl}/games/${gameId}/achievements`));
-  }
-
-  async getAchievementsByGameIdForUser(gameId: number, userId: number): Promise<Achievement[]> {
-    return await this.request(this.http.get<Achievement[]>(`${this.apiUrl}/games/${gameId}/achievements/user/${userId}`));
+  async getAchievementsByGameId(gameId: number, userId?: number): Promise<Achievement[]> {
+    return await this.request(this.http.get<Achievement[]>(`${this.apiUrl}/games/${gameId}/achievements${userId ? `/user/${userId}` : ''}`));
   }
 
   async completeAchievement(achievementId: number, userId: number): Promise<boolean> {

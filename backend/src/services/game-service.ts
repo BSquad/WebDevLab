@@ -13,11 +13,7 @@ export class GameService {
     return await this.gameDbAccess.getGameById(gameId);
   }
 
-  getAchievementsByGameId = async (gameId: number): Promise<Achievement[]> => {
-    return await this.gameDbAccess.getAchievementsByGameId(gameId);
-  }
-
-  getAchievementsByGameIdForUser = async (gameId: number, userId: number): Promise<Achievement[]> => {
+  getAchievementsByGameId = async (gameId: number, userId?: number): Promise<Achievement[]> => {
     return await this.gameDbAccess.getAchievementsByGameIdForUser(gameId, userId);
   }
 

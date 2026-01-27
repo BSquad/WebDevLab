@@ -27,13 +27,23 @@ export class GameDbAccess {
     return await this.db.executeSQL(`SELECT * FROM ACHIEVEMENTS WHERE gameId = ?`, [gameId]) as Achievement[];
   }
 
-  getAchievementsByGameIdForUser = async (gameId: number, userId: number): Promise<Achievement[]> => {
-    return await this.db.executeSQL(`
-      SELECT a.*, CASE WHEN ua.userId IS NOT NULL THEN 1 ELSE 0 END AS isCompleted
-      FROM achievements a
-      LEFT JOIN user_achievements ua ON a.id = ua.achievementId AND ua.userId = ?
-      WHERE a.gameId = ?
-    `, [userId, gameId]) as Achievement[];
+  getAchievementsByGameIdForUser = async (gameId: number, userId?: number): Promise<Achievement[]> => {
+    if (userId) {
+      return await this.db.executeSQL(`
+        SELECT a.*, CASE WHEN ua.userId IS NOT NULL THEN 1 ELSE 0 END AS isCompleted
+        FROM achievements a
+        LEFT JOIN user_achievements ua ON a.id = ua.achievementId AND ua.userId = ?
+        WHERE a.gameId = ?
+        `,
+        [userId, gameId]) as Achievement[];
+    } else {
+      return await this.db.executeSQL(`
+        SELECT a.*, 0 AS isCompleted
+        FROM achievements a
+        WHERE a.gameId = ?
+        `,
+        [gameId]) as Achievement[];
+    }
   }
 
   competeAchievement = async (achievementId: number, userId: number) => {
