@@ -1,0 +1,1 @@
+gnome-terminal -- bash -c "cd backend && npm run resrt-db; exec bash"
