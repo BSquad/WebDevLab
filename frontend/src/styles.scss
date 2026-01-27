@@ -37,6 +37,7 @@ $gradient: linear-gradient(145deg, $color-primary, #673ab7, $color-accent);
 
 body {
   margin: 0;
+  background-color: $color-primary-dark;
 }
 
 /* Login */
@@ -126,8 +127,6 @@ body {
 }
 
 .page {
-  min-height: 100vh;
-  background: $color-primary-dark;
   padding: 1rem 2rem 2rem 2rem;
 }
 
@@ -253,7 +252,6 @@ body {
 
 .game-detail-page {
   background: $color-primary-dark;
-  min-height: 100vh;
   display: flex;
 
   .guides-panel {
