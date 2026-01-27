@@ -15,17 +15,17 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './achievement-page.scss',
 })
 export class AchievementPage {
-  achievements: any = signal<Achievement[]>([]);
+  achievements = signal<Achievement[]>([]);
   game: any = signal<Game | null>(null);
   user: any = signal<User | null>(null);
-  
+
   constructor(
-    private router: Router, 
-    private route: ActivatedRoute, 
+    private router: Router,
+    private route: ActivatedRoute,
     private gameService: GameService,
     private authService: AuthService) {
-      this.user = toSignal(this.authService.currentUser$);
-    }
+    this.user = toSignal(this.authService.currentUser$);
+  }
 
   async ngOnInit() {
     const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
@@ -49,9 +49,11 @@ export class AchievementPage {
     const success = await this.gameService.completeAchievement(achievementId, this.user()!.id);
 
     if (success) {
-      const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
-      const achievementsData = await this.gameService.getAchievementsByGameIdForUser(gameId, this.user()!.id);
-      this.achievements.set(achievementsData);
+      this.achievements.update(list =>
+        list.map(a =>
+          a.id === achievementId ? { ...a, isCompleted: true } : a
+        )
+      );
     }
   }
 }

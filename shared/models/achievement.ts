@@ -1,5 +1,5 @@
 export interface Achievement {
-  id?: number;
+  id: number;
   gameId: number;
   title: string;
   description?: string;
