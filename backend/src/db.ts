@@ -42,7 +42,7 @@ export class Db {
       gameId INTEGER NOT NULL,
       title TEXT NOT NULL,
       description TEXT NOT NULL,
-      iconPath TEXT,
+      difficulty TEXT NOT NULL CHECK(difficulty IN ('bronze', 'silver', 'gold', 'platinum')),
       FOREIGN KEY (gameId) REFERENCES games(id),
       UNIQUE(gameId, title)
     );
@@ -169,99 +169,103 @@ export class Db {
       ('Clair Obscur: Expedition 33', 'Clair Obscur: Expedition 33 ist ein preisgekröntes, von der Kritik gefeiertes Rollenspiel aus dem Jahr 2025, entwickelt von dem französischen Studio Sandfall Interactive und veröffentlicht von Kepler Interactive. Das Spiel kombiniert eine tiefgründige narrative Struktur mit taktischen rundenbasierten Kämpfen, kunstvoller Belle‑Époque‑inspirierten Weltgestaltung und emotional aufgeladenen Charakterbögen. Spieler begleiten eine Expedition gegen eine mysteriöse, übernatürliche Bedrohung in einer eindrucksvoll gestalteten Fantasy‑Welt, in der Licht‑ und Schattenmotivik als zentrales künstlerisches Thema dient. Clair Obscur erhielt zahlreiche Auszeichnungen, darunter Game of the Year 2025 bei den The Game Awards, Best Narrative, Best Art Direction und Best Score und wurde von Kritikern und Spielern für seine Story, Musik und visuelle Gestaltung gelobt. Das Spiel wurde am 24. April 2025 für PlayStation 5, Windows und Xbox Series X/S veröffentlicht und verkaufte bis Ende 2025 über fünf Millionen Einheiten.', 'role-playing', 'rpg,story,turn-based,fantasy', 'PC,PS5,Xbox', 'Sandfall Interactive', 'Kepler Interactive', '2025-04-24', '', 9.8);
 
     INSERT OR IGNORE INTO achievements
-      (gameId, title, description, iconPath)
+      (gameId, title, description, difficulty)
     VALUES
       (
         (SELECT id FROM games WHERE title = 'Elden Ring'),
         'Elden Lord',
-        'Beende das Spiel und werde Elden Lord.',
-        'TODO'
+        'End the game and become the Elden Lord.',
+        'silver'
       ),
       (
         (SELECT id FROM games WHERE title = 'Elden Ring'),
-        'Legendärer Krieger',
-        'Besiege 50 optionale Bosse.',
-        'TODO'
+        'Legendary Warrior',
+        'Kill 50 optional bosses.',
+        'gold'
       ),
       (
         (SELECT id FROM games WHERE title = 'Elden Ring'),
-        'Runenmeister',
-        'Sammle insgesamt 1.000.000 Runen.',
-        'TODO'
+        'Rune Collector',
+        'Collect 1.000.000 runes.',
+        'platinum'
       ),
       (
         (SELECT id FROM games WHERE title = 'The Witcher 3'),
-        'Hexer auf dem Pfad',
-        'Schließe die Hauptstory ab.',
-        'TODO'
+        'The Witcher',
+        'Complete all main story quests.',
+        'bronze'
       ),
       (
         (SELECT id FROM games WHERE title = 'The Witcher 3'),
-        'Gwent-Meister',
-        'Gewinne alle wichtigen Gwent-Turniere.',
-        'TODO'
+        'Gwent-Master',
+        'Win all important Gwent tournaments.',
+        'platinum'
       ),
       (
         (SELECT id FROM games WHERE title = 'The Witcher 3'),
-        'Monsterjäger',
-        'Töte 100 Monster.',
-        'TODO'
+        'Monster Slayer',
+        'Kill 100 monsters.',
+        'bronze'
       ),
       (
         (SELECT id FROM games WHERE title = 'Stardew Valley'),
-        'Erster Ertrag',
-        'Ernte deine erste Feldfrucht.',
-        'TODO'
+        'First Harvest',
+        'Harvest your first crop.',
+        'bronze'
       ),
       (
         (SELECT id FROM games WHERE title = 'Stardew Valley'),
-        'Gemeinschaftsheld',
-        'Schließe das Community Center ab.',
-        'TODO'
+        'Community Helper',
+        'Complete the Community Center.',
+        'silver'
       ),
       (
         (SELECT id FROM games WHERE title = 'Stardew Valley'),
-        'Millionär',
-        'Verdiene insgesamt 1.000.000 Gold.',
-        'TODO'
+        'Farming Pro',
+        'Reach level 10 in Farming skill.',
+        'gold'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Stardew Valley'),
+        'Millionaire',
+        'Earn 1,000,000 gold.',
+        'platinum'
       ),
       (
         (SELECT id FROM games WHERE title = 'Hades'),
-        'Fluchtversuch',
-        'Erreiche die Oberfläche zum ersten Mal.',
-        'TODO'
+        'Escape Artist',
+        'Escape the Underworld for the first time.',
+        'bronze'
       ),
       (
         (SELECT id FROM games WHERE title = 'Hades'),
-        'Gott des Todes',
-        'Beende das Spiel vollständig.',
-        'TODO'
+        'Godslayer',
+        'End the game completely.',
+        'gold'
       ),
       (
         (SELECT id FROM games WHERE title = 'Hades'),
-        'Olympischer Segen',
-        'Erhalte Segen aller olympischen Götter.',
-        'TODO'
-      ),
-
-      /* Minecraft */
-      (
-        (SELECT id FROM games WHERE title = 'Minecraft'),
-        'Holz sammeln',
-        'Schlage deinen ersten Baum.',
-        'TODO'
+        'olympian Favor',
+        'Receive blessings from all Olympian gods.',
+        'platinum'
       ),
       (
         (SELECT id FROM games WHERE title = 'Minecraft'),
-        'Der End',
-        'Besiege den Enderdrachen.',
-        'TODO'
+        'Woodworker',
+        'Collect your first block of wood.',
+        'bronze'
       ),
       (
         (SELECT id FROM games WHERE title = 'Minecraft'),
-        'Redstone-Ingenieur',
-        'Baue eine komplexe Redstone-Maschine.',
-        'TODO'
+        'The End',
+        'Defeat the Ender Dragon.',
+        'platinum'
+      ),
+      (
+        (SELECT id FROM games WHERE title = 'Minecraft'),
+        'Redstone-Engineer',
+        'Build a complex Redstone machine.',
+        'silver'
       );
 
     INSERT OR IGNORE INTO users

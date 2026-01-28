@@ -53,16 +53,27 @@
   }
 }
 
-// TODO
-// .achievement-icon {
-//   width: 50px;
-//   height: 50px;
-//   margin-right: 1rem;
+.achievement-icon {
+  width: 40px;
+  height: 40px;
+  mask-image: url('/trophy.svg');
+  mask-size: contain;
+  background-color: currentColor;
+  margin-right: 0.5rem;
+}
 
-//   img {
-//     width: 100%;
-//     height: 100%;
-//     object-fit: contain;
-//     border-radius: c.$radius-small;
-//   }
-// }
+.bronze {
+  color: g.$color-bronze;
+}
+
+.silver {
+  color: g.$color-silver;
+}
+
+.gold {
+  color: g.$color-gold;
+}
+
+.platinum {
+  color: g.$color-platinum;
+}

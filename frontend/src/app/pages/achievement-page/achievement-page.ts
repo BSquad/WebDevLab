@@ -7,7 +7,6 @@ import { AuthService } from '../../services/auth-service';
 import { User } from '../../../../../shared/models/user';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-
 @Component({
   selector: 'app-achievement-page',
   imports: [],

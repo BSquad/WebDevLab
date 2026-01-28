@@ -10,9 +10,7 @@
     <ul class="achievements-list">
       @for (achievement of achievements(); track achievement) {
       <li class="achievement-item" [class.completed]="achievement.isCompleted" [class.incomplete]="!achievement.isCompleted">
-        <!-- <div class="achievement-icon">
-          <img [src]="achievement.iconPath"/>
-        </div> -->
+        <div class="achievement-icon" [class]="achievement.difficulty"></div>
         <div class="achievement-info">
           <div class="achievement-name">{{ achievement.title }}</div>
           <div class="achievement-description">{{ achievement.description }}</div>
