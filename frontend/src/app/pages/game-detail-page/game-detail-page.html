@@ -5,7 +5,7 @@
 
   <div class="game-detail-page">
 
-    <div class="guides-panel">
+    <div class="guides-container">
       <h2>Guides</h2>
 
       <button class="normal-button" (click)="goToCreateGuide()">Create Guide</button>
@@ -36,7 +36,7 @@
       </ul>
     </div>
 
-    <div class="game-info-panel">
+    <div class="game-info-container">
       <img class="game-image-big" [src]="getGameImagePath(game()?.imageName)" />
       <p><strong>Description:</strong> {{ game()?.description }}</p>
       <p><strong>Genre:</strong> {{ game()?.genre }}</p>
@@ -68,7 +68,7 @@
       }
 
       @if (bestUsers()?.length > 0) {
-      <div class="best-users-section">
+      <div class="best-users-container">
         <h3>Top Players</h3>
         <ul class="best-users-list">
           @for (bestUser of bestUsers(); track bestUser) {

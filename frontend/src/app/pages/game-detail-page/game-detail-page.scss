@@ -3,7 +3,7 @@
 .game-detail-page {
   display: flex;
 
-  .guides-panel {
+  .guides-container {
     flex: 1;
 
     h2 {
@@ -79,7 +79,7 @@
     cursor: pointer;
   }
 
-  .game-info-panel {
+  .game-info-container {
     flex: 0.5;
 
     h1 {
@@ -125,7 +125,7 @@
   object-fit: cover;
 }
 
-.best-users-section {
+.best-users-container {
   margin-top: 2rem;
   padding: 1rem;
   border-radius: g.$radius-medium;
