@@ -40,7 +40,7 @@ export class AchievementPage {
   }
 
   async completeAchievement(achievement: Achievement) {
-    const success = await this.gameService.completeAchievement(achievement.id, this.user()!.id);
+    const success = await this.gameService.completeAchievement(achievement.id, this.user()!.id, this.game()!.id);
 
     if (success) {
       this.achievements.update(list =>

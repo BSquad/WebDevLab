@@ -54,13 +54,6 @@
               gap: 0.5rem;
               font-size: 0.85rem;
               margin-top: 0.2rem;
-
-              .guide-author {
-                text-decoration: underline;
-                cursor: pointer;
-              }
-
-              .guide-date {}
             }
           }
 
@@ -79,6 +72,11 @@
         }
       }
     }
+  }
+
+  .user-name-text {
+    text-decoration: underline;
+    cursor: pointer;
   }
 
   .game-info-panel {
@@ -125,4 +123,59 @@
   border-radius: g.$radius-medium;
   box-shadow: g.$shadow-medium;
   object-fit: cover;
+}
+
+.best-users-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: g.$radius-medium;
+  background: g.$gradient;
+  box-shadow: g.$shadow-medium;
+  color: g.$color-white;
+
+  h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .best-users-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0.4rem 0.6rem;
+      margin-bottom: 0.4rem;
+      border-radius: g.$radius-small;
+      background-color: rgba(255, 255, 255, 0.05);
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      &.empty-list {
+        text-align: center;
+        color: g.$color-white;
+        font-style: italic;
+      }
+
+      .user-name-text {
+        font-weight: 600;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-right: 0.5rem;
+      }
+
+      .best-user-achievements {
+        font-size: 0.9rem;
+        color: g.$color-yellow;
+      }
+    }
+  }
 }

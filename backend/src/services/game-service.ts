@@ -1,5 +1,6 @@
 import type { Achievement } from "../../../shared/models/achievement.ts";
 import type { Game } from "../../../shared/models/game.ts";
+import { User } from "../../../shared/models/user.js";
 import { GameDbAccess } from "../db-access/game-db-access.js";
 
 export class GameService {
@@ -17,8 +18,8 @@ export class GameService {
     return await this.gameDbAccess.getAchievementsByGameId(gameId, userId);
   }
 
-  completeAchievement = async (achievementId: number, userId: number) => {
-    await this.gameDbAccess.competeAchievement(achievementId, userId);
+  completeAchievement = async (achievementId: number, userId: number, gameId: number) => {
+    await this.gameDbAccess.completeAchievement(achievementId, userId, gameId);
   }
 
   toggleTrackGame = async (gameId: number, userId: number, isTracked: boolean) => {
@@ -27,5 +28,9 @@ export class GameService {
     } else {
       await this.gameDbAccess.trackGame(gameId, userId);
     }
+  }
+
+  getBestUsersByGameId = async (gameId: number): Promise<User[]> => {
+    return await this.gameDbAccess.getBestUsersByGameId(gameId);
   }
 }

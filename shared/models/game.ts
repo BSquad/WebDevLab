@@ -12,4 +12,5 @@ export interface Game {
   popularityScore?: number;
   isTracked: boolean; // for the current user
   isFavorite: boolean; // for the current user
+  achievementCount: number; // total count
 }

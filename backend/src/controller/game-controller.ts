@@ -27,7 +27,8 @@ export class GameController {
   completeAchievement = async (req: Request, res: Response) => {
     const achievementId = Number(req.params.achievementId);
     const userId = Number(req.body.userId);
-    await this.gameService.completeAchievement(achievementId, userId);
+    const gameId = Number(req.body.gameId);
+    await this.gameService.completeAchievement(achievementId, userId, gameId);
     res.json(true);
   }
 
@@ -37,5 +38,11 @@ export class GameController {
     const isTracked = Boolean(req.body.isTracked);
     await this.gameService.toggleTrackGame(gameId, userId, isTracked);
     res.json(true);
+  }
+
+  getBestUsersByGameId = async (req: Request, res: Response) => {
+    const gameId = Number(req.params.gameId);
+    const bestUsers = await this.gameService.getBestUsersByGameId(gameId);    
+    res.json(bestUsers);
   }
 }

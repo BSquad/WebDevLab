@@ -17,7 +17,7 @@
             <div class="guide-left">
               <div class="guide-title">{{ guide.title }}</div>
               <div class="guide-meta">
-                <span class="guide-author">by {{ guide.author }}</span>
+                <span class="user-name-text">by {{ guide.author }}</span>
                 <span class="guide-date"> from {{ guide.createdAt | date:'mediumDate' }}</span>
               </div>
             </div>
@@ -60,10 +60,28 @@
         }
       </div>
       <button class="normal-button" (click)="goToAchievements()">Achievements</button>
+
       @if (user()) {
       <button class="track-button" [class.filled]="game()?.isTracked" (click)="toggleTrackGame($event)">
         ★
       </button>
       }
+
+      @if (bestUsers()?.length > 0) {
+      <div class="best-users-section">
+        <h3>Top Players</h3>
+        <ul class="best-users-list">
+          @for (bestUser of bestUsers(); track bestUser) {
+          <li class="best-user-item">
+            <span class="user-name-text">{{ bestUser.name }}</span>
+            <span class="best-user-achievements">: {{ bestUser.achievementCount }}/{{ game()?.achievementCount }} Achievements</span>
+          </li>
+          } @empty {
+          <li class="empty-list">No top players yet</li>
+          }
+        </ul>
+      </div>
+      }
+
     </div>
   </div>

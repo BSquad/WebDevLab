@@ -73,6 +73,7 @@ export class Db {
     CREATE TABLE IF NOT EXISTS user_achievements (
       userId INTEGER NOT NULL,
       achievementId INTEGER NOT NULL,
+      gameId INTEGER NOT NULL,
       completedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (userId, achievementId),
       FOREIGN KEY (userId) REFERENCES users(id),

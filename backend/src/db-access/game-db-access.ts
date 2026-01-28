@@ -1,6 +1,7 @@
 import { Db } from '../db.js';
 import type { Game } from '../../../shared/models/game.ts';
 import type { Achievement } from '../../../shared/models/achievement.ts';
+import { User } from '../../../shared/models/user.js';
 
 export class GameDbAccess {
   private db: Db = new Db();
@@ -10,7 +11,8 @@ export class GameDbAccess {
         SELECT 
           g.*,
           CASE WHEN ug.userId IS NOT NULL THEN 1 ELSE 0 END AS isTracked,
-          COALESCE(ug.isFavorite, 0) AS isFavourite
+          COALESCE(ug.isFavorite, 0) AS isFavourite,
+          (SELECT COUNT(*) FROM achievements a WHERE a.gameId = g.id) AS achievementCount
         FROM games g
         LEFT JOIN user_games ug
           ON g.id = ug.gameId AND ug.userId = ?
@@ -30,7 +32,8 @@ export class GameDbAccess {
         SELECT 
           g.*,
           CASE WHEN ug.userId IS NOT NULL THEN 1 ELSE 0 END AS isTracked,
-          COALESCE(ug.isFavorite, 0) AS isFavourite
+          COALESCE(ug.isFavorite, 0) AS isFavourite,
+          (SELECT COUNT(*) FROM achievements a WHERE a.gameId = g.id) AS achievementCount
         FROM games g
         LEFT JOIN user_games ug
           ON g.id = ug.gameId AND ug.userId = ?
@@ -63,10 +66,10 @@ export class GameDbAccess {
     }));
   }
 
-  competeAchievement = async (achievementId: number, userId: number) => {
+  completeAchievement = async (achievementId: number, userId: number, gameId: number) => {
     await this.db.executeSQL(
-      `INSERT INTO USER_ACHIEVEMENTS (userId, achievementId, completedAt) VALUES (?, ?, datetime('now'))`,
-      [userId, achievementId]
+      `INSERT INTO USER_ACHIEVEMENTS (userId, achievementId, gameId, completedAt) VALUES (?, ?, ?, datetime('now'))`,
+      [userId, achievementId, gameId]
     );
   }
 
@@ -82,6 +85,18 @@ export class GameDbAccess {
       `DELETE FROM USER_GAMES WHERE userId = ? AND gameId = ?`,
       [userId, gameId]
     );
+  }
+
+  getBestUsersByGameId = async (gameId: number): Promise<User[]> => {
+    return await this.db.executeSQL(`
+      SELECT u.id, u.name, u.email, COUNT(ua.achievementId) AS achievementCount
+      FROM user_achievements ua
+      LEFT JOIN users u ON u.id = ua.userId
+      WHERE ua.gameId = ?
+      GROUP BY u.id, u.name, u.email
+      ORDER BY achievementCount DESC
+      LIMIT 10
+    `, [gameId]) as User[];
   }
 
   splitStringToArray = (text: string): string[] => {

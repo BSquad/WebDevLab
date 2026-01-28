@@ -21,6 +21,7 @@ export class GameDetailPage {
   game = signal<Game | null>(null);
   guides: any = signal<Guide[]>([]);
   user: any = signal<User | null>(null);
+  bestUsers: any = signal<User[]>([]);
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +41,8 @@ export class GameDetailPage {
       this.game.set(gameData);
       const guidesData = await this.guideService.getGuidesByGameId(gameId);
       this.guides.set(guidesData);
+      const bestUsersData = await this.gameService.getBestUsersByGameId(gameId);
+      this.bestUsers.set(bestUsersData);
     } catch (err: any) {
       this.toastService.showError('Error: ' + err.message);
     }
