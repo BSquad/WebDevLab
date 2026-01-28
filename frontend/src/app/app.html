@@ -2,7 +2,7 @@
   <header class="header">
     <button class="normal-button" (click)="goToGameList()">Browse Games</button>
     <button class="normal-button" (click)="goToUserPage()" [disabled]="!user()">My Guides</button>
-    <div class="profile-wrapper" (click)="toggleProfileDropdown()">
+    <div class="profile-container" (click)="toggleProfileDropdown()">
       <div class="profile-name">
         @if (user()) {
         {{ user()?.name }}
