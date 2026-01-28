@@ -1,0 +1,40 @@
+@use '../../../styles/_global' as g;
+
+.toast {
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: g.$shadow-medium;
+  animation: fadeInOut 2.5s ease forwards;
+}
+
+.success {
+  background: g.$color-success;
+}
+
+.error {
+  background: g.$color-error;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

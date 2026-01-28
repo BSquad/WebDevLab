@@ -1,270 +1,45 @@
-/* Farben */
-$color-primary: #3f51b5;
-$color-accent: #2196f3;
-$color-background: #2c3a8c;
-$color-button-hover: #1976d2;
-$color-gradient-middle: #673ab7;
-$color-success: #36ab18;
-$color-yellow: #ffc107;
-$color-error: #ff4d4d;
-$color-white: #fff;
-$color-black: #000;
-$color-input-background: rgba(63, 47, 47, 0.15);
-$color-button-deactivated-background: #716f6f;
-$color-button-deactivated-text: #313030;
-
-/* Layout & Sizes */
-$radius-small: 4px;
-$radius-medium: 8px;
-
-$shadow-medium: 0 6px 10px rgba(0, 0, 0, 0.2),
-  0 2px 4px rgba(0, 0, 0, 0.15);
-
-$shadow-strong: 0 12px 18px rgba(0, 0, 0, 0.28),
-  0 4px 8px rgba(0, 0, 0, 0.18);
-
-$gradient: linear-gradient(145deg, $color-primary, $color-gradient-middle, $color-accent);
+@use './styles/_global' as g;
 
 body {
   margin: 0;
-  background-color: $color-background;
-}
-
-.toast {
-  padding: 12px 20px;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  box-shadow: $shadow-medium;
-  animation: fadeInOut 2.5s ease forwards;
-}
-
-.success {
-  background: $color-success;
-}
-
-.error {
-  background: $color-error;
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  10% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  90% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-}
-
-/* App / Page Title */
-.page-title {
-  text-align: center;
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: $color-white;
-  }
+  background-color: g.$color-background;
 }
 
 .page {
   padding: 1rem 2rem 2rem 2rem;
 }
 
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: $gradient;
-  color: $color-white;
-  font-weight: 500;
-  box-shadow: $shadow-medium;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+.page-title {
+  text-align: center;
 
-  .profile-name {
-    font-size: 1rem;
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: g.$color-white;
   }
 }
 
 .normal-button {
-  background-color: $color-primary;
-  color: $color-white;
+  background-color: g.$color-primary;
+  color: g.$color-white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: $radius-small;
+  border-radius: g.$radius-small;
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: $color-button-hover;
+    background-color: g.$color-button-hover;
   }
 }
 
 .normal-button:disabled {
-  background-color: $color-button-deactivated-background;
-  color: $color-button-deactivated-text;
+  background-color: g.$color-button-deactivated-background;
+  color: g.$color-button-deactivated-text;
   cursor: not-allowed;
   opacity: 0.7;
   pointer-events: none;
-}
-
-/* Profile Dropdown */
-.profile-wrapper {
-  position: relative;
-  cursor: pointer;
-  user-select: none;
-
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  .profile-name {
-    font-weight: 500;
-    color: $color-white;
-  }
-}
-
-.profile-dropdown {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-
-  min-width: 160px;
-  padding: 6px 0;
-
-  background: $color-primary;
-  border-radius: $radius-medium;
-  box-shadow: $shadow-strong;
-  z-index: 2000;
-
-  animation: dropdownFadeIn 0.15s ease-out;
-}
-
-.dropdown-item {
-  width: 100%;
-  padding: 10px 14px;
-
-  background: none;
-  border: none;
-  color: $color-white;
-
-  text-align: left;
-  font-size: 0.95rem;
-  font-weight: 500;
-
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-  }
-
-  &:active {
-    background-color: rgba(255, 255, 255, 0.25);
-  }
-}
-
-.profile-dropdown::before {
-  content: "";
-  position: absolute;
-  top: -6px;
-  right: 16px;
-
-  width: 12px;
-  height: 12px;
-
-  background: $color-primary;
-  transform: rotate(45deg);
-  border-radius: 2px;
-}
-
-/* Login */
-.register-container,
-.login-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  border-radius: $radius-medium;
-  background: $gradient;
-  box-shadow: $shadow-medium;
-  color: $color-white;
-
-  form {
-    display: flex;
-    flex-direction: column;
-
-    div {
-      margin-bottom: 1rem;
-
-      label {
-        display: block;
-        margin-bottom: 0.25rem;
-        color: $color-white;
-      }
-
-      input {
-        width: 100%;
-        padding: 0.6rem;
-        border-radius: $radius-small;
-        border: none;
-        background: $color-white;
-      }
-    }
-  }
-
-  p {
-    margin-top: 1rem;
-    text-align: center;
-    color: $color-white;
-  }
-}
-
-// Game List Page
-.game-list-page {
-  .game-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    padding: 1rem;
-    border-radius: $radius-medium;
-    margin-bottom: 0.5rem;
-    color: $color-white;
-    background: $gradient;
-    cursor: pointer;
-  }
-
-  .game-info {
-    flex: 1;
-  }
-
-  .game-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  .game-genre {
-    font-size: 0.9rem;
-    opacity: 0.85;
-  }
 }
 
 .track-button {
@@ -272,220 +47,13 @@ body {
   border: none;
   cursor: pointer;
   font-size: 2rem;
-  color: $color-button-deactivated-text;
+  color: g.$color-button-deactivated-text;
 
   &.filled {
-    color: $color-yellow;
+    color: g.$color-yellow;
   }
 
   &:hover {
-    color: $color-yellow;
+    color: g.$color-yellow;
   }
-}
-
-.game-image-big {
-  width: 100%;
-  max-width: 1000px;
-  max-height: 600px;
-  border-radius: $radius-medium;
-  box-shadow: $shadow-medium;
-  object-fit: cover;
-}
-
-.game-image-small {
-  width: 80px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: $radius-small;
-  box-shadow: $shadow-medium;
-}
-
-// Game Detail Page
-.game-detail-page {
-  display: flex;
-
-  .guides-panel {
-    flex: 1;
-
-    h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      color: $color-white;
-    }
-
-    .guides-list {
-      list-style: none;
-      padding: 0;
-
-      li {
-        &.empty-list {
-          color: $color-white;
-        }
-      }
-
-      .guide-item {
-        display: block;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.6rem 0.8rem;
-        margin-bottom: 0.5rem;
-        margin-right: 2rem;
-        border-radius: $radius-small;
-        background: $gradient;
-        color: $color-white;
-        box-shadow: $shadow-medium;
-
-        .guide-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-
-          .guide-left {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-
-            .guide-title {
-              font-size: 1.2rem;
-              font-weight: 700;
-            }
-
-            .guide-meta {
-              display: flex;
-              gap: 0.5rem;
-              font-size: 0.85rem;
-              margin-top: 0.2rem;
-
-              .guide-author {
-                text-decoration: underline;
-                cursor: pointer;
-              }
-
-              .guide-date {}
-            }
-          }
-
-          .guide-actions {
-            display: flex;
-            gap: 0.4rem;
-            margin-left: 1rem;
-          }
-        }
-
-        .guide-content {
-          margin-top: 0.5rem;
-          font-size: 0.9rem;
-          color: $color-white;
-          line-height: 1.4;
-        }
-      }
-    }
-  }
-
-  .game-info-panel {
-    flex: 0.5;
-
-    h1 {
-      margin-top: 0;
-      font-size: 2rem;
-      color: $color-white;
-      margin-bottom: 1rem;
-    }
-
-    p {
-      margin: 0.5rem 0;
-      color: $color-white;
-    }
-
-    .tags-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.3rem;
-
-      .game-tag {
-        display: inline-block;
-        padding: 0.2rem 0.5rem;
-        background-color: $color-primary;
-        color: $color-white;
-        font-size: 0.85rem;
-        border-radius: $radius-small;
-      }
-    }
-
-    button {
-      margin-top: 1rem;
-    }
-  }
-}
-
-/* Achievement Liste */
-.achievement-page {
-
-  .achievements-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-
-    .achievement-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: $radius-medium;
-      box-shadow: $shadow-medium;
-      transition: background-color 0.3s, transform 0.2s;
-
-      &.completed {
-        background-color: $color-success;
-        color: $color-black;
-      }
-
-      &.incomplete {
-        background-color: $color-accent;
-        color: $color-white;
-      }
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: $shadow-strong;
-      }
-
-      .achievement-info {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-
-        .achievement-name {
-          font-weight: bold;
-          font-size: 1.1rem;
-          margin-bottom: 0.3rem;
-        }
-
-        .achievement-description {
-          font-size: 0.9rem;
-        }
-      }
-    }
-
-    .empty-list {
-      text-align: center;
-      color: $color-white;
-    }
-  }
-
-  // TODO
-  // .achievement-icon {
-  //   width: 50px;
-  //   height: 50px;
-  //   margin-right: 1rem;
-
-  //   img {
-  //     width: 100%;
-  //     height: 100%;
-  //     object-fit: contain;
-  //     border-radius: $radius-small;
-  //   }
-  // }
 }

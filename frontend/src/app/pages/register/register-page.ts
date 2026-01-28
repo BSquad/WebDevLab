@@ -9,7 +9,7 @@ import { RegisterData } from '../../../../../shared/models/register-data';
   selector: 'app-register',
   imports: [FormsModule, RouterModule],
   templateUrl: './register-page.html',
-  styleUrl: './register-page.scss',
+  styleUrls: ['./register-page.scss', '../../../styles/_auth-pages.scss'],
 })
 export class RegisterPage {
   constructor(

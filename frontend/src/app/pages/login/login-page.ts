@@ -8,7 +8,7 @@ import { ToastService } from '../../services/toast-service';
   selector: 'app-login',
   imports: [FormsModule, RouterModule],
   templateUrl: './login-page.html',
-  styleUrl: './login-page.scss',
+  styleUrls: ['./login-page.scss', '../../../styles/_auth-pages.scss'],
 })
 export class LoginPage {
   constructor(

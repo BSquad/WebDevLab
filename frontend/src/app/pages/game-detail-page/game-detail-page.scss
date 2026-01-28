@@ -1,0 +1,128 @@
+@use '../../../styles/_global' as g;
+
+.game-detail-page {
+  display: flex;
+
+  .guides-panel {
+    flex: 1;
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: g.$color-white;
+    }
+
+    .guides-list {
+      list-style: none;
+      padding: 0;
+
+      li {
+        &.empty-list {
+          color: g.$color-white;
+        }
+      }
+
+      .guide-item {
+        display: block;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 0.8rem;
+        margin-bottom: 0.5rem;
+        margin-right: 2rem;
+        border-radius: g.$radius-small;
+        background: g.$gradient;
+        color: g.$color-white;
+        box-shadow: g.$shadow-medium;
+
+        .guide-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+
+          .guide-left {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+
+            .guide-title {
+              font-size: 1.2rem;
+              font-weight: 700;
+            }
+
+            .guide-meta {
+              display: flex;
+              gap: 0.5rem;
+              font-size: 0.85rem;
+              margin-top: 0.2rem;
+
+              .guide-author {
+                text-decoration: underline;
+                cursor: pointer;
+              }
+
+              .guide-date {}
+            }
+          }
+
+          .guide-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-left: 1rem;
+          }
+        }
+
+        .guide-content {
+          margin-top: 0.5rem;
+          font-size: 0.9rem;
+          color: g.$color-white;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+
+  .game-info-panel {
+    flex: 0.5;
+
+    h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      color: g.$color-white;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      color: g.$color-white;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.3rem;
+
+      .game-tag {
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        background-color: g.$color-primary;
+        color: g.$color-white;
+        font-size: 0.85rem;
+        border-radius: g.$radius-small;
+      }
+    }
+
+    button {
+      margin-top: 1rem;
+    }
+  }
+}
+
+.game-image-big {
+  width: 100%;
+  max-width: 1000px;
+  max-height: 600px;
+  border-radius: g.$radius-medium;
+  box-shadow: g.$shadow-medium;
+  object-fit: cover;
+}

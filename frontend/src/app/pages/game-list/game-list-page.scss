@@ -1,0 +1,38 @@
+@use '../../../styles/_global' as g;
+
+.game-list-page {
+  .game-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 1rem;
+    border-radius: g.$radius-medium;
+    margin-bottom: 0.5rem;
+    color: g.$color-white;
+    background: g.$gradient;
+    cursor: pointer;
+  }
+
+  .game-info {
+    flex: 1;
+  }
+
+  .game-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .game-genre {
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+}
+
+.game-image-small {
+  width: 80px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: g.$radius-small;
+  box-shadow: g.$shadow-medium;
+}

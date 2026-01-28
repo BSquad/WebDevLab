@@ -1,0 +1,88 @@
+@use '../styles/_global' as g;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: g.$gradient;
+  color: g.$color-white;
+  font-weight: 500;
+  box-shadow: g.$shadow-medium;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .profile-name {
+    font-size: 1rem;
+  }
+}
+
+.profile-wrapper {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .profile-name {
+    font-weight: 500;
+    color: g.$color-white;
+  }
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+
+  min-width: 160px;
+  padding: 6px 0;
+
+  background: g.$color-primary;
+  border-radius: g.$radius-medium;
+  box-shadow: g.$shadow-strong;
+  z-index: 2000;
+
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 10px 14px;
+
+  background: none;
+  border: none;
+  color: g.$color-white;
+
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.profile-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 16px;
+
+  width: 12px;
+  height: 12px;
+
+  background: g.$color-primary;
+  transform: rotate(45deg);
+  border-radius: 2px;
+}

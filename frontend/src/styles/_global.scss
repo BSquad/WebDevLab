@@ -1,0 +1,26 @@
+/* Farben */
+$color-primary: #3f51b5;
+$color-accent: #2196f3;
+$color-background: #2c3a8c;
+$color-button-hover: #1976d2;
+$color-gradient-middle: #673ab7;
+$color-success: #36ab18;
+$color-yellow: #ffc107;
+$color-error: #ff4d4d;
+$color-white: #fff;
+$color-black: #000;
+$color-input-background: rgba(63, 47, 47, 0.15);
+$color-button-deactivated-background: #716f6f;
+$color-button-deactivated-text: #313030;
+
+/* Layout & Sizes */
+$radius-small: 4px;
+$radius-medium: 8px;
+
+$shadow-medium: 0 6px 10px rgba(0, 0, 0, 0.2),
+  0 2px 4px rgba(0, 0, 0, 0.15);
+
+$shadow-strong: 0 12px 18px rgba(0, 0, 0, 0.28),
+  0 4px 8px rgba(0, 0, 0, 0.18);
+
+$gradient: linear-gradient(145deg, $color-primary, $color-gradient-middle, $color-accent);
