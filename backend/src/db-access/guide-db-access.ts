@@ -6,8 +6,8 @@ export class GuideDbAccess {
 
   addGuide = async (guide: Guide) => {
     await this.db.executeSQL(
-      `INSERT INTO GUIDES (AUTHORID, GAMEID, TITLE, CONTENT, CREATEDAT) VALUES (?, ?, ?, ?, datetime('now'))`,
-      [guide.authorId, guide.gameId, guide.title, guide.content]
+      `INSERT INTO GUIDES (userId, GAMEID, TITLE, CONTENT, CREATEDAT) VALUES (?, ?, ?, ?, datetime('now'))`,
+      [guide.userId, guide.gameId, guide.title, guide.content]
     );
   }
 
@@ -15,7 +15,7 @@ export class GuideDbAccess {
     const sql = `
       SELECT 
         g.id,
-        g.authorId,
+        g.userId,
         u.name AS author,
         g.gameId,
         g.title,
@@ -23,7 +23,7 @@ export class GuideDbAccess {
         g.pdfPath,
         g.createdAt
       FROM guides g
-      JOIN users u ON g.authorId = u.id
+      JOIN users u ON g.userId = u.id
       WHERE g.gameId = ?
       ORDER BY g.createdAt DESC
     `;

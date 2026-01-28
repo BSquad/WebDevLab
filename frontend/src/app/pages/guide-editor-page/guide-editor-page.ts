@@ -48,7 +48,7 @@ export class GuideEditorPage {
         title: this.title,
         content: this.content,
         gameId: this.game()?.id,
-        authorId: this.user()?.id
+        userId: this.user()?.id
       };
 
       const success = await this.guideService.createGuide(guide);

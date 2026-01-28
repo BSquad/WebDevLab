@@ -50,7 +50,7 @@ export class GameDetailPage {
 
   isGuideOwner(guide: Guide): boolean {
     const user = this.user();
-    return user !== null && guide.authorId === user.id;
+    return user !== null && guide.userId === user.id;
   }
 
   goToReadGuide(guide: Guide) {

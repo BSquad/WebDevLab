@@ -49,15 +49,15 @@ export class Db {
 
     CREATE TABLE IF NOT EXISTS guides (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      authorId INTEGER NOT NULL,
+      userId INTEGER NOT NULL,
       gameId INTEGER NOT NULL,
       title TEXT NOT NULL,
       content TEXT NOT NULL,
       pdfPath TEXT,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (authorId) REFERENCES users(id),
+      FOREIGN KEY (userId) REFERENCES users(id),
       FOREIGN KEY (gameId) REFERENCES games(id),
-      UNIQUE(authorId, gameId, title)
+      UNIQUE(userId, gameId, title)
     );
 
     CREATE TABLE IF NOT EXISTS user_games (
@@ -281,7 +281,7 @@ export class Db {
       );
 
     INSERT OR IGNORE INTO guides 
-      (authorId, gameId, title, content, pdfPath, createdAt)
+      (userId, gameId, title, content, pdfPath, createdAt)
     VALUES
       (
         (SELECT id FROM users WHERE name = 'sa'), 

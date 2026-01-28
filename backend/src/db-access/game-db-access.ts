@@ -102,18 +102,22 @@ export class GameDbAccess {
   async getPopularGames(): Promise<Game[]> {
     const sql = `
       SELECT
-        g.*,
-        g.popularityScore
+        ga.*,
+        ga.popularityScore
           + (COUNT(DISTINCT ug.userId) * 0.5)
-          + (COUNT(DISTINCT ua.userId) * 0.7) AS combinedScore
-      FROM games g
+          + (COUNT(DISTINCT ua.userId) * 0.3) 
+          + (COUNT(DISTINCT gu.userId) * 0.7) AS combinedScore
+      FROM games ga
       LEFT JOIN user_games ug
-        ON ug.gameId = g.id
+        ON ug.gameId = ga.id
         AND ug.addedAt >= datetime('now', '-30 days')
       LEFT JOIN user_achievements ua
-        ON ua.gameId = g.id
+        ON ua.gameId = ga.id
         AND ua.completedAt >= datetime('now', '-30 days')
-      GROUP BY g.id
+      LEFT JOIN guides gu
+        ON gu.gameId = ga.id
+        AND gu.createdAt >= datetime('now', '-30 days')
+      GROUP BY ga.id
       ORDER BY combinedScore DESC
       LIMIT 8
     `;

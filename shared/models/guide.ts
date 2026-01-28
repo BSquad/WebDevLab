@@ -1,6 +1,6 @@
 export interface Guide {
   id?: number;
-  authorId: number;
+  userId: number;
   author?: string;
   gameId: number;
   title: string;
