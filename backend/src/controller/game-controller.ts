@@ -45,4 +45,9 @@ export class GameController {
     const bestUsers = await this.gameService.getBestUsersByGameId(gameId);    
     res.json(bestUsers);
   }
+
+  getPopularGames = async (req: Request, res: Response) => {
+    const popularGames = await this.gameService.getPopularGames();
+    res.json(popularGames);
+  }
 }

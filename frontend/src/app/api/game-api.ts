@@ -31,4 +31,8 @@ export class GameApi extends BaseApi {
   async getBestUsersByGameId(gameId: number): Promise<User[]> {
     return await this.request(this.http.get<User[]>(`${this.apiUrl}/games/${gameId}/best-users`));
   }
+
+  async getPopularGames(): Promise<Game[]> {
+    return await this.request(this.http.get<Game[]>(`${this.apiUrl}/popular-games`));
+  }
 }

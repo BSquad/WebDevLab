@@ -33,4 +33,8 @@ export class GameService {
   async getBestUsersByGameId(gameId: number): Promise<User[]> {
     return await this.gameApi.getBestUsersByGameId(gameId);
   }
+
+  async getPopularGames(): Promise<Game[]> {
+    return await this.gameApi.getPopularGames();
+  }
 }

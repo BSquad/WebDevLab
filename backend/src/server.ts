@@ -39,6 +39,7 @@ app.get("/api/games/:gameId/achievements/user/:userId", gameController.getAchiev
 app.get("/api/guides/:gameId", guideController.getGuidesByGameId);
 app.post("/api/games/:gameId/track", gameController.toggleTrackGame);
 app.get("/api/games/:gameId/best-users", gameController.getBestUsersByGameId);
+app.get("/api/popular-games", gameController.getPopularGames);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);

@@ -64,6 +64,7 @@ export class Db {
       userId INTEGER NOT NULL,
       gameId INTEGER NOT NULL,
       isFavorite BOOLEAN,
+      addedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (userId, gameId),
       FOREIGN KEY (userId) REFERENCES users(id),
       FOREIGN KEY (gameId) REFERENCES games(id),

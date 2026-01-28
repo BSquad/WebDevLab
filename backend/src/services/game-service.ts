@@ -33,4 +33,8 @@ export class GameService {
   getBestUsersByGameId = async (gameId: number): Promise<User[]> => {
     return await this.gameDbAccess.getBestUsersByGameId(gameId);
   }
+
+  getPopularGames = async (): Promise<Game[]> => {
+    return await this.gameDbAccess.getPopularGames();
+  }
 }

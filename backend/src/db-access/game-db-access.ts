@@ -75,7 +75,7 @@ export class GameDbAccess {
 
   trackGame = async (gameId: number, userId: number) => {
     await this.db.executeSQL(
-      `INSERT OR IGNORE INTO USER_GAMES (userId, gameId, isFavorite) VALUES (?, ?, 0)`,
+      `INSERT OR IGNORE INTO USER_GAMES (userId, gameId, isFavorite, addedAt) VALUES (?, ?, 0, datetime('now'))`,
       [userId, gameId]
     );
   }
@@ -98,6 +98,29 @@ export class GameDbAccess {
       LIMIT 10
     `, [gameId]) as User[];
   }
+
+  async getPopularGames(): Promise<Game[]> {
+    const sql = `
+      SELECT
+        g.*,
+        g.popularityScore
+          + (COUNT(DISTINCT ug.userId) * 0.5)
+          + (COUNT(DISTINCT ua.userId) * 0.7) AS combinedScore
+      FROM games g
+      LEFT JOIN user_games ug
+        ON ug.gameId = g.id
+        AND ug.addedAt >= datetime('now', '-30 days')
+      LEFT JOIN user_achievements ua
+        ON ua.gameId = g.id
+        AND ua.completedAt >= datetime('now', '-30 days')
+      GROUP BY g.id
+      ORDER BY combinedScore DESC
+      LIMIT 8
+    `;
+
+    return await this.db.executeSQL(sql) as Game[];
+  }
+
 
   splitStringToArray = (text: string): string[] => {
     if (!text) return [];

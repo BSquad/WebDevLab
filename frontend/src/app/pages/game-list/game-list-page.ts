@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class GameListPage {
   games = signal<Game[]>([]);
+  popularGames = signal<Game[]>([]);
   user: any = signal<User | null>(null);
 
   filters = {
@@ -39,6 +40,8 @@ export class GameListPage {
     try {
       const data = await this.gameService.getGames(this.user()?.id);
       this.games.set(data);
+      const popularGames = await this.gameService.getPopularGames();
+      this.popularGames.set(popularGames);
     } catch (err) {
       this.toastService.showError('Error: ' + err);
     }

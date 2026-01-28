@@ -1,11 +1,28 @@
 <div class="page">
   <div class="page-title">
-    <h1>Game List</h1>
+    <h1>Games</h1>
+  </div>
+
+  <div class="popular-games-container">
+    <h3>Popular</h3>
+
+    <div class="popular-games-list">
+      @for (game of popularGames(); track game) {
+      <div class="popular-game-item" (click)="goToGame(game.id)">
+        <img class="popular-game-image" [src]="getGameImagePath(game.imageName)" />
+        <div class="popular-game-title">
+          {{ game.title }}
+        </div>
+      </div>
+      } @empty {
+      <span>No popular games</span>
+      }
+    </div>
   </div>
 
   <div class="game-list-page">
 
-    <div class="games-list-container">
+    <div class="game-list-container">
       @for (game of getfilteredGames(); track game) {
       <div class="game-item" (click)="goToGame(game.id)">
         <img class="game-image-small" [src]="getGameImagePath(game.imageName)" />
