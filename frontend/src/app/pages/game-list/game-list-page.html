@@ -5,27 +5,61 @@
 
   <div class="game-list-page">
 
-    @for (game of games(); track game) {
-    <div class="game-item" (click)="goToGame(game.id)">
-      <img class="game-image-small" [src]="getGameImagePath(game.imageName)" />
+    <div class="games-list-container">
+      @for (game of getfilteredGames(); track game) {
+      <div class="game-item" (click)="goToGame(game.id)">
+        <img class="game-image-small" [src]="getGameImagePath(game.imageName)" />
 
-      <div class="game-info">
-        <div class="game-title">
-          <strong>{{ game.title }}</strong>
+        <div class="game-info">
+          <div class="game-title">
+            <strong>{{ game.title }}</strong>
+          </div>
+          <div class="game-genre">
+            {{ game.genre }}
+          </div>
         </div>
-        <div class="game-genre">
-          {{ game.genre }}
-        </div>
+
+        @if (user()) {
+        <button class="track-button" [class.filled]="game.isTracked" (click)="toggleTrackGame(game, $event)">
+          ★
+        </button>
+        }
       </div>
-
-      @if (user()) {
-      <button class="track-button" [class.filled]="game.isTracked" (click)="toggleTrackGame(game, $event)">
-        ★
-      </button>
+      } @empty {
+      <li>No games</li>
       }
     </div>
-    } @empty {
-    <li>No games</li>
-    }
+
+    <div class="filters-container">
+      <h3>Filters</h3>
+
+      <div class="filter-item">
+        <label for="search-title">Search Title:</label>
+        <input type="text" id="search-title" [(ngModel)]="filters.title" placeholder="Search by title..." />
+      </div>
+
+      <div class="filter-item">
+        <label for="release-from">Release From:</label>
+        <input type="date" id="release-from" [(ngModel)]="filters.releaseFrom" />
+      </div>
+
+      <div class="filter-item">
+        <label for="release-to">Release To:</label>
+        <input type="date" id="release-to" [(ngModel)]="filters.releaseTo" />
+      </div>
+
+      <div class="filter-item">
+        <span>Tags:</span>
+        <div class="tags-checkboxes">
+          @for (tag of getAllTags(); track tag) {
+          <label>
+            <input type="checkbox" [(ngModel)]="filters.tags[tag]" />
+            {{ tag }}
+          </label>
+          }
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

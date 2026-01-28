@@ -1,38 +1,89 @@
 @use '../../../styles/_global' as g;
 
 .game-list-page {
-  .game-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  gap: 2rem;
 
+  .games-list-container {
+    flex: 1;
+
+    .game-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      padding: 1rem;
+      border-radius: g.$radius-medium;
+      margin-bottom: 0.5rem;
+      color: g.$color-white;
+      background: g.$gradient;
+      cursor: pointer;
+    }
+
+    .game-image-small {
+      width: 80px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: g.$radius-small;
+      box-shadow: g.$shadow-medium;
+    }
+
+    .game-info {
+      flex: 1;
+    }
+
+    .game-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .game-genre {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+  }
+
+  .filters-container {
+    flex: 0 0 220px;
     padding: 1rem;
     border-radius: g.$radius-medium;
-    margin-bottom: 0.5rem;
-    color: g.$color-white;
     background: g.$gradient;
-    cursor: pointer;
-  }
+    box-shadow: g.$shadow-medium;
+    color: g.$color-white;
+    align-self: flex-start;
 
-  .game-info {
-    flex: 1;
-  }
+    h3 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
 
-  .game-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
+    .filter-item {
+      margin-bottom: 1rem;
 
-  .game-genre {
-    font-size: 0.9rem;
-    opacity: 0.85;
-  }
-}
+      label {
+        display: block;
+        margin-bottom: 0.3rem;
+      }
 
-.game-image-small {
-  width: 80px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: g.$radius-small;
-  box-shadow: g.$shadow-medium;
+      input[type="text"],
+      input[type="date"] {
+        width: 100%;
+        padding: 0.4rem;
+        border-radius: g.$radius-small;
+        border: none;
+        box-sizing: border-box;
+      }
+
+      .tags-checkboxes {
+        margin-top: 0.3rem;
+        display: flex;
+        flex-direction: column;
+
+        label {
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }

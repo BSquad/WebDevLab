@@ -82,11 +82,13 @@
   .game-info-container {
     flex: 0.5;
 
-    h1 {
-      margin-top: 0;
-      font-size: 2rem;
-      color: g.$color-white;
-      margin-bottom: 1rem;
+    .game-image-big {
+      width: 100%;
+      max-width: 1000px;
+      max-height: 600px;
+      border-radius: g.$radius-medium;
+      box-shadow: g.$shadow-medium;
+      object-fit: cover;
     }
 
     p {
@@ -114,15 +116,6 @@
       margin-top: 1rem;
     }
   }
-}
-
-.game-image-big {
-  width: 100%;
-  max-width: 1000px;
-  max-height: 600px;
-  border-radius: g.$radius-medium;
-  box-shadow: g.$shadow-medium;
-  object-fit: cover;
 }
 
 .best-users-container {
