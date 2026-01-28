@@ -7,11 +7,14 @@ const DB_PATH = path.join("./database.sqlite");
 async function resetDatabase() {
   try {
     await fs.access(DB_PATH);
-    console.log("Bestehende Datenbank gefunden, wird gelöscht...");
     await fs.unlink(DB_PATH);
-    console.log("Datenbank gelöscht.");
-  } catch (err) {
-    console.log("Keine bestehende Datenbank gefunden, überspringe Löschung.");
+    console.log("\x1b[32mDatenbank erfolgreich gelöscht.\x1b[0m");
+  } catch (err: any) {
+    if (err.code === "ENOENT") {
+      
+    } else {
+      console.log("\x1b[31mLöschen fehlgeschlagen (Datei wird wahrscheinlich verwendet).\x1b[0m");
+    }
   }
 
   const db = new Db();
