@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Game } from '../../../../shared/models/game';
 import { BaseApi } from './base-api';
+import { Game } from '../../../../shared/models/game';
 import { Achievement } from '../../../../shared/models/achievement';
 import { User } from '../../../../shared/models/user';
 
@@ -8,31 +8,44 @@ import { User } from '../../../../shared/models/user';
   providedIn: 'root',
 })
 export class GameApi extends BaseApi {
+  private gameUrl = `${this.apiUrl}/games`;
+
+  // --------- Game ---------
   async getGames(userId?: number): Promise<Game[]> {
-    return await this.request(this.http.get<Game[]>(`${this.apiUrl}/games${userId ? `/user/${userId}` : ''}`));
+    const url = userId ? `${this.gameUrl}?userId=${userId}` : this.gameUrl;
+    return await this.request(this.http.get<Game[]>(url));
   }
 
   async getGame(id: number, userId?: number): Promise<Game> {
-    return await this.request(this.http.get<Game>(`${this.apiUrl}/games/${id}${userId ? `/user/${userId}` : ''}`));
-  }
-
-  async getAchievementsByGameId(gameId: number, userId?: number): Promise<Achievement[]> {
-    return await this.request(this.http.get<Achievement[]>(`${this.apiUrl}/games/${gameId}/achievements${userId ? `/user/${userId}` : ''}`));
-  }
-
-  async completeAchievement(achievementId: number, userId: number, gameId: number): Promise<boolean> {
-    return await this.request(this.http.post<boolean>(`${this.apiUrl}/achievements/${achievementId}/complete`, { userId, gameId }));
-  }
-
-  async toggleTrackGame(gameId: number, userId: number, isTracked: boolean): Promise<boolean> {
-    return await this.request(this.http.post<boolean>(`${this.apiUrl}/games/${gameId}/track`, { userId, isTracked }));
-  }
-
-  async getBestUsersByGameId(gameId: number): Promise<User[]> {
-    return await this.request(this.http.get<User[]>(`${this.apiUrl}/games/${gameId}/best-users`));
+    const url = userId ? `${this.gameUrl}/${id}?userId=${userId}` : `${this.gameUrl}/${id}`;
+    return await this.request(this.http.get<Game>(url));
   }
 
   async getPopularGames(): Promise<Game[]> {
-    return await this.request(this.http.get<Game[]>(`${this.apiUrl}/popular-games`));
+    return await this.request(this.http.get<Game[]>(`${this.gameUrl}/popular`));
+  }
+
+  // --------- Achievement ---------
+  async getAchievementsByGameId(gameId: number, userId?: number): Promise<Achievement[]> {
+    const url = `${this.gameUrl}/${gameId}/achievements${userId ? `?userId=${userId}` : ''}`;
+    return await this.request(this.http.get<Achievement[]>(url));
+  }
+
+  async completeAchievement(
+    achievementId: number,
+    userId: number,
+    gameId: number,
+  ): Promise<boolean> {
+    const url = `${this.gameUrl}/${gameId}/achievements/${achievementId}/complete?userId=${userId}`;
+    return await this.request(this.http.post<boolean>(url, {}));
+  }
+
+  async toggleTrackGame(gameId: number, userId: number, isTracked: boolean): Promise<boolean> {
+    const url = `${this.gameUrl}/${gameId}/track?userId=${userId}`;
+    return await this.request(this.http.post<boolean>(url, { isTracked }));
+  }
+
+  async getBestUsersByGameId(gameId: number): Promise<User[]> {
+    return await this.request(this.http.get<User[]>(`${this.gameUrl}/${gameId}/best-users`));
   }
 }

@@ -4,10 +4,11 @@ import cors from "cors";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+
 import { Db } from "./db.js";
-import { AuthController } from "./controller/auth-controller.js";
-import { GameController } from "./controller/game-controller.js";
-import { GuideController } from "./controller/guide-controller.js";
+import { authRouter } from "./routes/auth.routes.js";
+import { gameRouter } from "./routes/game.routes.js";
+import { guideRouter } from "./routes/guide.routes.js";
 
 const app = express();
 const PORT = 3000;
@@ -22,30 +23,16 @@ app.use("/images", express.static(path.join(__dirname, "../images")));
 const db = new Db();
 await db.initDB();
 
-const authController = new AuthController();
-const gameController = new GameController();
-const guideController = new GuideController();
-
-app.post("/api/login", authController.login);
-app.post("/api/register", authController.register);
-app.post("/api/create-guide", guideController.createGuide);
-app.post("/api/achievements/:achievementId/complete", gameController.completeAchievement);
-app.get("/api/games", gameController.getGames);
-app.get("/api/games/user/:userId", gameController.getGames);
-app.get("/api/games/:gameId", gameController.getGameById);
-app.get("/api/games/:gameId/user/:userId", gameController.getGameById);
-app.get("/api/games/:gameId/achievements", gameController.getAchievementsByGameId);
-app.get("/api/games/:gameId/achievements/user/:userId", gameController.getAchievementsByGameId);
-app.get("/api/guides/:gameId", guideController.getGuidesByGameId);
-app.post("/api/games/:gameId/track", gameController.toggleTrackGame);
-app.get("/api/games/:gameId/best-users", gameController.getBestUsersByGameId);
-app.get("/api/popular-games", gameController.getPopularGames);
+app.use("/auth", authRouter);
+app.use("/games", gameRouter);
+app.use("/guides", guideRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
   res.status(500).json({ message: err.message ?? "Unknown server error" });
 };
-
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Backend läuft auf http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Backend läuft auf http://localhost:${PORT}`),
+);

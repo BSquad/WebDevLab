@@ -9,32 +9,36 @@ import { User } from '../../../../shared/models/user';
 })
 export class GameService {
   constructor(private gameApi: GameApi) {}
-  
-  async getGames(userId?: number) : Promise<Game[]> {
-    return await this.gameApi.getGames(userId);
+
+  async getGames(userId?: number): Promise<Game[]> {
+    return this.gameApi.getGames(userId);
   }
 
-  async getGame(id: number, userId?: number) : Promise<Game> {
-    return await this.gameApi.getGame(id, userId);
+  async getGame(id: number, userId?: number): Promise<Game> {
+    return this.gameApi.getGame(id, userId);
   }
 
-  async getAchievementsByGameId(gameId: number, userId?: number) : Promise<Achievement[]> {
-    return await this.gameApi.getAchievementsByGameId(gameId, userId);
+  async getAchievementsByGameId(gameId: number, userId?: number): Promise<Achievement[]> {
+    return this.gameApi.getAchievementsByGameId(gameId, userId);
   }
 
-  async completeAchievement(achievementId: number, userId: number, gameId: number): Promise<boolean> {
-    return await this.gameApi.completeAchievement(achievementId, userId, gameId);
+  async completeAchievement(
+    achievementId: number,
+    userId: number,
+    gameId: number,
+  ): Promise<boolean> {
+    return this.gameApi.completeAchievement(achievementId, userId, gameId);
   }
 
   async toggleTrackGame(gameId: number, userId: number, isTracked: boolean): Promise<boolean> {
-    return await this.gameApi.toggleTrackGame(gameId, userId, isTracked);
+    return this.gameApi.toggleTrackGame(gameId, userId, isTracked);
   }
 
   async getBestUsersByGameId(gameId: number): Promise<User[]> {
-    return await this.gameApi.getBestUsersByGameId(gameId);
+    return this.gameApi.getBestUsersByGameId(gameId);
   }
 
   async getPopularGames(): Promise<Game[]> {
-    return await this.gameApi.getPopularGames();
+    return this.gameApi.getPopularGames();
   }
 }
