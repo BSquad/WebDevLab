@@ -1,87 +1,109 @@
 <div class="page">
-  <div class="page-title">
-    <h1>{{ game()?.title }}</h1>
-  </div>
-
-  <div class="game-detail-page">
-
-    <div class="guides-container">
-      <h2>Guides</h2>
-
-      <button class="normal-button" (click)="goToCreateGuide()">Create Guide</button>
-
-      <ul class="guides-list">
-        @for (guide of guides(); track guide) {
-        <li class="guide-item">
-          <div class="guide-header">
-            <div class="guide-left">
-              <div class="guide-title">{{ guide.title }}</div>
-              <div class="guide-meta">
-                <span class="user-name-text">by {{ guide.author }}</span>
-                <span class="guide-date"> from {{ guide.createdAt | date:'mediumDate' }}</span>
-              </div>
-            </div>
-            <div class="guide-actions">
-              <button class="normal-button" (click)="goToEditGuide(guide)" [hidden]="!isGuideOwner(guide)">Edit</button>
-              <button class="normal-button" (click)="goToReadGuide(guide)">Read</button>
-            </div>
-          </div>
-          <div class="guide-content">
-            {{ guide.content.length > 370 ? (guide.content | slice:0:370) + '...' : guide.content }}
-          </div>
-        </li>
-        } @empty {
-        <li class="empty-list">No guides yet</li>
-        }
-      </ul>
+    <div class="page-title">
+        <h1>{{ game()?.title }}</h1>
     </div>
 
-    <div class="game-info-container">
-      <img class="game-image-big" [src]="getGameImagePath(game()?.imageName)" />
-      <p><strong>Description:</strong> {{ game()?.description }}</p>
-      <p><strong>Genre:</strong> {{ game()?.genre }}</p>
-      <p><strong>Publisher:</strong> {{ game()?.publisher }}</p>
-      <p><strong>Developer:</strong> {{ game()?.developer }}</p>
-      <p><strong>Release Date:</strong> {{ game()?.releaseDate }}</p>
-      <p><strong>Tags:</strong></p>
-      <div class="tags-container">
-        @for (tag of game()?.tags; track tag) {
-        <span class="game-tag">{{ tag }}</span>
-        } @empty {
-        <span class="game-tag">No tags</span>
-        }
-      </div>
-      <p><strong>Platforms:</strong></p>
-      <div class="tags-container">
-        @for (platform of game()?.platform; track platform) {
-        <span class="game-tag">{{ platform }}</span>
-        } @empty {
-        <span class="game-tag">No platforms</span>
-        }
-      </div>
-      <button class="normal-button" (click)="goToAchievements()">Achievements</button>
+    <div class="game-detail-page">
+        <div class="guides-container">
+            <h2>Guides</h2>
 
-      @if (user()) {
-      <button class="track-button" [class.filled]="game()?.isTracked" (click)="toggleTrackGame($event)">
-        ★
-      </button>
-      }
+            <button class="normal-button" (click)="goToCreateGuide()">Create Guide</button>
 
-      @if (bestUsers()?.length > 0) {
-      <div class="best-users-container">
-        <h3>Top Players</h3>
-        <ul class="best-users-list">
-          @for (bestUser of bestUsers(); track bestUser) {
-          <li class="best-user-item">
-            <span class="user-name-text">{{ bestUser.name }}</span>
-            <span class="best-user-achievements">: {{ bestUser.achievementCount }}/{{ game()?.achievementCount }} Achievements</span>
-          </li>
-          } @empty {
-          <li class="empty-list">No top players yet</li>
-          }
-        </ul>
-      </div>
-      }
+            <ul class="guides-list">
+                @for (guide of guides(); track guide) {
+                    <li class="guide-item">
+                        <div class="guide-header">
+                            <div class="guide-left">
+                                <div class="guide-title">{{ guide.title }}</div>
+                                <div class="guide-meta">
+                                    <span class="user-name-text">by {{ guide.author }}</span>
+                                    <span class="guide-date">
+                                        from {{ guide.createdAt | date: 'mediumDate' }}</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="guide-actions">
+                                <button
+                                    class="normal-button"
+                                    (click)="goToEditGuide(guide)"
+                                    [hidden]="!isGuideOwner(guide)"
+                                >
+                                    Edit
+                                </button>
+                                <button class="normal-button" (click)="goToReadGuide(guide)">
+                                    Read
+                                </button>
+                            </div>
+                        </div>
+                        <div class="guide-content">
+                            {{
+                                guide.content.length > 370
+                                    ? (guide.content | slice: 0 : 370) + '...'
+                                    : guide.content
+                            }}
+                        </div>
+                    </li>
+                } @empty {
+                    <li class="empty-list">No guides yet</li>
+                }
+            </ul>
+        </div>
 
+        <div class="game-info-container">
+            <img class="game-image-big" [src]="getGameImagePath(game()?.imageName)" />
+            <p><strong>Description:</strong> {{ game()?.description }}</p>
+            <p><strong>Genre:</strong> {{ game()?.genre }}</p>
+            <p><strong>Publisher:</strong> {{ game()?.publisher }}</p>
+            <p><strong>Developer:</strong> {{ game()?.developer }}</p>
+            <p><strong>Release Date:</strong> {{ game()?.releaseDate }}</p>
+            <p><strong>Tags:</strong></p>
+            <div class="tags-container">
+                @for (tag of game()?.tags; track tag) {
+                    <span class="game-tag">{{ tag }}</span>
+                } @empty {
+                    <span class="game-tag">No tags</span>
+                }
+            </div>
+            <p><strong>Platforms:</strong></p>
+            <div class="tags-container">
+                @for (platform of game()?.platform; track platform) {
+                    <span class="game-tag">{{ platform }}</span>
+                } @empty {
+                    <span class="game-tag">No platforms</span>
+                }
+            </div>
+            <button class="normal-button" (click)="goToAchievements()">Achievements</button>
+
+            @if (user()) {
+                <button
+                    class="track-button"
+                    [class.filled]="game()?.isTracked"
+                    (click)="toggleTrackGame($event)"
+                >
+                    ★
+                </button>
+            }
+
+            @if (bestUsers()?.length > 0) {
+                <div class="best-users-container">
+                    <h3>Top Players</h3>
+                    <ul class="best-users-list">
+                        @for (bestUser of bestUsers(); track bestUser) {
+                            <li class="best-user-item">
+                                <span class="user-name-text">{{ bestUser.name }}</span>
+                                <span class="best-user-achievements"
+                                    >: {{ bestUser.achievementCount }}/{{
+                                        game()?.achievementCount
+                                    }}
+                                    Achievements</span
+                                >
+                            </li>
+                        } @empty {
+                            <li class="empty-list">No top players yet</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
     </div>
-  </div>
+</div>

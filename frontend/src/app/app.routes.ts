@@ -8,12 +8,12 @@ import { GuideEditorPage } from './pages/guide-editor-page/guide-editor-page';
 import { AchievementPage } from './pages/achievement-page/achievement-page';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/games', pathMatch: 'full' },
-  { path: 'login', component: LoginPage },
-  { path: 'register', component: RegisterPage },
-  { path: 'games', component: GameListPage },
-  { path: 'games/:gameId', component: GameDetailPage },
-  { path: 'user', component: UserPage },
-  { path: 'create-guide/:gameId', component: GuideEditorPage },
-  { path: 'achievements/:gameId', component: AchievementPage },
+    { path: '', redirectTo: '/games', pathMatch: 'full' },
+    { path: 'login', component: LoginPage },
+    { path: 'register', component: RegisterPage },
+    { path: 'games', component: GameListPage },
+    { path: 'games/:gameId', component: GameDetailPage },
+    { path: 'user', component: UserPage },
+    { path: 'create-guide/:gameId', component: GuideEditorPage },
+    { path: 'achievements/:gameId', component: AchievementPage },
 ];

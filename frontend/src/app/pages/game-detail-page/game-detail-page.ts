@@ -12,75 +12,80 @@ import { User } from '../../../../../shared/models/user';
 import { PathBuilder } from '../../services/path-builder';
 
 @Component({
-  selector: 'app-game-detail-page',
-  imports: [SlicePipe, DatePipe],
-  templateUrl: './game-detail-page.html',
-  styleUrl: './game-detail-page.scss',
+    selector: 'app-game-detail-page',
+    imports: [SlicePipe, DatePipe],
+    templateUrl: './game-detail-page.html',
+    styleUrl: './game-detail-page.scss',
 })
 export class GameDetailPage {
-  game = signal<Game | null>(null);
-  guides: any = signal<Guide[]>([]);
-  user: any = signal<User | null>(null);
-  bestUsers: any = signal<User[]>([]);
+    game = signal<Game | null>(null);
+    guides: any = signal<Guide[]>([]);
+    user: any = signal<User | null>(null);
+    bestUsers: any = signal<User[]>([]);
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private gameService: GameService,
-    private guideService: GuideService,
-    private authService: AuthService,
-    private toastService: ToastService,
-    private pathBuilder: PathBuilder) {
-    this.user = toSignal(this.authService.currentUser$);
-  }
-
-  async ngOnInit() {
-    try {
-      const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
-      const gameData = await this.gameService.getGame(gameId, this.user()?.id);
-      this.game.set(gameData);
-      const guidesData = await this.guideService.getGuidesByGameId(gameId);
-      this.guides.set(guidesData);
-      const bestUsersData = await this.gameService.getBestUsersByGameId(gameId);
-      this.bestUsers.set(bestUsersData);
-    } catch (err: any) {
-      this.toastService.showError('Error: ' + err.message);
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private gameService: GameService,
+        private guideService: GuideService,
+        private authService: AuthService,
+        private toastService: ToastService,
+        private pathBuilder: PathBuilder,
+    ) {
+        this.user = toSignal(this.authService.currentUser$);
     }
-  }
 
-  isGuideOwner(guide: Guide): boolean {
-    const user = this.user();
-    return user !== null && guide.userId === user.id;
-  }
-
-  goToReadGuide(guide: Guide) {
-    this.router.navigate(['/read-guide', guide.id]);
-  }
-
-  goToEditGuide(guide: Guide) {
-    this.router.navigate(['/edit-guide', guide.id]);
-  }
-
-  goToCreateGuide() {
-    const gameId = this.game()?.id;
-    this.router.navigate(['/create-guide', gameId], { state: { game: this.game() } });
-  }
-
-  goToAchievements() {
-    const gameId = this.game()?.id;
-    this.router.navigate(['/achievements', gameId]);
-  }
-
-  async toggleTrackGame(event: Event) {
-    event.stopPropagation();
-    const success = await this.gameService.toggleTrackGame(this.game()!.id, this.user()!.id, this.game()!.isTracked);
-
-    if (success) {
-      this.game.update(g => g ? { ...g, isTracked: !g.isTracked } : null);
+    async ngOnInit() {
+        try {
+            const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
+            const gameData = await this.gameService.getGame(gameId, this.user()?.id);
+            this.game.set(gameData);
+            const guidesData = await this.guideService.getGuidesByGameId(gameId);
+            this.guides.set(guidesData);
+            const bestUsersData = await this.gameService.getBestUsersByGameId(gameId);
+            this.bestUsers.set(bestUsersData);
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
+        }
     }
-  }
 
-  getGameImagePath(imageName?: string): string {
-    return this.pathBuilder.getGameImagePath(imageName);
-  }
+    isGuideOwner(guide: Guide): boolean {
+        const user = this.user();
+        return user !== null && guide.userId === user.id;
+    }
+
+    goToReadGuide(guide: Guide) {
+        this.router.navigate(['/read-guide', guide.id]);
+    }
+
+    goToEditGuide(guide: Guide) {
+        this.router.navigate(['/edit-guide', guide.id]);
+    }
+
+    goToCreateGuide() {
+        const gameId = this.game()?.id;
+        this.router.navigate(['/create-guide', gameId], { state: { game: this.game() } });
+    }
+
+    goToAchievements() {
+        const gameId = this.game()?.id;
+        this.router.navigate(['/achievements', gameId]);
+    }
+
+    async toggleTrackGame(event: Event) {
+        event.stopPropagation();
+        const success = await this.gameService.toggleTrackGame(
+            this.game()!.id,
+            this.user()!.id,
+            this.game()!.isTracked,
+        );
+
+        if (success) {
+            this.game.update((g) => (g ? { ...g, isTracked: !g.isTracked } : null));
+        }
+    }
+
+    getGameImagePath(imageName?: string): string {
+        return this.pathBuilder.getGameImagePath(imageName);
+    }
 }

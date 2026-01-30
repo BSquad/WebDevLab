@@ -2,40 +2,40 @@
 
 .register-container,
 .login-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  border-radius: g.$radius-medium;
-  background: g.$gradient;
-  box-shadow: g.$shadow-medium;
-  color: g.$color-white;
-
-  form {
-    display: flex;
-    flex-direction: column;
-
-    div {
-      margin-bottom: 1rem;
-
-      label {
-        display: block;
-        margin-bottom: 0.25rem;
-        color: g.$color-white;
-      }
-
-      input {
-        width: 100%;
-        padding: 0.6rem;
-        border-radius: g.$radius-small;
-        border: none;
-        background: g.$color-white;
-      }
-    }
-  }
-
-  p {
-    margin-top: 1rem;
-    text-align: center;
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: g.$radius-medium;
+    background: g.$gradient;
+    box-shadow: g.$shadow-medium;
     color: g.$color-white;
-  }
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+        div {
+            margin-bottom: 1rem;
+
+            label {
+                display: block;
+                margin-bottom: 0.25rem;
+                color: g.$color-white;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.6rem;
+                border-radius: g.$radius-small;
+                border: none;
+                background: g.$color-white;
+            }
+        }
+    }
+
+    p {
+        margin-top: 1rem;
+        text-align: center;
+        color: g.$color-white;
+    }
 }
