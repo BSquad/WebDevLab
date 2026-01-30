@@ -6,47 +6,50 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../shared/models/user';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet, RouterModule],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
-  standalone: true,
+    selector: 'app-root',
+    imports: [RouterOutlet, RouterModule],
+    templateUrl: './app.html',
+    styleUrl: './app.scss',
+    standalone: true,
 })
 export class App {
-  protected readonly title = signal('WebDevLab');
-  profileDropdownOpen = false;
-  currentUrl: string = '';
-  pageTitle: string = '';
-  user: any = signal<User | null>(null);
+    protected readonly title = signal('WebDevLab');
+    profileDropdownOpen = false;
+    currentUrl: string = '';
+    pageTitle: string = '';
+    user: any = signal<User | null>(null);
 
-  constructor(private router: Router, private authService: AuthService) {
-    this.user = toSignal(this.authService.currentUser$);
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.currentUrl = event.urlAfterRedirects;
-        this.profileDropdownOpen = false;
-      });
-  }
+    constructor(
+        private router: Router,
+        private authService: AuthService,
+    ) {
+        this.user = toSignal(this.authService.currentUser$);
+        this.router.events
+            .pipe(filter((event) => event instanceof NavigationEnd))
+            .subscribe((event: NavigationEnd) => {
+                this.currentUrl = event.urlAfterRedirects;
+                this.profileDropdownOpen = false;
+            });
+    }
 
-  goToGameList() {
-    this.router.navigate(['/games']);
-  }
+    goToGameList() {
+        this.router.navigate(['/games']);
+    }
 
-  goToUserPage() {
-    this.router.navigate(['/user']);
-  }
+    goToUserPage() {
+        this.router.navigate(['/user']);
+    }
 
-  goToLogin() {
-    this.router.navigate(['/login']);
-  }
+    goToLogin() {
+        this.router.navigate(['/login']);
+    }
 
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+    logout() {
+        this.authService.logout();
+        this.router.navigate(['/login']);
+    }
 
-  toggleProfileDropdown(): void {
-    this.profileDropdownOpen = !this.profileDropdownOpen;
-  }
+    toggleProfileDropdown(): void {
+        this.profileDropdownOpen = !this.profileDropdownOpen;
+    }
 }

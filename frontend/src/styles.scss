@@ -1,59 +1,59 @@
 @use './styles/_global' as g;
 
 body {
-  margin: 0;
-  background-color: g.$color-background;
+    margin: 0;
+    background-color: g.$color-background;
 }
 
 .page {
-  padding: 1rem 2rem 2rem 2rem;
+    padding: 1rem 2rem 2rem 2rem;
 }
 
 .page-title {
-  text-align: center;
+    text-align: center;
 
-  h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: g.$color-white;
-  }
+    h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: g.$color-white;
+    }
 }
 
 .normal-button {
-  background-color: g.$color-primary;
-  color: g.$color-white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: g.$radius-small;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+    background-color: g.$color-primary;
+    color: g.$color-white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: g.$radius-small;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
 
-  &:hover {
-    background-color: g.$color-button-hover;
-  }
+    &:hover {
+        background-color: g.$color-button-hover;
+    }
 }
 
 .normal-button:disabled {
-  background-color: g.$color-button-deactivated-background;
-  color: g.$color-button-deactivated-text;
-  cursor: not-allowed;
-  opacity: 0.7;
-  pointer-events: none;
+    background-color: g.$color-button-deactivated-background;
+    color: g.$color-button-deactivated-text;
+    cursor: not-allowed;
+    opacity: 0.7;
+    pointer-events: none;
 }
 
 .track-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 2rem;
-  color: g.$color-button-deactivated-text;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+    color: g.$color-button-deactivated-text;
 
-  &.filled {
-    color: g.$color-yellow;
-  }
+    &.filled {
+        color: g.$color-yellow;
+    }
 
-  &:hover {
-    color: g.$color-yellow;
-  }
+    &:hover {
+        color: g.$color-yellow;
+    }
 }

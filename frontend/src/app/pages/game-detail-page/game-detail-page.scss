@@ -1,174 +1,174 @@
 @use '../../../styles/_global' as g;
 
 .game-detail-page {
-  display: flex;
+    display: flex;
 
-  .guides-container {
-    flex: 1;
+    .guides-container {
+        flex: 1;
 
-    h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      color: g.$color-white;
-    }
-
-    .guides-list {
-      list-style: none;
-      padding: 0;
-
-      li {
-        &.empty-list {
-          color: g.$color-white;
+        h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: g.$color-white;
         }
-      }
 
-      .guide-item {
-        display: block;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.6rem 0.8rem;
-        margin-bottom: 0.5rem;
-        margin-right: 2rem;
-        border-radius: g.$radius-small;
-        background: g.$gradient;
-        color: g.$color-white;
-        box-shadow: g.$shadow-medium;
+        .guides-list {
+            list-style: none;
+            padding: 0;
 
-        .guide-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-
-          .guide-left {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-
-            .guide-title {
-              font-size: 1.2rem;
-              font-weight: 700;
+            li {
+                &.empty-list {
+                    color: g.$color-white;
+                }
             }
 
-            .guide-meta {
-              display: flex;
-              gap: 0.5rem;
-              font-size: 0.85rem;
-              margin-top: 0.2rem;
+            .guide-item {
+                display: block;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.6rem 0.8rem;
+                margin-bottom: 0.5rem;
+                margin-right: 2rem;
+                border-radius: g.$radius-small;
+                background: g.$gradient;
+                color: g.$color-white;
+                box-shadow: g.$shadow-medium;
+
+                .guide-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+
+                    .guide-left {
+                        display: flex;
+                        flex-direction: column;
+                        flex: 1;
+
+                        .guide-title {
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                        }
+
+                        .guide-meta {
+                            display: flex;
+                            gap: 0.5rem;
+                            font-size: 0.85rem;
+                            margin-top: 0.2rem;
+                        }
+                    }
+
+                    .guide-actions {
+                        display: flex;
+                        gap: 0.4rem;
+                        margin-left: 1rem;
+                    }
+                }
+
+                .guide-content {
+                    margin-top: 0.5rem;
+                    font-size: 0.9rem;
+                    color: g.$color-white;
+                    line-height: 1.4;
+                }
             }
-          }
+        }
+    }
 
-          .guide-actions {
+    .user-name-text {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .game-info-container {
+        flex: 0.5;
+
+        .game-image-big {
+            width: 100%;
+            max-width: 1000px;
+            max-height: 600px;
+            border-radius: g.$radius-medium;
+            box-shadow: g.$shadow-medium;
+            object-fit: cover;
+        }
+
+        p {
+            margin: 0.5rem 0;
+            color: g.$color-white;
+        }
+
+        .tags-container {
             display: flex;
-            gap: 0.4rem;
-            margin-left: 1rem;
-          }
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-top: 0.3rem;
+
+            .game-tag {
+                display: inline-block;
+                padding: 0.2rem 0.5rem;
+                background-color: g.$color-primary;
+                color: g.$color-white;
+                font-size: 0.85rem;
+                border-radius: g.$radius-small;
+            }
         }
 
-        .guide-content {
-          margin-top: 0.5rem;
-          font-size: 0.9rem;
-          color: g.$color-white;
-          line-height: 1.4;
+        button {
+            margin-top: 1rem;
         }
-      }
     }
-  }
-
-  .user-name-text {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  .game-info-container {
-    flex: 0.5;
-
-    .game-image-big {
-      width: 100%;
-      max-width: 1000px;
-      max-height: 600px;
-      border-radius: g.$radius-medium;
-      box-shadow: g.$shadow-medium;
-      object-fit: cover;
-    }
-
-    p {
-      margin: 0.5rem 0;
-      color: g.$color-white;
-    }
-
-    .tags-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.3rem;
-
-      .game-tag {
-        display: inline-block;
-        padding: 0.2rem 0.5rem;
-        background-color: g.$color-primary;
-        color: g.$color-white;
-        font-size: 0.85rem;
-        border-radius: g.$radius-small;
-      }
-    }
-
-    button {
-      margin-top: 1rem;
-    }
-  }
 }
 
 .best-users-container {
-  margin-top: 2rem;
-  padding: 1rem;
-  border-radius: g.$radius-medium;
-  background: g.$gradient;
-  box-shadow: g.$shadow-medium;
-  color: g.$color-white;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: g.$radius-medium;
+    background: g.$gradient;
+    box-shadow: g.$shadow-medium;
+    color: g.$color-white;
 
-  h3 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  .best-users-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 0.4rem 0.6rem;
-      margin-bottom: 0.4rem;
-      border-radius: g.$radius-small;
-      background-color: rgba(255, 255, 255, 0.05);
-      transition: background-color 0.2s;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-      }
-
-      &.empty-list {
-        text-align: center;
-        color: g.$color-white;
-        font-style: italic;
-      }
-
-      .user-name-text {
-        font-weight: 600;
-        text-decoration: underline;
-        cursor: pointer;
-        margin-right: 0.5rem;
-      }
-
-      .best-user-achievements {
-        font-size: 0.9rem;
-        color: g.$color-yellow;
-      }
+    h3 {
+        margin-top: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
     }
-  }
+
+    .best-users-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0.4rem 0.6rem;
+            margin-bottom: 0.4rem;
+            border-radius: g.$radius-small;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+            }
+
+            &.empty-list {
+                text-align: center;
+                color: g.$color-white;
+                font-style: italic;
+            }
+
+            .user-name-text {
+                font-weight: 600;
+                text-decoration: underline;
+                cursor: pointer;
+                margin-right: 0.5rem;
+            }
+
+            .best-user-achievements {
+                font-size: 0.9rem;
+                color: g.$color-yellow;
+            }
+        }
+    }
 }

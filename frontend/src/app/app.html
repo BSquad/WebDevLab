@@ -1,24 +1,28 @@
 <main class="main">
-  <header class="header">
-    <button class="normal-button" (click)="goToGameList()">Browse Games</button>
-    <button class="normal-button" (click)="goToUserPage()" [disabled]="!user()">My Guides</button>
-    <div class="profile-container" (click)="toggleProfileDropdown()">
-      <div class="profile-name">
-        @if (user()) {
-        {{ user()?.name }}
-        @if (profileDropdownOpen) {
-        <div class="profile-dropdown" (click)="$event.stopPropagation()">
-          <button class="dropdown-item" (click)="logout()">Logout</button>
+    <header class="header">
+        <button class="normal-button" (click)="goToGameList()">Browse Games</button>
+        <button class="normal-button" (click)="goToUserPage()" [disabled]="!user()">
+            My Guides
+        </button>
+        <div class="profile-container" (click)="toggleProfileDropdown()">
+            <div class="profile-name">
+                @if (user()) {
+                    {{ user()?.name }}
+                    @if (profileDropdownOpen) {
+                        <div class="profile-dropdown" (click)="$event.stopPropagation()">
+                            <button class="dropdown-item" (click)="logout()">Logout</button>
+                        </div>
+                    }
+                } @else {
+                    <button class="normal-button" (click)="goToLogin()" [disabled]="user()">
+                        Login
+                    </button>
+                }
+            </div>
         </div>
-        }
-        } @else {
-        <button class="normal-button" (click)="goToLogin()" [disabled]="user()">Login</button>
-        }
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <div class="content">
-    <router-outlet />
-  </div>
+    <div class="content">
+        <router-outlet />
+    </div>
 </main>

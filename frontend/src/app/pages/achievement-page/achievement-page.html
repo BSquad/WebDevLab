@@ -1,26 +1,32 @@
 <div class="page">
-  <div class="page-title">
-    <h1>Achievements for {{ game()?.title }}</h1>
-  </div>
+    <div class="page-title">
+        <h1>Achievements for {{ game()?.title }}</h1>
+    </div>
 
-  <div class="achievement-page">
+    <div class="achievement-page">
+        <button class="normal-button back-button" (click)="goBack()">Back to Game Details</button>
 
-    <button class="normal-button back-button" (click)="goBack()">Back to Game Details</button>
-
-    <ul class="achievements-list">
-      @for (achievement of achievements(); track achievement) {
-      <li class="achievement-item" [class.completed]="achievement.isCompleted" [class.incomplete]="!achievement.isCompleted">
-        <div class="achievement-icon" [class]="achievement.difficulty"></div>
-        <div class="achievement-info">
-          <div class="achievement-name">{{ achievement.title }}</div>
-          <div class="achievement-description">{{ achievement.description }}</div>
-        </div>
-        @if (user() && !achievement.isCompleted) {
-        <button class="normal-button" (click)="completeAchievement(achievement)">Complete</button>
-        }
-      </li>
-      } @empty {
-      <li class="empty-list">No achievements available for this game.</li>
-      }
-    </ul>
-  </div>
+        <ul class="achievements-list">
+            @for (achievement of achievements(); track achievement) {
+                <li
+                    class="achievement-item"
+                    [class.completed]="achievement.isCompleted"
+                    [class.incomplete]="!achievement.isCompleted"
+                >
+                    <div class="achievement-icon" [class]="achievement.difficulty"></div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">{{ achievement.title }}</div>
+                        <div class="achievement-description">{{ achievement.description }}</div>
+                    </div>
+                    @if (user() && !achievement.isCompleted) {
+                        <button class="normal-button" (click)="completeAchievement(achievement)">
+                            Complete
+                        </button>
+                    }
+                </li>
+            } @empty {
+                <li class="empty-list">No achievements available for this game.</li>
+            }
+        </ul>
+    </div>
+</div>

@@ -1,79 +1,81 @@
 @use '../../../styles/_global' as g;
 
 .achievements-list {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
 
-  .achievement-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: g.$radius-medium;
-    box-shadow: g.$shadow-medium;
-    transition: background-color 0.3s, transform 0.2s;
+    .achievement-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: g.$radius-medium;
+        box-shadow: g.$shadow-medium;
+        transition:
+            background-color 0.3s,
+            transform 0.2s;
 
-    &.completed {
-      background-color: g.$color-success;
-      color: g.$color-black;
+        &.completed {
+            background-color: g.$color-success;
+            color: g.$color-black;
+        }
+
+        &.incomplete {
+            background-color: g.$color-accent;
+            color: g.$color-white;
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: g.$shadow-strong;
+        }
+
+        .achievement-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            .achievement-name {
+                font-weight: bold;
+                font-size: 1.1rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .achievement-description {
+                font-size: 0.9rem;
+            }
+        }
     }
 
-    &.incomplete {
-      background-color: g.$color-accent;
-      color: g.$color-white;
+    .empty-list {
+        text-align: center;
+        color: g.$color-white;
     }
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: g.$shadow-strong;
-    }
-
-    .achievement-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-
-      .achievement-name {
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin-bottom: 0.3rem;
-      }
-
-      .achievement-description {
-        font-size: 0.9rem;
-      }
-    }
-  }
-
-  .empty-list {
-    text-align: center;
-    color: g.$color-white;
-  }
 }
 
 .achievement-icon {
-  width: 40px;
-  height: 40px;
-  mask-image: url('/trophy.svg');
-  mask-size: contain;
-  background-color: currentColor;
-  margin-right: 0.5rem;
+    width: 40px;
+    height: 40px;
+    mask-image: url('/trophy.svg');
+    mask-size: contain;
+    background-color: currentColor;
+    margin-right: 0.5rem;
 }
 
 .bronze {
-  color: g.$color-bronze;
+    color: g.$color-bronze;
 }
 
 .silver {
-  color: g.$color-silver;
+    color: g.$color-silver;
 }
 
 .gold {
-  color: g.$color-gold;
+    color: g.$color-gold;
 }
 
 .platinum {
-  color: g.$color-platinum;
+    color: g.$color-platinum;
 }
