@@ -14,7 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     styleUrl: './achievement-page.scss',
 })
 export class AchievementPage {
-    achievements = signal<Achievement[]>([]);
+    achievements: any = signal<Achievement[]>([]);
     game: any = signal<Game | null>(null);
     user: any = signal<User | null>(null);
 
@@ -50,8 +50,8 @@ export class AchievementPage {
         );
 
         if (success) {
-            this.achievements.update((list) =>
-                list.map((a) => (a.id === achievement.id ? { ...a, isCompleted: true } : a)),
+            this.achievements.update((list: any) =>
+                list.map((a: any) => (a.id === achievement.id ? { ...a, isCompleted: true } : a)),
             );
         }
     }

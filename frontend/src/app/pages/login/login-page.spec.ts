@@ -4,19 +4,7 @@ import { provideRouter, Router } from '@angular/router';
 import { LoginPage } from './login-page';
 import { AuthService } from '../../services/auth-service';
 import { ToastService } from '../../services/toast-service';
-
-class AuthServiceMock {
-    loginWithCredentials = jasmine.createSpy('loginWithCredentials').and.resolveTo(true);
-}
-
-class RouterMock {
-    navigate = jasmine.createSpy('navigate');
-}
-
-class ToastServiceMock {
-    showSuccess = jasmine.createSpy('showSuccess');
-    showError = jasmine.createSpy('showError');
-}
+import { AuthServiceMock, RouterMock, ToastServiceMock } from '../../tests/mock-classes.spec';
 
 describe('LoginPage', () => {
     let component: LoginPage;
