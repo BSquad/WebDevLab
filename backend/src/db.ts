@@ -1,13 +1,13 @@
-import sqlite3 from 'sqlite3';
-import { Database, open } from 'sqlite';
+import sqlite3 from "sqlite3";
+import { Database, open } from "sqlite";
 
 export class Db {
   openDB = async () => {
     return await open({
-      filename: './database.sqlite',
-      driver: sqlite3.Database
+      filename: "./database.sqlite",
+      driver: sqlite3.Database,
     });
-  }
+  };
 
   setupDatabase = async () => {
     const db = await this.openDB();
@@ -113,7 +113,7 @@ export class Db {
   `);
 
     await db.close();
-  }
+  };
 
   createInitialData = async () => {
     const db = await this.openDB();
@@ -344,26 +344,27 @@ export class Db {
         datetime('now')
       );
   `);
-  }
+  };
 
   initDB = async () => {
     await this.setupDatabase();
     await this.createInitialData();
-  }
+  };
 
   executeSQL = async (
     sql: string,
     params: any[] = [],
-    single: boolean = false
+    single: boolean = false,
   ): Promise<any> => {
-    const db: Database<sqlite3.Database, sqlite3.Statement> = await this.openDB();
+    const db: Database<sqlite3.Database, sqlite3.Statement> =
+      await this.openDB();
 
     await db.exec(`PRAGMA foreign_keys = ON;`);
 
     let result;
 
     try {
-      if (sql.trim().toUpperCase().startsWith('SELECT')) {
+      if (sql.trim().toUpperCase().startsWith("SELECT")) {
         result = single ? await db.get(sql, params) : await db.all(sql, params);
       } else {
         result = await db.run(sql, params);
@@ -375,5 +376,5 @@ export class Db {
     }
 
     return result;
-  }
+  };
 }
