@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { LoginPage } from './login-page';
 import { AuthService } from '../../services/auth-service';
 import { ToastService } from '../../services/toast-service';
@@ -30,8 +30,8 @@ describe('LoginPage', () => {
             imports: [LoginPage, FormsModule],
             providers: [
                 { provide: AuthService, useClass: AuthServiceMock },
-                { provide: Router, useClass: RouterMock },
                 { provide: ToastService, useClass: ToastServiceMock },
+                provideRouter([]),
             ],
         }).compileComponents();
 
@@ -41,6 +41,8 @@ describe('LoginPage', () => {
         authService = TestBed.inject(AuthService) as any;
         router = TestBed.inject(Router) as any;
         toast = TestBed.inject(ToastService) as any;
+
+        spyOn(router, 'navigate');
 
         fixture.detectChanges();
     });
