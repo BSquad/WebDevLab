@@ -6,9 +6,10 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 
 import { Db } from "./db.js";
-import { authRouter } from "./routes/auth.routes.js";
-import { gameRouter } from "./routes/game.routes.js";
-import { guideRouter } from "./routes/guide.routes.js";
+import { authRouter } from "./routes/auth-routes.js";
+import { gameRouter } from "./routes/game-routes.js";
+import { guideRouter } from "./routes/guide-routes.js";
+import { userRouter } from "./routes/user-routes.js";
 
 const app = express();
 const PORT = 3000;
@@ -26,6 +27,7 @@ await db.initDB();
 app.use("/auth", authRouter);
 app.use("/games", gameRouter);
 app.use("/guides", guideRouter);
+app.use("/users", userRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
