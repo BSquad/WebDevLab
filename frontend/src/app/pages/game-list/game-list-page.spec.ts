@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GameListPage } from './game-list-page';
 
-describe('GameList', () => {
+describe('GameListPage', () => {
     let component: GameListPage;
     let fixture: ComponentFixture<GameListPage>;
 

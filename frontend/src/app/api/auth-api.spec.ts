@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AuthApi } from './auth-api';
 
-describe('UserApi', () => {
+describe('AuthApi', () => {
     let service: AuthApi;
 
     beforeEach(() => {
