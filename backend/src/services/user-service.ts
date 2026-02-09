@@ -5,34 +5,34 @@ import { GuideDbAccess } from '../db-access/guide-db-access.js';
 import { UserProfile } from '../../../shared/models/user.js';
 
 export class UserService {
-    private readonly gameDb = new GameDbAccess();
-    private readonly guideDb = new GuideDbAccess();
-    private readonly userDb = new UserDbAccess();
+    private readonly gameDbAccess = new GameDbAccess();
+    private readonly guideDbAccess = new GuideDbAccess();
+    private readonly userDbAccess = new UserDbAccess();
 
     createUser = async (name: string, email: string, passwordHash: string) => {
-        return await this.userDb.createUser(name, email, passwordHash);
+        return await this.userDbAccess.createUser(name, email, passwordHash);
     };
 
     getUserById = async (id: number) => {
-        const user = await this.userDb.getUserById(id);
+        const user = await this.userDbAccess.getUserById(id);
         if (!user) throw new Error('User not found');
         return user;
     };
 
     updateUser = async (id: number, name: string, email: string) => {
-        return await this.userDb.updateUser(id, name, email);
+        return await this.userDbAccess.updateUser(id, name, email);
     };
 
     deleteUser = async (id: number) => {
-        return await this.userDb.deleteUser(id);
+        return await this.userDbAccess.deleteUser(id);
     };
 
     getFullProfile = async (userId: number): Promise<UserProfile> => {
         const [user, games, guides, achievements] = await Promise.all([
-            this.userDb.getUserById(userId),
-            this.gameDb.getGamesByUserId(userId),
-            this.guideDb.getGuidesByUserId(userId),
-            this.gameDb.getAchievementsByUserId(userId),
+            this.userDbAccess.getUserById(userId),
+            this.gameDbAccess.getGamesByUserId(userId),
+            this.guideDbAccess.getGuidesByUserId(userId),
+            this.gameDbAccess.getAchievementsByUserId(userId),
         ]);
 
         if (!user) throw new Error('User not found');
@@ -42,6 +42,6 @@ export class UserService {
 
     startUserAnalysis = async (userId: number): Promise<AnalysisData> => {
         await new Promise((resolve) => setTimeout(resolve, 10_000));
-        return await this.userDb.startUserAnalysis(userId);
+        return await this.userDbAccess.startUserAnalysis(userId);
     };
 }
