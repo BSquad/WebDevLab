@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.guideRouter = void 0;
+var express_1 = require("express");
+var guide_controller_js_1 = require("../controller/guide-controller.js");
+var router = (0, express_1.Router)();
+exports.guideRouter = router;
+var guideController = new guide_controller_js_1.GuideController();
+router.post('/', guideController.createGuide);
+router.get('/game/:gameId', guideController.getGuidesByGameId);

@@ -1,0 +1,34 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var cors_1 = require("cors");
+var path_1 = require("path");
+var path_2 = require("path");
+var url_1 = require("url");
+var db_js_1 = require("./db.js");
+var auth_routes_js_1 = require("./routes/auth-routes.js");
+var game_routes_js_1 = require("./routes/game-routes.js");
+var guide_routes_js_1 = require("./routes/guide-routes.js");
+var user_routes_js_1 = require("./routes/user-routes.js");
+var app = (0, express_1.default)();
+var PORT = 3000;
+var __filename = (0, url_1.fileURLToPath)(import.meta.url);
+var __dirname = (0, path_2.dirname)(__filename);
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+app.use('/images', express_1.default.static(path_1.default.join(__dirname, '../images')));
+var db = new db_js_1.Db();
+await db.initDB();
+app.use('/auth', auth_routes_js_1.authRouter);
+app.use('/games', game_routes_js_1.gameRouter);
+app.use('/guides', guide_routes_js_1.guideRouter);
+app.use('/users', user_routes_js_1.userRouter);
+var errorHandler = function (err, req, res, next) {
+    var _a;
+    console.error(err);
+    res.status(500).json({ message: (_a = err.message) !== null && _a !== void 0 ? _a : 'Unknown server error' });
+};
+app.use(errorHandler);
+app.listen(PORT, function () {
+    return console.log("Backend l\u00E4uft auf http://localhost:".concat(PORT));
+});
