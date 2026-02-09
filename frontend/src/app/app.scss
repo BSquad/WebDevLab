@@ -1,88 +1,128 @@
-@use '../styles/_global' as g;
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: g.$gradient;
-    color: g.$color-white;
-    font-weight: 500;
-    box-shadow: g.$shadow-medium;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    .profile-name {
-        font-size: 1rem;
-    }
-}
-
-.profile-container {
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-
+.profile-trigger {
     display: flex;
     align-items: center;
-    gap: 6px;
-
-    .profile-name {
-        font-weight: 500;
-        color: g.$color-white;
-    }
-}
-
-.profile-dropdown {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-
-    min-width: 160px;
-    padding: 6px 0;
-
-    background: g.$color-primary;
-    border-radius: g.$radius-medium;
-    box-shadow: g.$shadow-strong;
-    z-index: 2000;
-
-    animation: dropdownFadeIn 0.15s ease-out;
-}
-
-.dropdown-item {
-    width: 100%;
-    padding: 10px 14px;
-
-    background: none;
-    border: none;
-    color: g.$color-white;
-
-    text-align: left;
-    font-size: 0.95rem;
-    font-weight: 500;
-
+    gap: 12px;
     cursor: pointer;
-    transition: background-color 0.15s ease;
+    padding: 4px 8px;
+    border-radius: 12px;
+    transition: background 0.2s ease;
 
     &:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-    }
-
-    &:active {
-        background-color: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.15); // Subtle highlight on hover
     }
 }
 
-.profile-dropdown::before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    right: 16px;
+.username {
+    font-weight: 500;
+    font-size: 14px;
+}
 
-    width: 12px;
-    height: 12px;
+.avatar-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0e0e0;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    flex-shrink: 0;
 
-    background: g.$color-primary;
-    transform: rotate(45deg);
-    border-radius: 2px;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #757575;
+        margin: 0;
+    }
+}
+
+.menu-user-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+
+    strong {
+        font-size: 15px;
+    }
+    span {
+        font-size: 13px;
+        opacity: 0.7;
+        margin-top: 4px;
+    }
+}
+.menu-header {
+    padding: 16px;
+    text-align: center;
+
+    .menu-name {
+        margin: 0;
+        font-weight: bold;
+    }
+    .menu-email {
+        margin: 0;
+        font-size: 0.8rem;
+        opacity: 0.7;
+    }
+}
+
+.main-header {
+    height: 64px;
+    position: sticky;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+}
+
+.left-section,
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.brand {
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.spacer {
+    flex: 1 1 auto; // This consumes all available middle space
+}
+
+.nav {
+    display: flex;
+    gap: 4px;
+    margin-right: 16px;
+
+    // Hide nav links on small screens (Mobile responsiveness)
+    @media (max-width: 600px) {
+        display: none;
+    }
+}
+
+.auth-section {
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    padding-left: 16px;
+    margin-right: 8px;
 }

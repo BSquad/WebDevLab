@@ -1,28 +1,48 @@
-<main class="main">
-    <header class="header">
-        <button class="normal-button" (click)="goToGameList()">Browse Games</button>
-        <button class="normal-button" (click)="goToUserPage()" [disabled]="!user()">
-            My Guides
-        </button>
-        <div class="profile-container" (click)="toggleProfileDropdown()">
-            <div class="profile-name">
+<mat-toolbar color="primary" class="main-header">
+    <div class="header-container">
+        <div class="left-section">
+            <span class="brand" (click)="goToGameList()">My App</span>
+        </div>
+
+        <span class="spacer"></span>
+
+        <div class="right-section">
+            <nav class="nav-links">
+                <button mat-button (click)="goToGameList()">Browse Games</button>
+                <button mat-button (click)="goToUserPage()" [disabled]="!user()">My Guides</button>
+            </nav>
+
+            <div class="auth-section">
                 @if (user()) {
-                    {{ user()?.name }}
-                    @if (profileDropdownOpen) {
-                        <div class="profile-dropdown" (click)="$event.stopPropagation()">
-                            <button class="dropdown-item" (click)="logout()">Logout</button>
-                        </div>
-                    }
-                } @else {
-                    <button class="normal-button" (click)="goToLogin()" [disabled]="user()">
-                        Login
+                <div class="profile-trigger" [matMenuTriggerFor]="profileMenu">
+                    <span class="username">{{ user()?.name }}</span>
+                    <div class="avatar-wrapper">
+                        @if (user()?.profilePic) {
+                        <img [src]="user()?.profilePic" alt="Profile" />
+                        } @else {
+                        <mat-icon>account_circle</mat-icon>
+                        }
+                    </div>
+                </div>
+
+                <mat-menu #profileMenu="matMenu">
+                    <button mat-menu-item (click)="goToUserPage()">
+                        <mat-icon>person</mat-icon>
+                        <span>View Profile</span>
                     </button>
+                    <button mat-menu-item (click)="logout()">
+                        <mat-icon>logout</mat-icon>
+                        <span>Logout</span>
+                    </button>
+                </mat-menu>
+                } @else {
+                <button mat-flat-button color="accent" (click)="goToLogin()">Login</button>
                 }
             </div>
         </div>
-    </header>
-
-    <div class="content">
-        <router-outlet />
     </div>
+</mat-toolbar>
+
+<main class="content">
+    <router-outlet />
 </main>

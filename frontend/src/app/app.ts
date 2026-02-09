@@ -4,10 +4,23 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from './services/auth-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../shared/models/user';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, RouterModule],
+    imports: [
+        RouterOutlet,
+        RouterModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatDividerModule,
+    ],
     templateUrl: './app.html',
     styleUrl: './app.scss',
     standalone: true,

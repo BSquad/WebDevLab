@@ -1,10 +1,95 @@
-<div class="page">
-    <div class="page-title">
-        <h1>User Profile</h1>
+<div class="dashboard-container">
+    @if (userProfile.isLoading()) {
+    <div class="loader-overlay">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <p>LOADING RETRO DATA...</p>
     </div>
+    }
 
-    <p>user-page works!</p>
-    <p>Name: {{ user()?.name }}</p>
-    <p>Email: {{ user()?.email }}</p>
-    <button (click)="startAnalysis()">Analysis</button>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <mat-card class="pixel-border">
+                <div class="avatar-wrapper">
+                    <img [src]="'/assets/pictures/user-pic.jpg'" alt="User Avatar" />
+                </div>
+            </mat-card>
+
+            <mat-card class="info-card pixel-border">
+                <div class="card-header">USER INFO</div>
+                <div class="info-content">
+                    <p><strong>NAME:</strong> {{ userProfile.value()?.name }}</p>
+                    <p><strong>EMAIL:</strong> {{ userProfile.value()?.email }}</p>
+                </div>
+            </mat-card>
+
+            <mat-card class="achievements-card pixel-border">
+                <div class="card-header">BADGES</div>
+                <div class="badge-grid">
+                    @for (item of achievements(); track item.title) {
+                    <mat-icon [title]="item.title" [ngClass]="item.difficulty"
+                        >military_tech</mat-icon
+                    >
+                    } @empty {
+                    <p class="empty-msg">NO BADGES YET</p>
+                    }
+                </div>
+
+                <button
+                    mat-flat-button
+                    class="analyze-btn"
+                    [disabled]="isAnalyzing()"
+                    (click)="startAnalysis()"
+                >
+                    {{ isAnalyzing() ? 'ANALYZING...' : 'START ANALYSIS' }}
+                </button>
+            </mat-card>
+        </aside>
+
+        <main class="main-content">
+            @if (analysisResult(); as data) {
+            <section class="analysis-panel pixel-border">
+                <div class="section-header">ANALYSIS RESULTS</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span>GAMES</span><strong>{{data.gameCount}}</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>GENRE</span><strong>{{data.mostPlayedGenre}}</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>RATE</span><strong>{{data.completionRate}}%</strong>
+                    </div>
+                </div>
+            </section>
+            }
+
+            <section class="game-section pixel-border">
+                <div class="section-header">MY GAMES</div>
+                <div class="game-list">
+                    @for (game of games(); track game.id) {
+                    <div class="game-item" [class.favorite]="game.isFavorite">
+                        <img [src]="'assets/' + game.imageName" [alt]="game.title" />
+                        <span>{{ game.title }}</span>
+                        @if (game.isFavorite) { <mat-icon class="fav-star">star</mat-icon> }
+                    </div>
+                    }
+                </div>
+            </section>
+
+            <section class="progress-section pixel-border">
+                <div class="section-header">GUIDES CREATED</div>
+                <div class="guide-list">
+                    @for (guide of guides(); track guide.id) {
+                    <div class="progress-item">
+                        <div class="progress-details">
+                            <div class="label-row">
+                                <span class="game-title">{{ guide.title }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </section>
+        </main>
+    </div>
 </div>

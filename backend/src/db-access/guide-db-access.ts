@@ -30,4 +30,16 @@ export class GuideDbAccess {
 
         return (await this.db.executeSQL(sql, [gameId])) as Guide[];
     };
+
+    getGuidesByUserId = async (userId: number): Promise<Guide[]> => {
+        return await this.db.executeSQL(
+            `
+      SELECT g.id, g.title, gm.title as gameTitle, g.createdAt,
+             (SELECT AVG(score) FROM guide_rating WHERE guideId = g.id) as averageRating
+      FROM guides g
+      JOIN games gm ON g.gameId = gm.id
+      WHERE g.userId = ?`,
+            [userId],
+        );
+    };
 }

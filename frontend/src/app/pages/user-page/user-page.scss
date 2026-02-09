@@ -1,0 +1,262 @@
+// --- VARIABLES & THEME ---
+$bg-dark-blue: #001a4d;
+$retro-blue: #0033cc;
+$retro-light-blue: #7a99ff;
+$retro-cyan: #00ffff;
+$header-gradient: linear-gradient(to bottom, #ffffff 0%, $retro-light-blue 50%, $retro-blue 100%);
+$card-bg: rgba(0, 51, 153, 0.7);
+$text-shadow: 1px 1px 0px #000;
+
+// --- LAYOUT ENGINE ---
+.dashboard-container {
+    background-color: $bg-dark-blue;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+}
+
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr; // Strict 1/3 and 2/3 split
+    gap: 30px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+// --- GLOBAL RETRO STYLES ---
+.pixel-border {
+    border: 3px solid white;
+    background: $card-bg;
+    border-radius: 0 !important;
+    margin-bottom: 20px;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+}
+
+.section-header,
+.card-header {
+    background: $header-gradient;
+    color: $bg-dark-blue;
+    font-weight: 900;
+    padding: 6px 12px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    border-bottom: 3px solid white;
+    letter-spacing: 1px;
+}
+
+// --- LEFT COLUMN (1/3): PROFILE & INFO ---
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    .avatar-wrapper {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #111;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; // Maintains aspect ratio, crops extra
+            image-rendering: pixelated; // Keeps retro art sharp
+        }
+    }
+
+    .info-content {
+        padding: 15px;
+        p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            strong {
+                color: $retro-light-blue;
+            }
+        }
+    }
+
+    .badge-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+        gap: 12px;
+        padding: 15px;
+
+        mat-icon {
+            font-size: 36px;
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(2px 2px 0px black);
+
+            &.gold {
+                color: #ffd700;
+            }
+            &.silver {
+                color: #c0c0c0;
+            }
+            &.bronze {
+                color: #cd7f32;
+            }
+        }
+    }
+}
+
+// --- RIGHT COLUMN (2/3): GAMES & GUIDES ---
+.main-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 10px;
+}
+
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+    padding: 20px;
+
+    .game-item {
+        display: flex;
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px;
+        transition: transform 0.1s;
+        position: relative;
+
+        &:hover {
+            transform: scale(1.05);
+            border-color: white;
+        }
+
+        img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border: 1px solid white;
+            margin-bottom: 8px;
+        }
+
+        span {
+            font-size: 0.75rem;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .fav-star {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: #ffff00;
+            font-size: 20px;
+            text-shadow: 2px 2px 0px black;
+        }
+    }
+}
+
+// --- PROGRESS & ANALYSIS SECTIONS ---
+.progress-item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .label-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .game-title {
+            font-weight: bold;
+            color: $retro-cyan;
+        }
+    }
+}
+
+.analysis-panel {
+    background: linear-gradient(135deg, rgba(0, 51, 153, 0.9), rgba(0, 10, 30, 0.9));
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 20px;
+        gap: 15px;
+
+        .stat-box {
+            text-align: center;
+            border: 1px solid $retro-light-blue;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+
+            span {
+                display: block;
+                font-size: 0.7rem;
+                color: $retro-light-blue;
+                margin-bottom: 5px;
+            }
+
+            strong {
+                font-size: 1.4rem;
+                color: white;
+                text-shadow: $text-shadow;
+            }
+        }
+    }
+}
+
+// --- UI COMPONENTS ---
+.analyze-btn {
+    width: calc(100% - 30px);
+    margin: 15px;
+    height: 45px;
+    background: linear-gradient(to right, #6a11cb, #2575fc) !important;
+    border: 2px solid white !important;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900 !important;
+    color: white !important;
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.2);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        background: #444 !important;
+    }
+}
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        margin-top: 20px;
+        letter-spacing: 3px;
+    }
+}
+
+// --- MEDIA QUERIES ---
+@media (max-width: 900px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr; // Stack columns on mobile
+    }
+}

@@ -11,4 +11,7 @@ export class GuideService {
     getGuidesByGameId = async (gameId: number): Promise<Guide[]> => {
         return await this.guideDbAccess.getGuidesByGameId(gameId);
     };
+
+    getGuidesByUserId = async (id: number): Promise<Guide[]> =>
+        await this.guideDbAccess.getGuidesByUserId(id);
 }
