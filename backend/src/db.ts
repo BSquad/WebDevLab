@@ -9,6 +9,40 @@ export class Db {
         });
     };
 
+    initDB = async () => {
+        await this.setupDatabase();
+        await this.createInitialData();
+    };
+
+    executeSQL = async (
+        sql: string,
+        params: any[] = [],
+        single: boolean = false,
+    ): Promise<any> => {
+        const db: Database<sqlite3.Database, sqlite3.Statement> =
+            await this.openDB();
+
+        await db.exec(`PRAGMA foreign_keys = ON;`);
+
+        let result;
+
+        try {
+            if (sql.trim().toUpperCase().startsWith('SELECT')) {
+                result = single
+                    ? await db.get(sql, params)
+                    : await db.all(sql, params);
+            } else {
+                result = await db.run(sql, params);
+            }
+        } catch (err) {
+            throw err;
+        } finally {
+            await db.close();
+        }
+
+        return result;
+    };
+
     setupDatabase = async () => {
         const db = await this.openDB();
 
@@ -208,6 +242,114 @@ export class Db {
               'bronze'
             ),
             (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Card Collector',
+              'Collect all Gwent cards.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Master Alchemist',
+              'Create 20 different alchemical potions.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Swordsman',
+              'Reach level 25 in sword skills.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Explorer',
+              'Discover all question mark locations in Velen.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Treasure Hunter',
+              'Find and open 50 treasure chests.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Friend of the Dwarves',
+              'Complete all quests for Zoltan.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Lover',
+              'Complete all romance quests.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Monster Hunter Pro',
+              'Complete 25 witcher contracts.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Skellige Champion',
+              'Complete all main quests in Skellige.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Novigrad Socialite',
+              'Complete all secondary quests in Novigrad.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Sign Master',
+              'Reach level 20 in all sign skills.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Mutagen Collector',
+              'Create and equip 3 greater mutagens.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Horse Master',
+              'Win 25 horse races.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Fist Fighter',
+              'Win all fist fighting tournaments.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Diplomat',
+              'Resolve 5 quests through dialogue.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Rich Man',
+              'Accumulate 50,000 crowns.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Completionist',
+              'Complete all quests in the game.',
+              'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'The Witcher 3'),
+              'Wild Hunt Slayer',
+              'Defeat the Wild Hunt leader.',
+              'gold'
+            ),
+            (
               (SELECT id FROM games WHERE title = 'Stardew Valley'),
               'First Harvest',
               'Harvest your first crop.',
@@ -291,92 +433,98 @@ export class Db {
               (SELECT id FROM users WHERE name = 'sa'), 
               (SELECT id FROM games WHERE title = 'Elden Ring'), 
               'Beginner Guide', 
-              'Elden Ring ist ein riesiges Open-World-Action-RPG. In diesem Guide behandeln wir die grundlegenden Spielmechaniken, wie das Bewegen, Kämpfen und Leveln. Außerdem geben wir Tipps für die ersten Gebiete, wie man Ressourcen effizient nutzt, erste Bosse besiegt und Fallen vermeidet. Spieler lernen, welche Klassen für den Einstieg geeignet sind, wie man die Karte optimal erkundet und welche NPCs hilfreich sind. Der Guide geht auch auf Waffen, Magie und Buffs ein, damit Anfänger nicht frustriert werden.', 
+              'Elden Ring is a massive open-world action RPG. This guide covers the basic game mechanics including movement, combat, and leveling. We also provide tips for the first areas, how to use resources efficiently, defeat early bosses, and avoid traps. Players will learn which classes are suitable for beginners, how to explore the map optimally, and which NPCs are helpful. The guide also covers weapons, magic, and buffs to prevent frustration for new players.', 
               'TODO', 
-              datetime('now')
+              '2026-01-15 14:30:00'
             ),
             (
               (SELECT id FROM users WHERE name = 'test'), 
               (SELECT id FROM games WHERE title = 'Elden Ring'), 
               'Boss Guide', 
-              'Dieser Guide konzentriert sich auf die großen Bosskämpfe in Elden Ring. Wir geben Schritt-für-Schritt-Anleitungen für die Taktiken gegen die wichtigsten Bosse der ersten Spielregionen. Dabei werden Angriffsmuster, Schwächen und empfohlene Ausrüstung beschrieben. Außerdem Tipps zu Summons, Coop-Mechaniken und wie man Bosskampffrust reduziert, damit der Fortschritt flüssig bleibt.', 
+              'This guide focuses on the major boss fights in Elden Ring. We provide step-by-step instructions for tactics against the most important bosses in the early game regions. This includes attack patterns, weaknesses, and recommended equipment. Additionally, tips for summons, co-op mechanics, and how to reduce boss fight frustration to ensure smooth progress.', 
               'TODO', 
-              datetime('now')
+              '2026-01-22 09:15:00'
             ),
             (
               (SELECT id FROM users WHERE name = 'sa'), 
               (SELECT id FROM games WHERE title = 'Elden Ring'), 
               'Secrets & Easter Eggs', 
-              'Dieser Guide deckt geheime Orte, versteckte Bosse und seltene Items in Elden Ring ab. Wir zeigen, wie man versteckte Pfade entdeckt, welche NPC-Quests zu besonderen Belohnungen führen, und wie man geheime Skills und Waffen freischaltet. Außerdem Hinweise zu Easter Eggs, die Anspielungen auf andere Spiele enthalten. Spieler erhalten hier wertvolle Hinweise, um das Spiel vollständig zu erkunden.', 
+              'This guide uncovers secret locations, hidden bosses, and rare items in Elden Ring. We show how to discover hidden paths, which NPC quests lead to special rewards, and how to unlock secret skills and weapons. Also includes hints about Easter Eggs that reference other games. Players will receive valuable tips to fully explore the game.', 
               'TODO', 
-              datetime('now')
+              '2026-02-03 16:45:00'
             ),
             (
               (SELECT id FROM users WHERE name = 'sa'), 
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Main Story Walkthrough', 
-              'Dieser Guide behandelt die Hauptquests von The Witcher 3: Wild Hunt. Wir führen den Spieler durch alle Kapitel und zeigen, wie man Entscheidungen trifft, die Einfluss auf das Spielende haben. Dazu Tipps zu Kämpfen, Hexer-Zeichen, Tränken und Ausrüstung. Außerdem behandeln wir die wichtigsten Story-Entscheidungen, um die maximale Erfahrung und bestmögliche Belohnungen zu erhalten.', 
+              'This guide covers the main quests of The Witcher 3: Wild Hunt. We guide players through all chapters and show how to make decisions that affect the game ending. Includes tips for combat, witcher signs, potions, and equipment. We also cover the most important story decisions to get the maximum experience and best possible rewards.', 
               'TODO', 
-              datetime('now')
+              '2026-01-08 11:20:00'
             ),
             (
               (SELECT id FROM users WHERE name = 'sa'), 
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Gwent Strategy Guide', 
-              'Ein umfassender Guide zum Kartenspiel Gwent in The Witcher 3. Hier erfährt man, wie man die besten Decks zusammenstellt, Gegner analysiert und Karten effizient sammelt. Wir erklären die Spielmechanik, Strategien gegen spezielle Gegner und geben Tipps für Turniere in Novigrad und Kaer Morhen.', 
+              'A comprehensive guide to the card game Gwent in The Witcher 3. Here you will learn how to build the best decks, analyze opponents, and collect cards efficiently. We explain the game mechanics, strategies against specific opponents, and provide tips for tournaments in Novigrad and Kaer Morhen.', 
               'TODO', 
-              datetime('now')
+              '2026-01-31 13:10:00'
             ),
             (
               (SELECT id FROM users WHERE name = 'test'), 
               (SELECT id FROM games WHERE title = 'Hades'), 
               'Beginner Hades Guide', 
-              'Hades ist ein roguelike Dungeon-Crawler. In diesem Guide erfahren Anfänger, wie man die ersten Runs überlebt, welche Waffen sich für den Einstieg eignen, wie man die Götterboons sinnvoll kombiniert und welche Upgrades langfristig helfen. Außerdem Tipps zu Heilung, Gegnergruppen und Bossen in den ersten Leveln. Ziel ist es, den Spieler optimal auf spätere, schwierigere Runs vorzubereiten.', 
+              'Hades is a roguelike dungeon crawler. In this guide, beginners will learn how to survive the first runs, which weapons are suitable for starting out, how to combine god boons effectively, and which upgrades help in the long term. Also includes tips for healing, enemy groups, and bosses in the early levels. The goal is to optimally prepare players for later, more difficult runs.', 
               'TODO', 
-              datetime('now')
+              '2026-02-08 10:30:00'
             ),
             (
               (SELECT id FROM users WHERE name = 'test'), 
               (SELECT id FROM games WHERE title = 'Hades'), 
               'Advanced Hades Tactics', 
-              'Dieser Guide richtet sich an erfahrene Spieler von Hades. Wir analysieren die fortgeschrittenen Builds, synergistische Boons, die optimalen Waffen und die beste Strategie gegen die finalen Bosse. Außerdem geben wir Hinweise zu seltenen Upgrades, Chamber-Kompositionen und Geheimnissen in der Unterwelt, um maximale Highscores zu erreichen.', 
+              'This guide is aimed at experienced Hades players. We analyze advanced builds, synergistic boons, optimal weapons, and the best strategies against the final bosses. Additionally, we provide hints for rare upgrades, chamber compositions, and secrets in the Underworld to achieve maximum high scores.', 
               'TODO', 
-              datetime('now')
+              '2026-02-14 15:25:00'
+            ),
+            (
+              (SELECT id FROM users WHERE name = 'sa'), 
+              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
+              'Romance Guide', 
+              'This comprehensive guide covers all romance options in The Witcher 3: Wild Hunt. We detail the complete romance paths for Yennefer, Triss, and other secondary romance options like Keira Metz and Jutta an Dimun. Learn the specific dialogue choices, quest requirements, and timing needed to successfully pursue each romance. We also explain the consequences of your romantic choices on the story ending and character relationships. The guide includes tips for managing multiple romances, avoiding common mistakes, and achieving the best possible romantic outcomes. Special attention is given to the complex Yennefer-Triss dynamic and how to navigate this delicate situation without breaking hearts or missing out on meaningful content.', 
+              'TODO', 
+              '2026-01-12 18:40:00'
+            ),
+            (
+              (SELECT id FROM users WHERE name = 'test'), 
+              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
+              'Crafting & Alchemy Masterclass', 
+              'Master the art of crafting and alchemy in The Witcher 3 with this detailed guide. We cover everything from basic weapon and armor crafting to advanced alchemical preparations. Learn where to find the best crafting diagrams, how to locate rare ingredients, and which merchants sell the most valuable schematics. The guide explains the alchemy system in depth, including how to create powerful potions, oils, and bombs that will give you an edge in combat. We provide complete walkthroughs for major crafting quests like the Master Armorers and Master Swordsmiths questlines. Discover the locations of all Grandmaster diagrams in the Blood and Wine expansion and learn how to craft the most powerful gear sets in the game. Tips for ingredient farming, mutagen creation, and optimizing your alchemical build are also included.', 
+              'TODO', 
+              '2026-02-01 12:55:00'
+            ),
+            (
+              (SELECT id FROM users WHERE name = 'sa'), 
+              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
+              'Complete Treasure Hunt Guide', 
+              'Uncover every hidden treasure in The Witcher 3 with this exhaustive treasure hunting guide. We detail the locations of all witcher gear sets, including Griffin, Cat, Bear, Wolf, and Viper diagrams scattered throughout the main game and expansions. Each treasure hunt is covered with step-by-step instructions, maps, and tips for overcoming the challenges that guard these valuable rewards. Learn how to decode cryptic maps, solve environmental puzzles, and defeat the powerful guardians of ancient witcher artifacts. The guide also covers non-witcher treasure hunts, including hidden caches, smuggler''s treasures, and legendary weapon locations. We provide strategies for navigating dangerous dungeons, avoiding traps, and preparing for the tough battles that often precede major discoveries. Special sections dedicated to the Blood and Wine Grandmaster gear hunts and Hearts of Stone unique item locations.', 
+              'TODO', 
+              '2026-01-25 20:15:00'
+            ),
+            (
+              (SELECT id FROM users WHERE name = 'test'), 
+              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
+              'Character Build Guide', 
+              'Create the perfect Geralt build with this comprehensive character development guide. We analyze all skill trees in detail: Combat, Alchemy, Signs, and General, providing recommendations for different playstyles from pure warrior to master mage. Learn which skills synergize best, how to allocate skill points efficiently, and which mutagens complement your chosen build. The guide covers popular builds like the Euphoria build, Signs build, Tank build, and Hybrid builds, complete with recommended equipment, decoctions, and playstyle strategies. We explain the mechanics behind attack power, sign intensity, and critical hit chance, helping you optimize Geralt''s stats for maximum effectiveness. Advanced topics include mutation systems, gear set bonuses, and how to adapt your build for different challenges like boss fights, contract monsters, or crowd control situations. Tips for respeccing and experimenting with different builds throughout your playthrough.', 
+              'TODO', 
+              '2026-02-10 14:20:00'
+            ),
+            (
+              (SELECT id FROM users WHERE name = 'sa'), 
+              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
+              'Expansion Content Guide', 
+              'Master the additional content from Hearts of Stone and Blood and Wine expansions with this detailed guide. For Hearts of Stone, we provide complete walkthroughs for all main quests including the complex Heist missions, the mysterious Man of Glass questline, and the challenging encounters with Gaunter O''Dimm. Learn how to navigate the moral complexities of the expansion and achieve the best possible outcomes. For Blood and Wine, we cover the entire Toussaint experience from the initial investigation to the final confrontation with the Beast. The guide includes detailed maps of all new areas, complete walkthroughs for all main and secondary quests, and strategies for the unique tournament system. We also cover the new Grandmaster gear sets, the wine mechanics, and the estate management system. Special attention is given to the multiple endings and how your choices throughout both expansions affect the final outcomes. Tips for level-appropriate progression and optimal quest sequencing are included.', 
+              'TODO', 
+              '2026-01-18 17:35:00'
             );
         `);
-    };
-
-    initDB = async () => {
-        await this.setupDatabase();
-        await this.createInitialData();
-    };
-
-    executeSQL = async (
-        sql: string,
-        params: any[] = [],
-        single: boolean = false,
-    ): Promise<any> => {
-        const db: Database<sqlite3.Database, sqlite3.Statement> =
-            await this.openDB();
-
-        await db.exec(`PRAGMA foreign_keys = ON;`);
-
-        let result;
-
-        try {
-            if (sql.trim().toUpperCase().startsWith('SELECT')) {
-                result = single
-                    ? await db.get(sql, params)
-                    : await db.all(sql, params);
-            } else {
-                result = await db.run(sql, params);
-            }
-        } catch (err) {
-            throw err;
-        } finally {
-            await db.close();
-        }
-
-        return result;
     };
 }
