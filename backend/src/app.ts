@@ -13,6 +13,7 @@ import { gameRouter } from './routes/game-routes.js';
 import { guideRouter } from './routes/guide-routes.js';
 import { userRouter } from './routes/user-routes.js';
 import { favoritesRouter } from './routes/favorites-routes.js';
+import { commentsRouter } from './routes/comments-routes.js';
 
 const app = express();
 
@@ -26,11 +27,12 @@ app.use('/images', express.static(path.join(__dirname, '../images')));
 const db = new Db();
 await db.initDB();
 
-app.use('/favorites', favoritesRouter);
 app.use('/auth', authRouter);
 app.use('/games', gameRouter);
 app.use('/guides', guideRouter);
 app.use('/users', userRouter);
+app.use('/comments', commentsRouter);
+app.use('/favorites', favoritesRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.error(err);
