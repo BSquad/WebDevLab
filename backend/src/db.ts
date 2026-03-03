@@ -89,6 +89,7 @@ export class Db {
           content TEXT NOT NULL,
           pdfPath TEXT,
           createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (userId) REFERENCES users(id),
           FOREIGN KEY (gameId) REFERENCES games(id),
           UNIQUE(userId, gameId, title)
@@ -120,10 +121,10 @@ export class Db {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           userId INTEGER NOT NULL,
           guideId INTEGER NOT NULL,
-          score INTEGER,
+          score INTEGER NOT NULL CHECK(score >= 1 AND score <= 5),
           UNIQUE (userId, guideId),
           FOREIGN KEY (userId) REFERENCES users(id),
-          FOREIGN KEY (guideId) REFERENCES guides(id)
+          FOREIGN KEY (guideId) REFERENCES guides(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS guide_comments (
@@ -133,15 +134,14 @@ export class Db {
           commentText TEXT,
           createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (userId) REFERENCES users(id),
-          FOREIGN KEY (guideId) REFERENCES guides(id),
-          UNIQUE (userId, guideId, commentText)
+          FOREIGN KEY (guideId) REFERENCES guides(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS screenshots (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           guideId INTEGER NOT NULL,
           filePath TEXT,
-          FOREIGN KEY (guideId) REFERENCES guides(id),
+          FOREIGN KEY (guideId) REFERENCES guides(id) ON DELETE CASCADE
           UNIQUE (guideId, filePath)
         );
       `);
