@@ -11,4 +11,12 @@ module.exports = {
     moduleNameMapper: {
         "^(\\.{1,2}/.*)\\.js$": "$1",
     },
+
+    collectCoverage: true,
+
+    coverageDirectory: "coverage",
+
+    collectCoverageFrom: ["src/**/*.ts", "!src/start-server.ts"],
+
+    coverageReporters: ["text", "html"],
 };
