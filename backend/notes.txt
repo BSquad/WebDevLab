@@ -1,0 +1,25 @@
+For pdf upload we need some lib to handle the format.
+we have "app.use(express.json());" which can only handle application/json.
+fieluload from browser comes as "multipart/form-data".
+express is not able to parse this on its own.
+
+We use multer for uploads:
+
+npm install multer
+npm install --save-dev @types/multer
+
+
+____________________________________________
+
+for pdf generation
+
+npm install pdfkit
+npm install --save-dev @types/pdfkit
+
+
+____________________________________________
+backend test
+
+npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
+
+npx ts-jest config:init

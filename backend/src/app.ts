@@ -1,3 +1,5 @@
+// server.ts
+
 import express from 'express';
 import type { ErrorRequestHandler } from 'express';
 import cors from 'cors';
@@ -10,9 +12,10 @@ import { authRouter } from './routes/auth-routes.js';
 import { gameRouter } from './routes/game-routes.js';
 import { guideRouter } from './routes/guide-routes.js';
 import { userRouter } from './routes/user-routes.js';
+import { favoritesRouter } from './routes/favorites-routes.js';
+import { commentsRouter } from './routes/comments-routes.js';
 
 const app = express();
-const PORT = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,6 +31,8 @@ app.use('/auth', authRouter);
 app.use('/games', gameRouter);
 app.use('/guides', guideRouter);
 app.use('/users', userRouter);
+app.use('/comments', commentsRouter);
+app.use('/favorites', favoritesRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.error(err);
@@ -35,6 +40,4 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 app.use(errorHandler);
 
-app.listen(PORT, () =>
-    console.log(`Backend läuft auf http://localhost:${PORT}`),
-);
+export default app;

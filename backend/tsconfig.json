@@ -6,12 +6,12 @@
         "moduleResolution": "NodeNext", // Ensures .js extensions in imports work
         "rootDir": "..", // Where your code lives, one level up to include shared (a quick and dirty solution to removed IDE warnings)
         "outDir": "./dist", // Where compiled code will go
-
+        "types": ["node", "jest"], //for testing
         /* Strictness & Safety */
         "strict": true, // Keeps your code high quality
         "esModuleInterop": true, // Fixes compatibility with older libraries
         "skipLibCheck": true, // Speeds up compilation
         "forceConsistentCasingInFileNames": true
     },
-    "include": ["src/**/*", "../shared/**/*"]
+    "include": ["src/**/*", "tests/**/*", "../shared/**/*"]
 }
