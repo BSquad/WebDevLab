@@ -1,3 +1,5 @@
+// server.ts
+
 import express from 'express';
 import type { ErrorRequestHandler } from 'express';
 import cors from 'cors';
@@ -12,7 +14,6 @@ import { guideRouter } from './routes/guide-routes.js';
 import { userRouter } from './routes/user-routes.js';
 
 const app = express();
-const PORT = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,6 +36,4 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 app.use(errorHandler);
 
-app.listen(PORT, () =>
-    console.log(`Backend läuft auf http://localhost:${PORT}`),
-);
+export default app;
