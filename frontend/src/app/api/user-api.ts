@@ -5,6 +5,7 @@ import { User, UserProfile } from '../../../../shared/models/user';
 import { Game } from '../../../../shared/models/game';
 import { Achievement } from '../../../../shared/models/achievement';
 import { Guide } from '../../../../shared/models/guide';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -15,6 +16,11 @@ export class UserApi extends BaseApi {
     async getUserProfile(userId: number): Promise<UserProfile> {
         const url = `${this.userUrl}/${userId}/profile`;
         return await this.request(this.http.get<UserProfile>(url));
+    }
+
+    async updateUser(userId: number, formData: FormData): Promise<void> {
+        const url = `${this.userUrl}/${userId}`;
+        return await this.request(this.http.put<void>(url, formData));
     }
 
     async getGames(userId: number): Promise<Game[]> {

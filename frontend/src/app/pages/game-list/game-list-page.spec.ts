@@ -80,7 +80,7 @@ describe('GameListPage', () => {
     it('should return image path from PathBuilder', () => {
         const path = component.getGameImagePath('cover.png');
         expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith('cover.png');
-        expect(path).toBe('/images/cover.png');
+        expect(path).toBe('/uploads/images/cover.png');
     });
 
     it('should collect all unique tags', () => {

@@ -4,84 +4,74 @@ import { GameService } from '../services/game-service.js';
 import { GuideService } from '../services/guide-service.js';
 
 export class UserController {
-    private userService: UserService = new UserService();
-    private gameService: GameService = new GameService();
-    private guideService: GuideService = new GuideService();
+    // TypeScript automatically infers the types here
+    private userService = new UserService();
+    private gameService = new GameService();
+    private guideService = new GuideService();
 
     getUser = async (req: Request, res: Response): Promise<void> => {
-        try {
-            const user = await this.userService.getUserById(
-                Number(req.params.id),
-            );
-            res.status(200).json(user);
-        } catch (error: any) {
-            res.status(404).json({ error: error.message });
-        }
+        const user = await this.userService.getUserById(Number(req.params.id));
+        res.status(200).json(user);
     };
 
     updateUser = async (req: Request, res: Response): Promise<void> => {
-        try {
-            await this.userService.updateUser(
-                Number(req.params.id),
-                req.body.name,
-                req.body.email,
-            );
-            res.status(200).json({ message: 'User updated' });
-        } catch (error: any) {
-            res.status(400).json({ error: error.message });
+        const userId = Number(req.params.id);
+        const { name, email } = req.body;
+
+        //get the current user to keep the old path if no new pciture is uploaded
+        const currentUser = await this.userService.getUserById(userId);
+        let profilePath = currentUser.profilePicturePath;
+
+        if (req.file) {
+            profilePath = `/uploads/images/user/${req.file.filename}`;
         }
+
+        await this.userService.updateUser(userId, name, email, profilePath);
+
+        res.status(200).json({
+            message: 'User updated',
+        });
     };
 
     deleteUser = async (req: Request, res: Response): Promise<void> => {
-        try {
-            await this.userService.deleteUser(Number(req.params.id));
-            res.status(200).json({ message: 'User deleted' });
-        } catch (error: any) {
-            res.status(400).json({ error: error.message });
-        }
+        await this.userService.deleteUser(Number(req.params.id));
+        res.status(200).json({ message: 'User deleted' });
     };
 
     getUserProfile = async (req: Request, res: Response): Promise<void> => {
-        try {
-            const userId = Number(req.params.id);
+        const userId = Number(req.params.id);
 
-            if (isNaN(userId)) {
-                res.status(400).json({ error: 'Invalid User ID' });
-                return;
-            }
-
-            const profile = await this.userService.getFullProfile(userId);
-            res.status(200).json(profile);
-        } catch (error: any) {
-            console.error(error);
-            res.status(500).json({
-                error: error.message || 'Internal Server Error',
-            });
+        if (Number.isNaN(userId)) {
+            res.status(400).json({ error: 'Invalid User ID' });
+            return;
         }
+
+        const profile = await this.userService.getFullProfile(userId);
+        res.status(200).json(profile);
     };
 
-    getGames = async (req: Request, res: Response) => {
+    getGames = async (req: Request, res: Response): Promise<void> => {
         const data = await this.gameService.getGamesByUserId(
             Number(req.params.id),
         );
         res.json(data);
     };
 
-    getAchievements = async (req: Request, res: Response) => {
+    getAchievements = async (req: Request, res: Response): Promise<void> => {
         const data = await this.gameService.getAchievementsByUserId(
             Number(req.params.id),
         );
         res.json(data);
     };
 
-    getGuides = async (req: Request, res: Response) => {
-        const data = await this.guideService.getGuidesByUserId(
+    getGuides = async (req: Request, res: Response): Promise<void> => {
+        const data = await this.guideService.getGuideById(
             Number(req.params.id),
         );
         res.json(data);
     };
 
-    startUserAnalysis = async (req: Request, res: Response) => {
+    startUserAnalysis = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.body.userId);
         const analysisData = await this.userService.startUserAnalysis(userId);
         console.log(analysisData);

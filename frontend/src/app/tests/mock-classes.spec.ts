@@ -35,7 +35,7 @@ export class AuthServiceMock {
 export class PathBuilderMock {
     getGameImagePath = jasmine
         .createSpy('getGameImagePath')
-        .and.callFake((imageName?: string) => `/images/${imageName || 'default.png'}`);
+        .and.callFake((imageName?: string) => `/uploads/images/${imageName || 'default.png'}`);
 }
 
 export class GuideServiceMock {

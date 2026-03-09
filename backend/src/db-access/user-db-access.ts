@@ -34,10 +34,15 @@ export class UserDbAccess {
             `SELECT id, name, email, profilePicturePath FROM users`,
         );
 
-    updateUser = async (id: number, name: string, email: string) =>
+    updateUser = async (
+        id: number,
+        name: string,
+        email: string,
+        profilePicturePath: string,
+    ) =>
         await this.db.executeSQL(
-            `UPDATE users SET name = ?, email = ? WHERE id = ?`,
-            [name, email, id],
+            `UPDATE users SET name = ?, email = ?,  profilePicturePath = ? WHERE id = ?`,
+            [name, email, profilePicturePath, id],
         );
 
     deleteUser = async (id: number) =>

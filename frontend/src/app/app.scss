@@ -1,128 +1,208 @@
-.profile-trigger {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 12px;
-    transition: background 0.2s ease;
+@use './../styles/global' as *;
 
-    &:hover {
-        background: rgba(255, 255, 255, 0.15); // Subtle highlight on hover
-    }
-}
-
-.username {
-    font-weight: 500;
-    font-size: 14px;
-}
-
-.avatar-wrapper {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #e0e0e0;
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    flex-shrink: 0;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    mat-icon {
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #757575;
-        margin: 0;
-    }
-}
-
-.menu-user-info {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-
-    strong {
-        font-size: 15px;
-    }
-    span {
-        font-size: 13px;
-        opacity: 0.7;
-        margin-top: 4px;
-    }
-}
-.menu-header {
-    padding: 16px;
-    text-align: center;
-
-    .menu-name {
-        margin: 0;
-        font-weight: bold;
-    }
-    .menu-email {
-        margin: 0;
-        font-size: 0.8rem;
-        opacity: 0.7;
-    }
-}
-
+// --- TOOLBAR LAYOUT & THEMING ---
 .main-header {
     height: 64px;
     position: sticky;
+    top: 0;
     z-index: 1000;
+    background: linear-gradient(
+        to right,
+        $color-primary,
+        $color-gradient-middle,
+        $color-accent
+    ) !important;
+    color: $color-white !important;
+
+    // THE FIX: Forcing the border and shadow directly on the toolbar host
+    border-bottom: 4px solid $color-white !important;
+    box-shadow: 0px 6px 0px rgba($color-black, 0.8) !important;
 }
 
 .header-container {
     display: flex;
     align-items: center;
     width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
     padding: 0 16px;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .left-section,
 .right-section {
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-.brand {
-    font-size: 1.25rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-left: 8px;
+    gap: 16px;
 }
 
 .spacer {
-    flex: 1 1 auto; // This consumes all available middle space
+    flex: 1 1 auto;
 }
 
-.nav {
-    display: flex;
-    gap: 4px;
-    margin-right: 16px;
+.brand {
+    font-size: 1.5rem;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px $color-black;
+    transition: all 0.1s ease;
 
-    // Hide nav links on small screens (Mobile responsiveness)
-    @media (max-width: 600px) {
-        display: none;
+    &:hover {
+        transform: scale(1.05);
+        color: $color-yellow;
     }
 }
 
+// --- NAVIGATION BUTTONS ---
+.nav-links {
+    display: flex;
+    gap: 16px;
+}
+
+// THE FIX: Punching through Material's internal button layers
+.retro-btn {
+    font-family: 'Courier New', Courier, monospace !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    letter-spacing: 1px !important;
+    border-radius: 0 !important;
+    border: 2px solid transparent !important; // Reserves space so layout doesn't jump
+    background-color: transparent !important;
+    color: $color-white !important;
+    transition: all 0.1s ease;
+
+    &:hover:not(:disabled) {
+        // High-contrast retro hover state
+        background-color: rgba($color-black, 0.4) !important;
+        border: 2px solid $color-yellow !important;
+        color: $color-yellow !important;
+        text-shadow: 1px 1px 0px $color-black !important;
+    }
+
+    &:disabled {
+        opacity: 0.4 !important;
+    }
+}
+
+// --- PROFILE SECTION ---
 .auth-section {
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 2px solid rgba($color-white, 0.3);
     padding-left: 16px;
-    margin-right: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border: 2px solid transparent;
+    transition: all 0.1s ease;
+
+    &:hover {
+        background-color: rgba($color-black, 0.4);
+        border: 2px solid $color-yellow;
+
+        .username {
+            color: $color-yellow;
+        }
+
+        .avatar-wrapper {
+            border-color: $color-yellow;
+        }
+    }
+}
+
+.username {
+    font-weight: 900;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px $color-black;
+    transition: color 0.1s ease;
+}
+
+.avatar-wrapper {
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $color-black;
+    border: 2px solid $color-white;
+    flex-shrink: 0;
+    transition: border-color 0.1s ease;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        image-rendering: pixelated;
+    }
+
+    mat-icon {
+        color: $color-white;
+    }
+}
+
+// --- MATERIAL MENU OVERRIDES ---
+::ng-deep .retro-menu {
+    background: $color-background !important;
+    border: 4px solid $color-white !important;
+    border-radius: 0 !important;
+    box-shadow: 8px 8px 0px rgba($color-black, 0.8) !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    margin-top: 10px !important; // Pushes it slightly away from the toolbar
+
+    .menu-header {
+        padding: 16px;
+        text-align: center;
+        background: rgba($color-black, 0.5);
+        color: $color-white;
+        border-bottom: 2px solid $color-white;
+
+        .menu-name {
+            margin: 0;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0px $color-black;
+        }
+
+        .menu-email {
+            margin: 0;
+            font-size: 0.8rem;
+            color: $color-accent;
+            margin-top: 4px;
+        }
+    }
+
+    // THE FIX: Forcing menu hover states
+    .retro-menu-btn {
+        color: $color-white !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-weight: bold !important;
+        border-bottom: 1px solid rgba($color-white, 0.1) !important;
+        transition: all 0.1s ease;
+
+        mat-icon {
+            color: $color-accent !important;
+            transition: color 0.1s ease;
+        }
+
+        &:hover {
+            background-color: rgba($color-black, 0.4) !important;
+            color: $color-yellow !important;
+            padding-left: 24px !important; // Cool retro indent effect on hover
+
+            mat-icon {
+                color: $color-yellow !important;
+            }
+        }
+    }
 }

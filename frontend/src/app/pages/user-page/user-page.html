@@ -8,88 +8,123 @@
 
     <div class="dashboard-layout">
         <aside class="sidebar">
-            <mat-card class="pixel-border">
+            <mat-card class="pixel-border" appearance="outlined">
                 <div class="avatar-wrapper">
-                    <img [src]="'/assets/pictures/user-pic.jpg'" alt="User Avatar" />
+                    <img
+                        [src]="getProfileImageUrl(userProfile.value()?.profilePicturePath)"
+                        alt="User Avatar"
+                        class="pixel-avatar"
+                    />
                 </div>
             </mat-card>
 
-            <mat-card class="info-card pixel-border">
-                <div class="card-header">USER INFO</div>
-                <div class="info-content">
+            <mat-card class="info-card pixel-border" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>USER INFO</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="info-content">
                     <p><strong>NAME:</strong> {{ userProfile.value()?.name }}</p>
                     <p><strong>EMAIL:</strong> {{ userProfile.value()?.email }}</p>
-                </div>
+                </mat-card-content>
+
+                <mat-card-actions>
+                    <button mat-flat-button class="analyze-btn edit-btn" (click)="toggleEditMode()">
+                        EDIT PROFILE
+                    </button>
+                </mat-card-actions>
             </mat-card>
 
-            <mat-card class="achievements-card pixel-border">
-                <div class="card-header">BADGES</div>
-                <div class="badge-grid">
+            <mat-card class="achievements-card pixel-border" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>BADGES</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="badge-grid">
                     @for (item of achievements(); track item.title) {
-                    <mat-icon [title]="item.title" [ngClass]="item.difficulty"
-                        >military_tech</mat-icon
-                    >
+                    <mat-icon
+                        [title]="item.title"
+                        [ngClass]="item.difficulty"
+                        fontIcon="military_tech"
+                    ></mat-icon>
                     } @empty {
                     <p class="empty-msg">NO BADGES YET</p>
                     }
-                </div>
-
-                <button
-                    mat-flat-button
-                    class="analyze-btn"
-                    [disabled]="isAnalyzing()"
-                    (click)="startAnalysis()"
-                >
-                    {{ isAnalyzing() ? 'ANALYZING...' : 'START ANALYSIS' }}
-                </button>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button
+                        mat-flat-button
+                        class="analyze-btn"
+                        [disabled]="isAnalyzing()"
+                        (click)="startAnalysis()"
+                    >
+                        {{ isAnalyzing() ? 'ANALYZING...' : 'START ANALYSIS' }}
+                    </button>
+                </mat-card-actions>
             </mat-card>
         </aside>
 
         <main class="main-content">
             @if (analysisResult(); as data) {
-            <section class="analysis-panel pixel-border">
-                <div class="section-header">ANALYSIS RESULTS</div>
-                <div class="stats-grid">
+            <mat-card class="analysis-panel pixel-border" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>ANALYSIS RESULTS</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="stats-grid">
                     <div class="stat-box">
-                        <span>GAMES</span><strong>{{data.gameCount}}</strong>
+                        <span>GAMES</span><strong>{{ data.gameCount }}</strong>
                     </div>
                     <div class="stat-box">
-                        <span>GENRE</span><strong>{{data.mostPlayedGenre}}</strong>
+                        <span>GENRE</span><strong>{{ data.mostPlayedGenre }}</strong>
                     </div>
                     <div class="stat-box">
-                        <span>RATE</span><strong>{{data.completionRate}}%</strong>
+                        <span>RATE</span><strong>{{ data.completionRate }}%</strong>
                     </div>
-                </div>
-            </section>
+                </mat-card-content>
+            </mat-card>
             }
 
-            <section class="game-section pixel-border">
-                <div class="section-header">MY GAMES</div>
-                <div class="game-list">
-                    @for (game of games(); track game.id) {
-                    <div class="game-item" [class.favorite]="game.isFavorite">
-                        <img [src]="'assets/' + game.imageName" [alt]="game.title" />
-                        <span>{{ game.title }}</span>
-                        @if (game.isFavorite) { <mat-icon class="fav-star">star</mat-icon> }
+            <mat-card class="game-section pixel-border" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>MY GAMES</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="game-list">
+                        @for (game of games(); track game.id) {
+                        <a
+                            class="game-item"
+                            [class.favorite]="game.isFavorite"
+                            [routerLink]="['/games', game.id]"
+                        >
+                            <img [src]="'assets/' + game.imageName" [alt]="game.title" />
+                            <span>{{ game.title }}</span>
+                            @if (game.isFavorite) {
+                            <mat-icon class="fav-star" fontIcon="star"></mat-icon> }
+                        </a>
+                        } @empty {
+                        <p class="empty-msg">NO GAMES YET</p>
+                        }
                     </div>
-                    }
-                </div>
-            </section>
+                </mat-card-content>
+            </mat-card>
 
-            <section class="progress-section pixel-border">
-                <div class="section-header">GUIDES CREATED</div>
-                <div class="guide-list">
-                    @for (guide of guides(); track guide.id) {
-                    <div class="progress-item">
-                        <div class="progress-details">
-                            <div class="label-row">
-                                <span class="game-title">{{ guide.title }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    }
-                </div>
-            </section>
+            <mat-card class="progress-section pixel-border" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>MY GUIDES</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-nav-list>
+                        @for (guide of guides(); track guide.id) {
+                        <a mat-list-item [routerLink]="['/guides', guide.id]">
+                            <span matListItemTitle>{{ guide.title }}</span>
+                            @if (guide.game) {
+                            <span matListItemLine>{{ guide.game.title }}</span>
+                            }
+                        </a>
+                        } @empty {
+                        <p class="empty-msg">NO GUIDES YET</p>
+                        }
+                    </mat-nav-list>
+                </mat-card-content>
+            </mat-card>
         </main>
     </div>
 </div>

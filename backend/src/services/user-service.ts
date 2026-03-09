@@ -19,8 +19,18 @@ export class UserService {
         return user;
     };
 
-    updateUser = async (id: number, name: string, email: string) => {
-        return await this.userDbAccess.updateUser(id, name, email);
+    updateUser = async (
+        id: number,
+        name: string,
+        email: string,
+        profilePicturePath: string,
+    ) => {
+        return await this.userDbAccess.updateUser(
+            id,
+            name,
+            email,
+            profilePicturePath,
+        );
     };
 
     deleteUser = async (id: number) => {

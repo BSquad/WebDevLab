@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { UserApi } from '../api/user-api';
 import { AnalysisData } from '../../../../shared/models/analysisData';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +11,10 @@ export class UserService {
 
     async getUserProfile(userId: number) {
         return this.userApi.getUserProfile(userId);
+    }
+
+    async updateUser(userId: number, formData: FormData): Promise<void> {
+        return this.userApi.updateUser(userId, formData);
     }
 
     async getGames(userId: number) {

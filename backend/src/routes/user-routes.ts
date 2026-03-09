@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '../controller/user-controller.js';
+import { upload } from '../middleware/upload-middleware.js';
 
 const router = Router();
 const userController = new UserController();
@@ -13,7 +14,7 @@ router.get('/:id/guides', userController.getGuides);
 
 // CRUD ohne C
 router.get('/:id', userController.getUser);
-router.put('/:id', userController.updateUser);
+router.put('/:id', upload.single('profilePic'), userController.updateUser);
 router.delete('/:id', userController.deleteUser);
 
 export { router as userRouter };
