@@ -7,6 +7,10 @@
 # Backend
 /backend/node_modules/
 /backend/database.sqlite
+/backend/coverage/
+/backend/images
+# Coverage
+
 
 # Node / npm
 npm-debug.log
