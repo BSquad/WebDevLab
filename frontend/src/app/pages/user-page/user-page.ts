@@ -51,9 +51,7 @@ export class UserPage {
         params: () => ({ id: this.currentUser()?.id }),
         loader: async ({ params }) => {
             if (!params.id) return null;
-            const userProfile = await this.userService.getUserProfile(params.id);
-            console.log(userProfile);
-            return userProfile;
+            return await this.userService.getUserProfile(params.id);
         },
     });
 
