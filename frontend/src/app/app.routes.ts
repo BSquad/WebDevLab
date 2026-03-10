@@ -13,6 +13,7 @@ export const routes: Routes = [
     { path: 'register', component: RegisterPage },
     { path: 'games', component: GameListPage },
     { path: 'games/:gameId', component: GameDetailPage },
+    { path: 'guides/:guideId', component: GuideEditorPage }, //TODO: change component
     { path: 'user', component: UserPage },
     { path: 'create-guide/:gameId', component: GuideEditorPage },
     { path: 'achievements/:gameId', component: AchievementPage },

@@ -22,7 +22,7 @@ const __dirname = dirname(__filename);
 
 app.use(cors());
 app.use(express.json());
-app.use('/images', express.static(path.join(__dirname, '../images')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const db = new Db();
 await db.initDB();
@@ -35,8 +35,15 @@ app.use('/comments', commentsRouter);
 app.use('/favorites', favoritesRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ message: err.message ?? 'Unknown server error' });
+    console.error(`[Error] ${req.method} ${req.originalUrl}`);
+    console.error(err.stack ?? err);
+
+    const isDev = process.env.NODE_ENV === 'development';
+
+    res.status(err.status ?? 500).json({
+        message: err.message ?? 'Unknown server error',
+        ...(isDev && { stack: err.stack }),
+    });
 };
 app.use(errorHandler);
 

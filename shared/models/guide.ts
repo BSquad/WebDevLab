@@ -1,8 +1,11 @@
+import { Game } from './game';
+
 export interface Guide {
     id?: number;
     userId: number;
     author?: string;
     gameId: number;
+    game?: Game;
     title: string;
     content: string;
 

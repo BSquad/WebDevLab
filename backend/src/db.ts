@@ -141,7 +141,7 @@ export class Db {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           guideId INTEGER NOT NULL,
           filePath TEXT,
-          FOREIGN KEY (guideId) REFERENCES guides(id) ON DELETE CASCADE
+          FOREIGN KEY (guideId) REFERENCES guides(id) ON DELETE CASCADE,
           UNIQUE (guideId, filePath)
         );
       `);

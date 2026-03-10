@@ -1,0 +1,50 @@
+<div class="retro-dialog-wrapper">
+    <div class="dialog-header">EDIT CHARACTER</div>
+
+    <mat-dialog-content class="dialog-content">
+        <div class="avatar-upload-container">
+            <div class="pixel-avatar-preview">
+                @if (imagePreview()) {
+                <img [src]="imagePreview()" alt="Preview" />
+                } @else {
+                <mat-icon fontIcon="account_box"></mat-icon>
+                }
+            </div>
+
+            <input
+                type="file"
+                #fileInput
+                (change)="onFileSelected($event)"
+                accept="image/*"
+                hidden
+            />
+            <button mat-flat-button class="retro-btn upload-btn" (click)="fileInput.click()">
+                UPLOAD PROFILE PICTURE
+            </button>
+        </div>
+
+        <form [formGroup]="form">
+            <mat-form-field appearance="outline" class="retro-input w-100">
+                <mat-label>NAME</mat-label>
+                <input matInput formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="retro-input w-100">
+                <mat-label>EMAIL</mat-label>
+                <input matInput formControlName="email" type="email" />
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="dialog-actions">
+        <button mat-button class="retro-btn cancel-btn" (click)="cancel()">CANCEL</button>
+        <button
+            mat-flat-button
+            class="retro-btn save-btn"
+            (click)="save()"
+            [disabled]="form.invalid"
+        >
+            SAVE
+        </button>
+    </mat-dialog-actions>
+</div>

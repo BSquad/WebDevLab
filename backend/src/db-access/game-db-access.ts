@@ -152,4 +152,27 @@ export class GameDbAccess {
             .map((v) => v.trim())
             .filter(Boolean);
     };
+
+    getGamesByUserId = async (userId: number): Promise<Game[]> => {
+        return await this.db.executeSQL(
+            `
+      SELECT g.id, g.title, g.genre, g.imageName, ug.isFavorite, ug.addedAt 
+      FROM games g
+      JOIN user_games ug ON g.id = ug.gameId
+      WHERE ug.userId = ?`,
+            [userId],
+        );
+    };
+
+    async getAchievementsByUserId(id: number): Promise<Achievement[]> {
+        return await this.db.executeSQL(
+            `
+      SELECT a.id, a.title, g.title as gameTitle, a.difficulty, ua.completedAt 
+      FROM achievements a 
+      JOIN user_achievements ua ON a.id = ua.achievementId 
+      JOIN games g ON a.gameId = g.id 
+      WHERE ua.userId = ?`,
+            [id],
+        );
+    }
 }

@@ -57,3 +57,9 @@ body {
         color: g.$color-yellow;
     }
 }
+
+.bg-transparent .mdc-dialog__surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}

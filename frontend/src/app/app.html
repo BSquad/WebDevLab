@@ -1,28 +1,57 @@
-<main class="main">
-    <header class="header">
-        <button class="normal-button" (click)="goToGameList()">Browse Games</button>
-        <button class="normal-button" (click)="goToUserPage()" [disabled]="!user()">
-            My Guides
-        </button>
-        <div class="profile-container" (click)="toggleProfileDropdown()">
-            <div class="profile-name">
+<mat-toolbar color="primary" class="main-header pixel-border-bottom">
+    <div class="header-container">
+        <div class="left-section">
+            <span class="brand" (click)="goToGameList()">GAME TRACKER</span>
+        </div>
+
+        <span class="spacer"></span>
+
+        <div class="right-section">
+            <nav class="nav-links">
+                <button mat-button class="retro-btn" (click)="goToGameList()">BROWSE</button>
+                <button mat-button class="retro-btn" (click)="goToUserPage()" [disabled]="!user()">
+                    MY GUIDES
+                </button>
+            </nav>
+
+            <div class="auth-section">
                 @if (user()) {
-                    {{ user()?.name }}
-                    @if (profileDropdownOpen) {
-                        <div class="profile-dropdown" (click)="$event.stopPropagation()">
-                            <button class="dropdown-item" (click)="logout()">Logout</button>
-                        </div>
-                    }
-                } @else {
-                    <button class="normal-button" (click)="goToLogin()" [disabled]="user()">
-                        Login
+                <div class="profile-trigger" [matMenuTriggerFor]="profileMenu">
+                    <span class="username">{{ user()?.name }}</span>
+                    <div class="avatar-wrapper">
+                        @if (user()?.profilePic) {
+                        <img [src]="user()?.profilePic" alt="Profile" />
+                        } @else {
+                        <mat-icon fontIcon="account_circle"></mat-icon>
+                        }
+                    </div>
+                </div>
+
+                <mat-menu #profileMenu="matMenu" class="retro-menu">
+                    <div class="menu-header">
+                        <p class="menu-name">{{ user()?.name }}</p>
+                        <p class="menu-email">{{ user()?.email || 'PLAYER_ONE' }}</p>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item (click)="goToUserPage()" class="retro-menu-btn">
+                        <mat-icon fontIcon="person"></mat-icon>
+                        <span>PROFILE</span>
                     </button>
+                    <button mat-menu-item (click)="logout()" class="retro-menu-btn">
+                        <mat-icon fontIcon="logout"></mat-icon>
+                        <span>LOGOUT</span>
+                    </button>
+                </mat-menu>
+                } @else {
+                <button mat-flat-button color="accent" class="retro-btn" (click)="goToLogin()">
+                    LOGIN
+                </button>
                 }
             </div>
         </div>
-    </header>
-
-    <div class="content">
-        <router-outlet />
     </div>
+</mat-toolbar>
+
+<main class="content">
+    <router-outlet />
 </main>

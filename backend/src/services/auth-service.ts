@@ -1,16 +1,16 @@
 import type { User } from '../../../shared/models/user.ts';
 import type { RegisterData } from '../../../shared/models/register-data.ts';
-import { AuthDbAccess } from '../db-access/auth-db-access.js';
+import { UserDbAccess } from '../db-access/user-db-access.js';
 
 export class AuthService {
-    private authDbAccess: AuthDbAccess = new AuthDbAccess();
+    private userdbAccess: UserDbAccess = new UserDbAccess();
 
     getUserByCredentials = async (
         name: string,
         password: string,
     ): Promise<User | null> => {
         const passwordHash = await this.hashPassword(password);
-        return await this.authDbAccess.getUserByNameAndPWHash(
+        return await this.userdbAccess.getUserByNameAndPWHash(
             name,
             passwordHash,
         );
@@ -19,7 +19,7 @@ export class AuthService {
     register = async (registerData: RegisterData) => {
         try {
             const passwordHash = await this.hashPassword(registerData.password);
-            await this.authDbAccess.addUser(
+            await this.userdbAccess.createUser(
                 registerData.name,
                 registerData.email,
                 passwordHash,

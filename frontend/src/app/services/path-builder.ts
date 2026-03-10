@@ -8,8 +8,8 @@ export class PathBuilder {
 
     getGameImagePath(imageFileName?: string): string {
         if (!imageFileName) {
-            return `${this.baseApiUrl}/images/games/questionmark.webp`;
+            return `${this.baseApiUrl}/uploads/images/games/questionmark.webp`;
         }
-        return `${this.baseApiUrl}/images/games/${imageFileName}`;
+        return `${this.baseApiUrl}/uploads/images/games/${imageFileName}`;
     }
 }

@@ -75,7 +75,7 @@ export class GuideController {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const filePath = `/images/guides/${req.file.filename}`;
+        const filePath = `/uploads/images/guides/${req.file.filename}`;
 
         await this.guideService.addScreenshot(guideId, filePath);
 

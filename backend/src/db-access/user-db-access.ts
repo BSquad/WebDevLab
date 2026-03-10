@@ -1,8 +1,52 @@
 import type { AnalysisData } from '../../../shared/models/analysisData.js';
+import { User } from '../../../shared/models/user.js';
 import { Db } from '../db.js';
 
 export class UserDbAccess {
     private db: Db = new Db();
+
+    createUser = async (name: string, email: string, passwordHash: string) =>
+        await this.db.executeSQL(
+            `INSERT INTO users (name, email, passwordHash) VALUES (?, ?, ?)`,
+            [name, email, passwordHash],
+        );
+
+    getUserById = async (id: number) =>
+        await this.db.executeSQL(
+            `SELECT id, name, email, profilePicturePath FROM users WHERE id = ?`,
+            [id],
+            true,
+        );
+
+    getUserByNameAndPWHash = async (
+        name: string,
+        passwordHash: string,
+    ): Promise<User | null> => {
+        return (await this.db.executeSQL(
+            `SELECT ID, NAME, EMAIL, PROFILEPICTUREPATH FROM USERS WHERE NAME = ? AND PASSWORDHASH = ?`,
+            [name, passwordHash],
+            true,
+        )) as User;
+    };
+
+    getAllUsers = async () =>
+        await this.db.executeSQL(
+            `SELECT id, name, email, profilePicturePath FROM users`,
+        );
+
+    updateUser = async (
+        id: number,
+        name: string,
+        email: string,
+        profilePicturePath: string,
+    ) =>
+        await this.db.executeSQL(
+            `UPDATE users SET name = ?, email = ?,  profilePicturePath = ? WHERE id = ?`,
+            [name, email, profilePicturePath, id],
+        );
+
+    deleteUser = async (id: number) =>
+        await this.db.executeSQL(`DELETE FROM users WHERE id = ?`, [id]);
 
     startUserAnalysis = async (userId: number): Promise<AnalysisData> => {
         return (await this.db.executeSQL(
