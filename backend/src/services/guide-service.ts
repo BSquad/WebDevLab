@@ -4,8 +4,8 @@ import { GuideDbAccess } from '../db-access/guide-db-access.js';
 export class GuideService {
     private guideDbAccess: GuideDbAccess = new GuideDbAccess();
 
-    createGuide = async (guide: Guide) => {
-        await this.guideDbAccess.addGuide(guide);
+    createGuide = async (guide: Guide): Promise<number> => {
+        return await this.guideDbAccess.addGuide(guide);
     };
 
     getGuidesByGameId = async (gameId: number): Promise<Guide[]> => {

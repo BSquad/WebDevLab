@@ -1,6 +1,6 @@
 <div class="page">
     <div class="page-title">
-        <h1>Create Guide for {{ game()?.title }}</h1>
+        <h1>{{ isEditMode ? 'Edit Guide' : 'Create Guide for ' + game()?.title }}</h1>
     </div>
 
     <form #guideCreationForm="ngForm" (ngSubmit)="onSubmit(guideCreationForm)">
@@ -11,9 +11,40 @@
 
         <div>
             <label for="content">Content:</label>
-            <input type="text" id="content" name="content" [(ngModel)]="content" required />
+
+            <textarea id="content" name="content" [(ngModel)]="content" required></textarea>
         </div>
 
-        <button type="submit">Create Guide</button>
+        <!-- Screenshot Upload -->
+        <div class="upload-container">
+            <label for="screenshots">Screenshots:</label>
+
+            <input
+                type="file"
+                id="screenshots"
+                (change)="onFileSelected($event)"
+                multiple
+                accept="image/*"
+            />
+            <div class="preview-container">
+                @for (url of previewUrls; track url) {
+                <img [src]="url" class="preview-image" />
+                }
+            </div>
+            <!-- Anzeige der ausgewählten Dateien -->
+            @if (selectedFiles.length > 0) {
+            <div class="selected-files">
+                <p>Selected screenshots:</p>
+
+                <ul>
+                    @for (file of selectedFiles; track file.name) {
+                    <li>{{ file.name }}</li>
+                    }
+                </ul>
+            </div>
+            }
+        </div>
+
+        <button type="submit">{{ isEditMode ? 'Update Guide' : 'Create Guide' }}</button>
     </form>
 </div>
