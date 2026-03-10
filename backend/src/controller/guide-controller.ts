@@ -6,9 +6,22 @@ export class GuideController {
     private guideService: GuideService = new GuideService();
 
     createGuide = async (req: Request, res: Response) => {
-        const guide = req.body as Guide;
-        await this.guideService.createGuide(guide);
-        res.json(true);
+        try {
+            const guide = req.body as Guide;
+
+            const id = await this.guideService.createGuide(guide);
+
+            res.json(id);
+        } catch (err: any) {
+            if (err.message.includes('SQLITE_CONSTRAINT')) {
+                return res.status(400).json({
+                    message:
+                        'You already created a guide with this title for this game.',
+                });
+            }
+
+            res.status(500).json({ message: err.message });
+        }
     };
 
     getGuidesByGameId = async (req: Request, res: Response) => {
@@ -51,13 +64,10 @@ export class GuideController {
 
     rateGuide = async (req: Request, res: Response) => {
         const guideId = Number(req.params.id);
-        const { userId, score } = req.body;
+        const rating = Number(req.body.rating);
+        const userId = Number(req.body.userId);
 
-        await this.guideService.rateGuide(
-            guideId,
-            Number(userId),
-            Number(score),
-        );
+        await this.guideService.rateGuide(guideId, userId, rating);
 
         res.json(true);
     };
@@ -70,6 +80,10 @@ export class GuideController {
 
     uploadScreenshot = async (req: Request, res: Response) => {
         const guideId = Number(req.params.id);
+
+        if (!guideId) {
+            return res.status(400).json({ message: 'Invalid guide id' });
+        }
 
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });

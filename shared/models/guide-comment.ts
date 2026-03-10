@@ -1,7 +1,9 @@
 export interface GuideComment {
-  id?: number;
-  userId: number;
-  guideId: number;
-  commentText: string;
-  createdAt?: string;
+    id?: number;
+    userId: number;
+    guideId: number;
+    commentText: string;
+    createdAt?: string;
+
+    author?: string;
 }

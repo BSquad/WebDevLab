@@ -57,4 +57,12 @@ export class AuthService {
 
         return success;
     }
+
+    getCurrentUser(): User | null {
+        return this.currentUser.value;
+    }
+
+    isLoggedIn(): boolean {
+        return this.currentUser.value !== null;
+    }
 }

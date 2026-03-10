@@ -18,6 +18,8 @@ router.get('/top/:gameId', guideController.getTopGuidesByGameId);
 router.post('/:id/rate', guideController.rateGuide);
 
 // MH14 – Upload Screenshot
+
+// MH14 – screenshot upload
 router.post(
     '/:id/upload',
     upload.single('image'),

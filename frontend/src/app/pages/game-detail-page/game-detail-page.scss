@@ -171,4 +171,39 @@
             }
         }
     }
+
+    .top-guides-container {
+        margin-bottom: 30px;
+    }
+
+    .top-guides-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .top-guide-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        padding: 10px;
+        border-radius: 8px;
+
+        background: #f7f7f7;
+        margin-bottom: 8px;
+    }
+
+    .guide-rating {
+        margin-left: 10px;
+        font-weight: 500;
+    }
+
+    .danger-button {
+        background: #d9534f;
+        color: white;
+    }
+
+    .danger-button:hover {
+        background: #c9302c;
+    }
 }

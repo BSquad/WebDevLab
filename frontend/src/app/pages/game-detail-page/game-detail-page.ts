@@ -22,6 +22,7 @@ export class GameDetailPage {
     guides: any = signal<Guide[]>([]);
     user: any = signal<User | null>(null);
     bestUsers: any = signal<User[]>([]);
+    topGuides = signal<Guide[]>([]);
 
     constructor(
         private route: ActivatedRoute,
@@ -38,6 +39,8 @@ export class GameDetailPage {
     async ngOnInit() {
         try {
             const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
+            const topGuidesData = await this.guideService.getTopGuides(gameId);
+            this.topGuides.set(topGuidesData);
             const gameData = await this.gameService.getGame(gameId, this.user()?.id);
             this.game.set(gameData);
             const guidesData = await this.guideService.getGuidesByGameId(gameId);
@@ -87,5 +90,26 @@ export class GameDetailPage {
 
     getGameImagePath(imageName?: string): string {
         return this.pathBuilder.getGameImagePath(imageName);
+    }
+
+    async deleteGuide(guide: Guide) {
+        const confirmed = confirm('Are you sure you want to delete this guide?');
+        if (!confirmed) return;
+
+        const user = this.user();
+
+        const success = await this.guideService.deleteGuide(guide.id!, user!.id);
+
+        if (success) {
+            const gameId = this.game()!.id;
+
+            const guidesData = await this.guideService.getGuidesByGameId(gameId);
+            this.guides.set(guidesData);
+
+            const topGuides = await this.guideService.getTopGuides(gameId);
+            this.topGuides.set(topGuides);
+
+            this.toastService.showSuccess('Guide deleted');
+        }
     }
 }
