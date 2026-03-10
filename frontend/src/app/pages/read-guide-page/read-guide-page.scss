@@ -1,0 +1,39 @@
+.rating-container {
+    margin-top: 20px;
+    font-size: 26px;
+}
+
+.rating-label {
+    margin-right: 10px;
+}
+
+.star {
+    cursor: pointer;
+    color: #ccc;
+    transition:
+        color 0.2s,
+        transform 0.15s;
+}
+
+.star.active {
+    color: gold;
+}
+
+.star:hover {
+    transform: scale(1.2);
+}
+
+.screenshots-container {
+    margin-top: 20px;
+}
+
+.screenshots {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.guide-screenshot {
+    width: 300px;
+    border-radius: 8px;
+}

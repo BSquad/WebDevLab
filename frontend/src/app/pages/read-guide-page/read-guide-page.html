@@ -1,0 +1,51 @@
+<div class="page">
+    <div class="page-title">
+        <h1>{{ guide()?.title }}</h1>
+    </div>
+
+    <div class="rating-container">
+        <span class="rating-label">Rating:</span>
+
+        @for (star of [1,2,3,4,5]; track star) {
+
+        <span
+            class="star"
+            [class.active]="star <= (hoverRating() || rating())"
+            (click)="rateGuide(star)"
+            (mouseenter)="hoverRating.set(star)"
+            (mouseleave)="hoverRating.set(0)"
+        >
+            ★
+        </span>
+        } Avg:{{ guide()?.avgRating }} / 5 @for (star of [1,2,3,4,5]; track star) {
+        <span class="star" [class.active]="star <= (guide()?.avgRating || 0)"> ★ </span>
+        }
+    </div>
+
+    <div class="guide-meta">
+        <span class="user-name-text">by {{ guide()?.author }}</span>
+        <span class="guide-date"> {{ guide()?.createdAt | date:'mediumDate' }} </span>
+    </div>
+
+    <div class="guide-content">{{ guide()?.content }}</div>
+
+    <div class="guide-actions">
+        <button class="normal-button" (click)="downloadPDF()">Download PDF</button>
+    </div>
+
+    @if (guide()?.id) {
+    <app-comments [guideId]="guide()?.id!"></app-comments>
+    } @if (guide()?.screenshots?.length) {
+
+    <div class="screenshots-container">
+        <h3>Screenshots</h3>
+
+        <div class="screenshots">
+            @for (shot of guide()?.screenshots; track shot) {
+            <img [src]="'http://localhost:3000' + shot" class="guide-screenshot" />
+            }
+        </div>
+    </div>
+
+    }
+</div>
