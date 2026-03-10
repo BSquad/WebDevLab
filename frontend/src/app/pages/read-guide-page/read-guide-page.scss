@@ -1,15 +1,32 @@
+@use '../../../styles/_global' as g;
+
+.guide-container {
+    background: rgba(g.$color-black, 0.25);
+    padding: 1.5rem;
+    border-radius: g.$radius-medium;
+}
+
+/* Rating */
+
 .rating-container {
-    margin-top: 20px;
-    font-size: 26px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 1rem;
+
+    font-size: 22px;
 }
 
 .rating-label {
-    margin-right: 10px;
+    font-size: 0.95rem;
+    color: g.$color-white;
 }
 
 .star {
     cursor: pointer;
-    color: #ccc;
+    color: #777;
+
     transition:
         color 0.2s,
         transform 0.15s;
@@ -23,17 +40,67 @@
     transform: scale(1.2);
 }
 
+.star.static {
+    cursor: default;
+}
+
+/* Avg rating */
+
+.avg-rating {
+    margin-left: 15px;
+    font-size: 0.9rem;
+    color: g.$color-white;
+}
+
+/* Meta */
+
+.guide-meta {
+    display: flex;
+    gap: 12px;
+    color: g.$color-white;
+    margin-bottom: 1rem;
+}
+
+/* Content */
+
+.guide-content {
+    color: g.$color-white;
+    line-height: 1.6;
+    white-space: pre-line;
+    margin-bottom: 1.5rem;
+}
+
+/* Screenshots */
+
 .screenshots-container {
-    margin-top: 20px;
+    margin-top: 2rem;
+}
+
+.screenshots-container h3 {
+    margin-bottom: 0.8rem;
+    color: g.$color-white;
 }
 
 .screenshots {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 12px;
-    flex-wrap: wrap;
+}
+
+.screenshot-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .guide-screenshot {
-    width: 300px;
-    border-radius: 8px;
+    width: 100%;
+    border-radius: g.$radius-small;
+    box-shadow: g.$shadow-medium;
+}
+
+.screenshot-label {
+    font-size: 0.85rem;
+    color: g.$color-white;
+    text-align: center;
 }

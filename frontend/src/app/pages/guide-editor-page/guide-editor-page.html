@@ -3,21 +3,34 @@
         <h1>{{ isEditMode ? 'Edit Guide' : 'Create Guide for ' + game()?.title }}</h1>
     </div>
 
-    <form #guideCreationForm="ngForm" (ngSubmit)="onSubmit(guideCreationForm)">
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" [(ngModel)]="title" required />
+    <form #guideCreationForm="ngForm" (ngSubmit)="onSubmit(guideCreationForm)" class="guide-form">
+        <div class="form-group">
+            <label for="title">Title</label>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                [(ngModel)]="title"
+                required
+                placeholder="Enter guide title..."
+            />
         </div>
 
-        <div>
-            <label for="content">Content:</label>
+        <div class="form-group">
+            <label for="content">Content</label>
 
-            <textarea id="content" name="content" [(ngModel)]="content" required></textarea>
+            <textarea
+                id="content"
+                name="content"
+                [(ngModel)]="content"
+                required
+                placeholder="Write your guide here... (You can reference screenshots like 'see screenshot 1')"
+            ></textarea>
         </div>
 
-        <!-- Screenshot Upload -->
         <div class="upload-container">
-            <label for="screenshots">Screenshots:</label>
+            <label for="screenshots">Screenshots</label>
 
             <input
                 type="file"
@@ -26,12 +39,17 @@
                 multiple
                 accept="image/*"
             />
+
             <div class="preview-container">
                 @for (url of previewUrls; track url) {
-                <img [src]="url" class="preview-image" />
+
+                <div class="preview-wrapper">
+                    <img [src]="url" class="preview-image" />
+                </div>
+
                 }
             </div>
-            <!-- Anzeige der ausgewählten Dateien -->
+
             @if (selectedFiles.length > 0) {
             <div class="selected-files">
                 <p>Selected screenshots:</p>
@@ -45,6 +63,8 @@
             }
         </div>
 
-        <button type="submit">{{ isEditMode ? 'Update Guide' : 'Create Guide' }}</button>
+        <button class="submit-button" type="submit">
+            {{ isEditMode ? 'Update Guide' : 'Create Guide' }}
+        </button>
     </form>
 </div>

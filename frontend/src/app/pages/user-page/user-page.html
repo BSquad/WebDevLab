@@ -94,7 +94,10 @@
                             [class.favorite]="game.isFavorite"
                             [routerLink]="['/games', game.id]"
                         >
-                            <img [src]="'assets/' + game.imageName" [alt]="game.title" />
+                            <img
+                                [src]="'http://localhost:3000/uploads/images/games/' + game.imageName"
+                                [alt]="game.title"
+                            />
                             <span>{{ game.title }}</span>
                             @if (game.isFavorite) {
                             <mat-icon class="fav-star" fontIcon="star"></mat-icon> }
@@ -108,7 +111,7 @@
 
             <mat-card class="progress-section pixel-border" appearance="outlined">
                 <mat-card-header>
-                    <mat-card-title>MY GUIDES</mat-card-title>
+                    <mat-card-title>MY PAGE</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <mat-nav-list>
