@@ -39,28 +39,27 @@ export class GuideDbAccess {
         return (await this.db.executeSQL(sql, [gameId])) as Guide[];
     };
 
-    getGuidesByUserId = async (id: number): Promise<Guide | undefined> => {
+    getGuidesByUserId = async (userId: number): Promise<Guide[]> => {
         const sql = `
       SELECT 
         g.id,
         g.userId,
         u.name AS author,
-        JSON_OBJECT(
-          'id', gm.id,
-          'title', gm.title
-        ) AS game,
+        g.gameId,
         g.title,
         g.content,
         g.pdfPath,
         g.createdAt,
-        g.updatedAt
+        g.updatedAt,
+        COALESCE(ROUND(AVG(r.score),1),0) AS avgRating
       FROM guides g
       JOIN users u ON g.userId = u.id
-      JOIN games gm ON g.gameId = gm.id
+      LEFT JOIN guide_rating r ON g.id = r.guideId
       WHERE g.userId = ?
+      GROUP BY g.id
     `;
 
-        return (await this.db.executeSQL(sql, [id])) as Guide | undefined;
+        return (await this.db.executeSQL(sql, [userId])) as Guide[];
     };
 
     getGuideById = async (id: number): Promise<Guide | undefined> => {

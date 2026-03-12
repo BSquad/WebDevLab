@@ -111,21 +111,22 @@
 
             <mat-card class="progress-section pixel-border" appearance="outlined">
                 <mat-card-header>
-                    <mat-card-title>MY PAGE</mat-card-title>
+                    <mat-card-title>MY GUIDES</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <mat-nav-list>
+                    <ul class="guides-list">
                         @for (guide of guides(); track guide.id) {
-                        <a mat-list-item [routerLink]="['/guides', guide.id]">
-                            <span matListItemTitle>{{ guide.title }}</span>
-                            @if (guide.game) {
-                            <span matListItemLine>{{ guide.game.title }}</span>
-                            }
-                        </a>
+
+                        <li>
+                            <app-guide-card [guide]="guide"></app-guide-card>
+                        </li>
+
                         } @empty {
+
                         <p class="empty-msg">NO GUIDES YET</p>
+
                         }
-                    </mat-nav-list>
+                    </ul>
                 </mat-card-content>
             </mat-card>
         </main>

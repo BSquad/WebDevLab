@@ -9,6 +9,7 @@
 /backend/database.sqlite
 /backend/coverage/
 /backend/images
+/backend/uploads/images/user/
 /backend/dist
 # Coverage
 

@@ -16,6 +16,10 @@ export class GuideService {
         return await this.guideDbAccess.getGuideById(id);
     };
 
+    async getGuidesByUserId(userId: number) {
+        return await this.guideDbAccess.getGuidesByUserId(userId);
+    }
+
     updateGuide = async (id: number, userId: number, guide: Guide) => {
         const updated = await this.guideDbAccess.updateGuide(id, userId, guide);
 

@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         /* Basic Options */
+        "isolatedModules": true,
         "target": "ES2022", // Support modern JS features
         "module": "NodeNext", // Required for proper ESM (import/export)
         "moduleResolution": "NodeNext", // Ensures .js extensions in imports work

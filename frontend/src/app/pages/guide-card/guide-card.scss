@@ -1,0 +1,72 @@
+@use '../../../styles/_global' as g;
+
+.guide-item {
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.5rem;
+    min-height: 70px;
+
+    border-radius: g.$radius-small;
+    background: g.$gradient;
+    color: g.$color-white;
+    box-shadow: g.$shadow-medium;
+}
+
+.guide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.guide-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.guide-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.guide-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.guide-meta {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+}
+
+.guide-rating {
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+.user-name-text {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.guide-content {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.guide-rating {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.star {
+    color: #666;
+    font-size: 14px;
+}
+
+.star.active {
+    color: gold;
+}

@@ -10,10 +10,11 @@ import { AuthService } from '../../services/auth-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../../../shared/models/user';
 import { PathBuilder } from '../../services/path-builder';
+import { GuideCardComponent } from '../guide-card/guide-card';
 
 @Component({
     selector: 'app-game-detail-page',
-    imports: [SlicePipe, DatePipe],
+    imports: [GuideCardComponent],
     templateUrl: './game-detail-page.html',
     styleUrl: './game-detail-page.scss',
 })
@@ -90,26 +91,5 @@ export class GameDetailPage {
 
     getGameImagePath(imageName?: string): string {
         return this.pathBuilder.getGameImagePath(imageName);
-    }
-
-    async deleteGuide(guide: Guide) {
-        const confirmed = confirm('Are you sure you want to delete this guide?');
-        if (!confirmed) return;
-
-        const user = this.user();
-
-        const success = await this.guideService.deleteGuide(guide.id!, user!.id);
-
-        if (success) {
-            const gameId = this.game()!.id;
-
-            const guidesData = await this.guideService.getGuidesByGameId(gameId);
-            this.guides.set(guidesData);
-
-            const topGuides = await this.guideService.getTopGuides(gameId);
-            this.topGuides.set(topGuides);
-
-            this.toastService.showSuccess('Guide deleted');
-        }
     }
 }

@@ -1,0 +1,27 @@
+<div class="guide-item">
+    <div class="guide-header">
+        <div class="guide-left">
+            <div class="guide-title">{{ guide.title }}</div>
+
+            <div class="guide-meta">
+                @if (guide.game) {
+                <span class="guide-game"> {{ guide.game.title }} </span>
+                }
+
+                <span class="guide-date"> {{ guide.createdAt | date:'mediumDate' }} </span>
+
+                @if (guide.avgRating) {
+                <span class="guide-rating"> ⭐ {{ guide.avgRating | number:'1.1-1' }} </span>
+                }
+            </div>
+        </div>
+
+        <div class="guide-actions">
+            @if (user()?.id === guide.userId) {
+            <button class="normal-button" [routerLink]="['/edit-guide', guide.id]">Edit</button>
+            }
+
+            <button class="normal-button" [routerLink]="['/read-guide', guide.id]">Read</button>
+        </div>
+    </div>
+</div>

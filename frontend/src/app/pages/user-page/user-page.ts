@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { GuideCardComponent } from '../guide-card/guide-card';
 
 import { ToastService } from '../../services/toast-service';
 import { AuthService } from '../../services/auth-service';
@@ -30,6 +31,7 @@ import { environment } from '../../../environments/environment';
         RouterModule,
         RouterLink,
         MatDialogModule,
+        GuideCardComponent,
     ],
     templateUrl: './user-page.html',
     styleUrl: './user-page.scss',

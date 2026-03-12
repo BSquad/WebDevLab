@@ -38,6 +38,8 @@
     resize: vertical;
 }
 
+/* Upload */
+
 .upload-container {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -79,11 +81,21 @@
     font-size: 0.9rem;
 }
 
+/* Button Layout */
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 1.5rem;
+    gap: 1rem;
+}
+
 /* submit button */
 
 .submit-button {
-    width: 100%;
-    margin-top: 1rem;
+    flex: 1;
 
     padding: 0.9rem;
 
@@ -97,8 +109,32 @@
     font-size: 1rem;
 
     cursor: pointer;
+
+    transition: 0.15s ease;
 }
 
 .submit-button:hover {
     filter: brightness(1.1);
+}
+
+/* delete button */
+
+.delete-button {
+    background: #c0392b;
+
+    padding: 0.9rem 1.2rem;
+
+    border: none;
+    border-radius: g.$radius-small;
+
+    color: white;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.15s ease;
+}
+
+.delete-button:hover {
+    background: #e74c3c;
 }

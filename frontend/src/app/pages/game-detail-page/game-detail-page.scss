@@ -1,211 +1,231 @@
+@use 'sass:color';
 @use '../../../styles/_global' as g;
 
-/* Layout */
+/* =========================
+   PAGE
+========================= */
+
+.page {
+    height: calc(100vh - 120px);
+    margin-top: 1rem;
+}
+
+/* =========================
+   LAYOUT
+========================= */
 
 .game-detail-page {
     display: flex;
     gap: 2rem;
-    align-items: stretch;
+    height: 100%;
 }
 
-/* Page title */
-
-.page-title {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    padding: 0.8rem 1rem;
-
-    background: rgba(g.$color-black, 0.35);
-    border-radius: g.$radius-small;
-    box-shadow: g.$shadow-medium;
-}
-
-.page-title h1 {
-    margin: 0;
-    font-size: 2rem;
-    color: g.$color-white;
-}
-
-/* Left column */
+/* =========================
+   LEFT COLUMN
+========================= */
 
 .guides-column {
     flex: 1;
 
-    background: rgba(g.$color-black, 0.25);
-    padding: 1rem;
-    border-radius: g.$radius-small;
-}
+    display: flex;
+    flex-direction: column;
 
-/* Right column */
-
-.game-info-container {
-    flex: 0.5;
-    background: rgba(g.$color-black, 0.25);
-    padding: 1rem;
-    border-radius: g.$radius-small;
-}
-
-/* Guides sections */
-
-.guides-container {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border-radius: g.$radius-small;
-}
-
-.guides-container h2 {
-    margin-top: 1rem;
-    font-size: 1.5rem;
-    color: g.$color-white;
-    text-align: center;
-}
-
-/* Guides list */
-
-.guides-list {
-    list-style: none;
-    padding: 0;
-    max-height: 500px;
-    overflow-y: auto;
-}
-
-.guides-list .empty-list {
-    color: g.$color-white;
-}
-
-/* Top guides layout */
-
-.top-guides-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 
-    max-height: none;
-    overflow: visible;
+    height: 100%;
+    min-height: 0;
 }
 
-.top-guides-list .guide-item {
-    height: 100%;
+/* =========================
+   GUIDES BOXES
+========================= */
+
+.guides-container {
+    background: rgba(g.$color-black, 0.25);
+
+    padding: 1rem;
+
+    border-radius: g.$radius-small;
+
     display: flex;
     flex-direction: column;
 }
 
-.top-guides-list .guide-title {
-    font-size: 1.1rem;
+/* Top Guides */
+
+.guides-container:first-child {
+    flex: none;
 }
 
-/* Guide item */
+/* All Guides */
 
-.guide-item {
-    padding: 0.6rem 0.8rem;
-    margin-bottom: 0.5rem;
-
-    border-radius: g.$radius-small;
-    background: g.$gradient;
-    color: g.$color-white;
-    box-shadow: g.$shadow-medium;
-}
-
-.guide-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.guide-left {
+.guides-container:last-child {
     flex: 1;
-    min-width: 0;
-}
 
-.guide-actions {
     display: flex;
-    gap: 0.4rem;
-    flex-shrink: 0;
+    flex-direction: column;
+
+    min-height: 0;
 }
 
-.guide-title {
-    font-size: 1.2rem;
+/* =========================
+   SECTION HEADER
+========================= */
+
+.section-header {
+    margin-bottom: 0.8rem;
+}
+
+.section-header h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 1rem;
+
+    color: g.$color-white;
+    font-size: 1.4rem;
+}
+
+.section-header h2::before,
+.section-header h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+
+    background: rgba(g.$color-white, 0.25);
+}
+
+/* Header mit Button */
+
+.guides-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.guides-header h2 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    color: g.$color-white;
+    font-size: 1.4rem;
+}
+
+.guides-header h2::before,
+.guides-header h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(g.$color-white, 0.25);
+}
+
+/* =========================
+   GUIDES LIST
+========================= */
+
+.guides-list {
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.6rem;
+}
+
+/* Scrollbereich für ALL GUIDES */
+
+.guides-scroll {
+    flex: 1;
+    overflow-y: auto;
+
+    padding-right: 6px;
+
+    min-height: 0;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+.guides-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.guides-scroll::-webkit-scrollbar-thumb {
+    background: g.$color-primary;
+    border-radius: 6px;
+}
+
+.guides-scroll::-webkit-scrollbar-thumb:hover {
+    background: color.adjust(g.$color-primary, $lightness: 10%);
+}
+
+/* =========================
+   TOP GUIDES GRID
+========================= */
+
+.top-guides-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 1rem;
+
+    counter-reset: topguide;
+}
+
+.top-guides-list app-guide-card {
+    counter-increment: topguide;
+
+    position: relative;
+}
+
+.top-guides-list app-guide-card::before {
+    content: counter(topguide);
+
+    position: absolute;
+    top: -25px;
+    left: -12px;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     font-weight: 700;
+
+    color: #fff;
+
+    background: linear-gradient(135deg, #ffcc00, #ff9900);
+
+    border-radius: 50%;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.guide-meta {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    margin-top: 0.2rem;
-}
-
-.guide-content {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: g.$color-white;
-    line-height: 1.4;
-}
-
-.user-name-text {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.guide-rating {
-    margin-left: 10px;
-    font-weight: 500;
-}
-
-/* Game info */
-
-.game-info-container .game-image-big {
-    width: 100%;
-    max-width: 1000px;
-    max-height: 600px;
-
-    border-radius: g.$radius-medium;
-    box-shadow: g.$shadow-medium;
-
-    object-fit: cover;
-}
-
-.game-info-container p {
-    margin: 0.5rem 0;
-    color: g.$color-white;
-}
-
-/* Tags */
-
-.tags-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-top: 0.3rem;
-}
-
-.game-tag {
-    padding: 0.2rem 0.5rem;
-    background-color: g.$color-primary;
-    color: g.$color-white;
-    font-size: 0.85rem;
-    border-radius: g.$radius-small;
-}
-
-/* Buttons */
-
-.game-info-container button {
-    margin-top: 1rem;
-}
+/* =========================
+   CREATE GUIDE BUTTON
+========================= */
 
 .create-guide-button {
-    width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 0.8rem;
-
-    font-size: 1rem;
-    font-weight: 600;
-
+    padding: 0.4rem 0.8rem;
+    margin-left: auto;
     background: g.$gradient;
     color: g.$color-white;
 
     border: none;
     border-radius: g.$radius-small;
+
+    font-size: 0.85rem;
+    font-weight: 600;
 
     cursor: pointer;
 }
@@ -214,56 +234,184 @@
     filter: brightness(1.1);
 }
 
-.danger-button {
-    background: #d9534f;
-    color: white;
+/* =========================
+   RIGHT COLUMN
+========================= */
+
+.game-right-column {
+    flex: 0.5;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 1rem;
 }
 
-.danger-button:hover {
-    background: #c9302c;
-}
+/* =========================
+   GAME INFO
+========================= */
 
-/* Top players */
+.game-info-container {
+    background: rgba(g.$color-black, 0.25);
 
-.best-users-container {
-    margin-top: 2rem;
     padding: 1rem;
 
-    border-radius: g.$radius-medium;
-    background: g.$gradient;
-    box-shadow: g.$shadow-medium;
+    border-radius: g.$radius-small;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
 
     color: g.$color-white;
 }
 
-.best-users-container h3 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+/* =========================
+   GAME IMAGE
+========================= */
+
+.game-image-big {
+    width: 100%;
+    height: 400px;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: g.$radius-small;
 }
+
+/* =========================
+   GAME META
+========================= */
+
+.game-info-container p {
+    font-size: 0.92rem;
+    line-height: 1.15;
+
+    margin: 0.05rem 0;
+}
+
+.game-info-container strong {
+    font-weight: 600;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.game-actions {
+    display: flex;
+    gap: 0.6rem;
+
+    margin-top: 0.5rem;
+}
+
+/* =========================
+   TAGS
+========================= */
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.4rem;
+}
+
+.game-tag {
+    background: rgba(g.$color-white, 0.08);
+
+    padding: 0.25rem 0.5rem;
+
+    border-radius: g.$radius-small;
+
+    font-size: 0.8rem;
+}
+
+/* =========================
+   TOP PLAYERS
+========================= */
+
+.top-players-container {
+    background: rgba(g.$color-black, 0.25);
+
+    padding: 0.8rem;
+
+    border-radius: g.$radius-small;
+
+    border: 1px solid rgba(g.$color-white, 0.08);
+}
+
+.top-players-container h3 {
+    text-align: center;
+    margin: 0 0 0.4rem 0;
+    font-size: 1rem;
+
+    color: white;
+}
+
+/* =========================
+   TOP PLAYERS LIST
+========================= */
 
 .best-users-list {
     list-style: none;
+
     padding: 0;
     margin: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.35rem;
+
+    max-height: 100px;
+
+    overflow-y: auto;
 }
 
-.best-users-list li {
-    display: flex;
-    align-items: center;
+/* Scrollbar */
 
-    padding: 0.4rem 0.6rem;
-    margin-bottom: 0.4rem;
+.best-users-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.best-users-list::-webkit-scrollbar-thumb {
+    background: g.$color-primary;
+
+    border-radius: 6px;
+}
+
+.best-users-list::-webkit-scrollbar-thumb:hover {
+    background: color.adjust(g.$color-primary, $lightness: 10%);
+}
+
+/* =========================
+   PLAYER ITEM
+========================= */
+
+.best-user-item {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 0.35rem 0.6rem;
 
     border-radius: g.$radius-small;
-    background-color: rgba(255, 255, 255, 0.05);
+
+    background: rgba(g.$color-white, 0.05);
 }
 
-.best-users-list li:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+.best-user-item:hover {
+    background: rgba(g.$color-white, 0.1);
+}
+
+.user-name-text {
+    font-weight: 500;
+    color: g.$color-white;
 }
 
 .best-user-achievements {
-    font-size: 0.9rem;
-    color: g.$color-yellow;
+    font-weight: 600;
+
+    color: g.$color-primary;
 }

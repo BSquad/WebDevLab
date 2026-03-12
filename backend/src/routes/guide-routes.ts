@@ -11,13 +11,13 @@ router.post('/', guideController.createGuide);
 // TODO: ggf. später REST-konform zu /games/:gameId/guides verschieben
 router.get('/game/:gameId', guideController.getGuidesByGameId);
 
+router.get('/user/:userId', guideController.getGuidesByUserId);
+
 // MH10 – Top 3 Guides
 router.get('/top/:gameId', guideController.getTopGuidesByGameId);
 
 // MH13 – Rate Guide
 router.post('/:id/rate', guideController.rateGuide);
-
-// MH14 – Upload Screenshot
 
 // MH14 – screenshot upload
 router.post(

@@ -16,7 +16,12 @@ describe('Guide API – Modul A', () => {
         });
 
         expect(response.status).toBe(200);
-        expect(response.body).toBe(true);
+
+        // API returns new guide id
+        expect(typeof response.body).toBe('number');
+        expect(response.body).toBeGreaterThan(0);
+
+        createdGuideId = response.body;
     });
 
     // -----------------------------
@@ -74,7 +79,7 @@ describe('Guide API – Modul A', () => {
             .post(`/guides/${createdGuideId}/rate`)
             .send({
                 userId: 1,
-                score: 5,
+                rating: 5,
             });
 
         expect(response.status).toBe(200);

@@ -51,6 +51,7 @@ export class GuideEditorPage {
 
             if (guideId) {
                 // EDIT MODE
+
                 this.guideId = Number(guideId);
 
                 const guide = await this.guideService.getGuideById(this.guideId);
@@ -152,5 +153,21 @@ export class GuideEditorPage {
         this.toastService.showSuccess(
             this.isEditMode ? 'Guide updated successfully!' : 'Guide created successfully!',
         );
+    }
+
+    async deleteGuide() {
+        if (!this.guideId) return;
+
+        const confirmed = confirm('Are you sure you want to delete this guide?');
+        if (!confirmed) return;
+
+        const user = this.user();
+
+        const success = await this.guideService.deleteGuide(this.guideId, user!.id);
+
+        if (success) {
+            this.toastService.showSuccess('Guide deleted');
+            this.router.navigate(['/games', this.game()?.id]);
+        }
     }
 }

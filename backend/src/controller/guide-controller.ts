@@ -41,6 +41,14 @@ export class GuideController {
         res.json(guide);
     };
 
+    getGuidesByUserId = async (req: Request, res: Response) => {
+        const userId = Number(req.params.userId);
+
+        const guides = await this.guideService.getGuidesByUserId(userId);
+
+        res.json(guides);
+    };
+
     updateGuide = async (req: Request, res: Response) => {
         const id = Number(req.params.id);
         const { userId, title, content } = req.body;
@@ -67,6 +75,9 @@ export class GuideController {
         const rating = Number(req.body.rating);
         const userId = Number(req.body.userId);
 
+        if (!rating || rating < 1 || rating > 5) {
+            return res.status(400).json({ message: 'Invalid rating' });
+        }
         await this.guideService.rateGuide(guideId, userId, rating);
 
         res.json(true);

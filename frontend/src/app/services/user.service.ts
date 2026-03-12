@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { UserApi } from '../api/user-api';
 import { AnalysisData } from '../../../../shared/models/analysisData';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',

@@ -194,46 +194,37 @@ mat-card-content {
 }
 
 // Progress Section
+/* --- GUIDES LIST --- */
+
 .progress-section {
-    mat-nav-list {
-        padding-top: 0;
+    .guides-list {
+        list-style: none;
+        padding: 20px;
+        margin: 0;
 
-        a[mat-list-item] {
-            background: rgba($color-white, 0.05);
-            border-bottom: 1px solid rgba($color-white, 0.1);
-            height: auto !important;
-            padding: 15px !important;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
 
-            &:last-child {
-                border-bottom: none;
-            }
-
-            [matListItemTitle] {
-                font-weight: bold;
-                color: $color-accent;
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 1rem;
-                margin-bottom: 5px;
-            }
-
-            [matListItemLine] {
-                color: $color-white;
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 0.85rem;
-            }
-
-            &:hover {
-                background: $color-transparent;
-            }
-        }
-
-        .empty-msg {
-            text-align: center;
-            color: rgba($color-white, 0.5);
-            padding: 20px;
-            margin: 0;
-        }
+        max-height: 350px;
+        overflow-y: auto;
     }
+
+    .empty-msg {
+        text-align: center;
+        color: rgba($color-white, 0.5);
+        padding: 20px;
+        margin: 0;
+    }
+}
+
+.guides-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.guides-list::-webkit-scrollbar-thumb {
+    background: $color-accent;
+    border-radius: 3px;
 }
 
 // --- ANALYSIS PANEL ---

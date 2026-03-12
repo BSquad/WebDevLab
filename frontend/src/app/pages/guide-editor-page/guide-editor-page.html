@@ -63,8 +63,16 @@
             }
         </div>
 
-        <button class="submit-button" type="submit">
-            {{ isEditMode ? 'Update Guide' : 'Create Guide' }}
-        </button>
+        <div class="button-row">
+            <button class="submit-button" type="submit">
+                {{ isEditMode ? 'Update Guide' : 'Create Guide' }}
+            </button>
+
+            @if (isEditMode) {
+            <button class="danger-button delete-button" type="button" (click)="deleteGuide()">
+                Delete Guide
+            </button>
+            }
+        </div>
     </form>
 </div>
