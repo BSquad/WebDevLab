@@ -13,7 +13,7 @@ export class RouterMock {
 
 export class GameServiceMock {
     getGames = jasmine.createSpy('getGames').and.resolveTo(MOCK_GAMES);
-    getGame = jasmine.createSpy('getGames').and.resolveTo(MOCK_GAME);
+    getGame = jasmine.createSpy('getGame').and.resolveTo(MOCK_GAME);
     getPopularGames = jasmine.createSpy('getPopularGames').and.resolveTo(MOCK_POPULAR_GAMES);
     toggleTrackGame = jasmine.createSpy('toggleTrackGame').and.resolveTo(true);
     getAchievementsByGameId = jasmine
@@ -40,6 +40,7 @@ export class PathBuilderMock {
 
 export class GuideServiceMock {
     getGuidesByGameId = jasmine.createSpy('getGuidesByGameId').and.resolveTo([]);
+    getTopGuides = jasmine.createSpy('getTopGuides').and.resolveTo([]);
 }
 
 export class ActivatedRouteMock {

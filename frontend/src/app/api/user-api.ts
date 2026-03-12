@@ -34,7 +34,7 @@ export class UserApi extends BaseApi {
     }
 
     async getGuides(userId: number): Promise<Guide[]> {
-        const url = `${this.apiUrl}/guides/user/${userId}`;
+        const url = `${this.userUrl}/guides/user/${userId}`;
         return await this.request(this.http.get<Guide[]>(url));
     }
 
