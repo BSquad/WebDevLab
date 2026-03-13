@@ -20,6 +20,7 @@ export class GameServiceMock {
         .createSpy('getAchievementsByGameId')
         .and.resolveTo(MOCK_ACHIEVEMENTS);
     completeAchievement = jasmine.createSpy('completeAchievement').and.resolveTo(true);
+    getBestUsersByGameId = jasmine.createSpy('getBestUsersByGameId').and.resolveTo([MOCK_USER]);
 }
 
 export class ToastServiceMock {
