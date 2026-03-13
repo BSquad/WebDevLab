@@ -26,6 +26,8 @@ router.post(
     guideController.uploadScreenshot,
 );
 
+router.delete('/:id/screenshot', guideController.deleteScreenshot);
+
 // MH15 – PDF Download
 router.get('/:id/pdf', guideController.downloadGuidePdf);
 

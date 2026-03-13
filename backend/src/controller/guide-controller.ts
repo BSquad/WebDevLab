@@ -107,6 +107,15 @@ export class GuideController {
         res.json({ path: filePath });
     };
 
+    deleteScreenshot = async (req: Request, res: Response) => {
+        const guideId = Number(req.params.id);
+        const { filePath } = req.body;
+
+        await this.guideService.deleteScreenshot(guideId, filePath);
+
+        res.json(true);
+    };
+
     downloadGuidePdf = async (req: Request, res: Response) => {
         const id = Number(req.params.id);
 

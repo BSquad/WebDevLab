@@ -7,9 +7,8 @@ import { GuideService } from '../../services/guide-service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Guide } from '../../../../../shared/models/guide';
 import { AuthService } from '../../services/auth-service';
-import { User } from '../../../../../shared/models/user';
-import { toSignal } from '@angular/core/rxjs-interop';
-
+import { Location } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 @Component({
     selector: 'app-guide-editor-page',
     imports: [FormsModule],
@@ -17,17 +16,24 @@ import { toSignal } from '@angular/core/rxjs-interop';
     styleUrl: './guide-editor-page.scss',
 })
 export class GuideEditorPage {
-    game: any = signal<Game | null>(null);
-    user: any = signal<User | null>(null);
+    game = signal<Game | null>(null);
+
     title: string = '';
     content: string = '';
+
     guideId: number | null = null;
-    isEditMode = false;
-    selectedFiles: File[] = [];
     gameId: number | null = null;
     userId: number | null = null;
 
+    isEditMode = false;
+
+    guide: Guide | null = null;
+
+    selectedFiles: File[] = [];
     previewUrls: string[] = [];
+    deletedScreenshots: string[] = [];
+
+    activeImage = signal<string | null>(null);
 
     constructor(
         private route: ActivatedRoute,
@@ -36,10 +42,11 @@ export class GuideEditorPage {
         private authService: AuthService,
         private guideService: GuideService,
         private toastService: ToastService,
+        private location: Location,
+        private cdr: ChangeDetectorRef,
     ) {
-        this.user = toSignal(this.authService.currentUser$);
-
         const currentUser = this.authService.getCurrentUser();
+
         if (currentUser) {
             this.userId = currentUser.id;
         }
@@ -51,31 +58,46 @@ export class GuideEditorPage {
 
             if (guideId) {
                 // EDIT MODE
-
                 this.guideId = Number(guideId);
-
-                const guide = await this.guideService.getGuideById(this.guideId);
-
-                this.gameId = guide.gameId;
-
                 this.isEditMode = true;
-                this.guideId = Number(guideId);
+
+                this.guide = await this.guideService.getGuideById(this.guideId);
+
+                console.log('Loaded guide:', this.guide);
+
+                this.loadExistingScreenshots();
+                this.cdr.detectChanges();
+
+                if (!this.guide) {
+                    this.toastService.showError('Guide not found');
+                    this.router.navigate(['/games']);
+                    return;
+                }
 
                 // Sicherheitscheck
-                if (guide.userId !== this.user()?.id) {
+                if (this.guide.userId !== this.userId) {
                     this.toastService.showError('You cannot edit this guide.');
                     this.router.navigate(['/games']);
                     return;
                 }
 
-                this.title = guide.title;
-                this.content = guide.content;
+                this.gameId = this.guide.gameId;
 
-                const gameData = await this.gameService.getGame(guide.gameId);
+                this.title = this.guide.title;
+                this.content = this.guide.content;
+
+                this.loadExistingScreenshots();
+
+                this.cdr.detectChanges();
+
+                const gameData = await this.gameService.getGame(this.guide.gameId);
                 this.game.set(gameData);
+
+                this.loadExistingScreenshots();
             } else {
                 // CREATE MODE
                 const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
+
                 this.gameId = gameId;
 
                 const gameData = await this.gameService.getGame(gameId);
@@ -91,25 +113,61 @@ export class GuideEditorPage {
 
         if (!input.files) return;
 
-        this.selectedFiles = Array.from(input.files);
+        const files = Array.from(input.files);
+
+        for (const file of files) {
+            this.selectedFiles.push(file);
+
+            const preview = URL.createObjectURL(file);
+
+            this.previewUrls.push(preview);
+        }
+
+        input.value = '';
+    }
+
+    loadExistingScreenshots() {
+        if (!this.guide || !this.guide.screenshots) return;
 
         this.previewUrls = [];
 
-        for (const file of this.selectedFiles) {
-            const url = URL.createObjectURL(file);
+        for (const shot of this.guide.screenshots) {
+            const url = 'http://localhost:3000' + shot;
+
             this.previewUrls.push(url);
         }
+    }
+
+    removeScreenshot(index: number) {
+        const url = this.previewUrls[index];
+
+        if (url.startsWith('blob:')) {
+            URL.revokeObjectURL(url);
+            this.selectedFiles.splice(index, 1);
+        } else {
+            const filePath = url.replace('http://localhost:3000', '');
+
+            this.deletedScreenshots.push(filePath);
+        }
+
+        this.previewUrls.splice(index, 1);
+    }
+
+    openImage(url: string) {
+        this.activeImage.set(url);
+    }
+
+    closeImage() {
+        this.activeImage.set(null);
     }
 
     async onSubmit(form: NgForm) {
         if (!form.valid) return;
 
         if (!this.isEditMode) {
-            const guides = await this.guideService.getGuidesByGameId(this.game()?.id);
+            const guides = await this.guideService.getGuidesByGameId(this.gameId!);
 
-            const exists = guides.some(
-                (g) => g.title === this.title && g.userId === this.user()?.id,
-            );
+            const exists = guides.some((g) => g.title === this.title && g.userId === this.userId);
 
             if (exists) {
                 this.toastService.showError('You already created a guide with this title.');
@@ -123,6 +181,7 @@ export class GuideEditorPage {
             gameId: this.gameId!,
             userId: this.userId!,
         };
+
         let guideId: number;
 
         if (this.isEditMode && this.guideId) {
@@ -134,6 +193,11 @@ export class GuideEditorPage {
             }
 
             guideId = this.guideId;
+
+            // Screenshots löschen (EDIT MODE)
+            for (const filePath of this.deletedScreenshots) {
+                await this.guideService.deleteScreenshot(guideId, filePath);
+            }
         } else {
             guideId = await this.guideService.createGuide(guide);
 
@@ -143,7 +207,7 @@ export class GuideEditorPage {
             }
         }
 
-        // Screenshots hochladen
+        // Neue Screenshots hochladen
         for (const file of this.selectedFiles) {
             await this.guideService.uploadScreenshot(guideId, file);
         }
@@ -156,18 +220,22 @@ export class GuideEditorPage {
     }
 
     async deleteGuide() {
-        if (!this.guideId) return;
+        if (!this.guideId || !this.userId) return;
 
         const confirmed = confirm('Are you sure you want to delete this guide?');
+
         if (!confirmed) return;
 
-        const user = this.user();
-
-        const success = await this.guideService.deleteGuide(this.guideId, user!.id);
+        const success = await this.guideService.deleteGuide(this.guideId, this.userId);
 
         if (success) {
             this.toastService.showSuccess('Guide deleted');
-            this.router.navigate(['/games', this.game()?.id]);
+
+            this.router.navigate(['/games', this.gameId]);
         }
+    }
+
+    goBack() {
+        this.location.back();
     }
 }

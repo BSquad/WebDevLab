@@ -1,20 +1,28 @@
 @use '../../../styles/_global' as g;
 
 .guide-item {
-    padding: 0.6rem 0.8rem;
-    margin-bottom: 0.5rem;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.6rem;
     min-height: 70px;
 
     border-radius: g.$radius-small;
     background: g.$gradient;
     color: g.$color-white;
     box-shadow: g.$shadow-medium;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
+.guide-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
 .guide-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .guide-left {
@@ -32,17 +40,27 @@
     font-size: 1.2rem;
     font-weight: 700;
 }
+.guide-author {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
 
 .guide-meta {
     display: flex;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    margin-top: 0.2rem;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+
+    font-size: 0.8rem;
+}
+.guide-meta span:not(:last-child)::after {
+    margin-left: 0.6rem;
+    opacity: 0.5;
 }
 
 .guide-rating {
-    margin-left: 10px;
-    font-weight: 500;
+    font-weight: 600;
+    color: #ffd54a;
 }
 
 .user-name-text {

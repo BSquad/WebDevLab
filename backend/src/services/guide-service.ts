@@ -52,6 +52,9 @@ export class GuideService {
         await this.guideDbAccess.addScreenshot(guideId, filePath);
     };
 
+    deleteScreenshot = async (guideId: number, filePath: string) => {
+        await this.guideDbAccess.deleteScreenshot(guideId, filePath);
+    };
     generateGuidePdf = async (id: number): Promise<Buffer> => {
         const guide = await this.guideDbAccess.getGuideById(id);
 
@@ -59,8 +62,18 @@ export class GuideService {
             throw new Error('Guide not found');
         }
 
+        const screenshots =
+            await this.guideDbAccess.getScreenshotsByGuideId(id);
+
         const PDFDocument = (await import('pdfkit')).default;
-        const doc = new PDFDocument();
+        const path = await import('path');
+        const fs = await import('fs');
+
+        const doc = new PDFDocument({
+            margin: 60,
+            size: 'A4',
+            bufferPages: true,
+        });
 
         const chunks: Buffer[] = [];
 
@@ -69,26 +82,132 @@ export class GuideService {
             doc.on('end', () => resolve(Buffer.concat(chunks)));
             doc.on('error', reject);
 
-            // Titel
-            doc.fontSize(20).text(guide.title, { underline: true });
-            doc.moveDown();
+            /* ---------- TITLE ---------- */
 
-            // Author
+            doc.font('Helvetica-Bold')
+                .fontSize(26)
+                .text(guide.title, { align: 'center' });
+
+            doc.moveDown(1);
+
+            /* ---------- META ---------- */
+
+            doc.font('Helvetica').fontSize(11).fillColor('#555');
+
             if (guide.author) {
-                doc.fontSize(12).text(`Author: ${guide.author}`);
-                doc.moveDown();
+                doc.text(`Author: ${guide.author}`, { align: 'center' });
             }
 
-            // Datum
             if (guide.createdAt) {
-                doc.fontSize(10).text(`Created: ${guide.createdAt}`);
-                doc.moveDown();
+                doc.text(`Created: ${guide.createdAt}`, { align: 'center' });
             }
 
-            // Content
-            doc.fontSize(12).text(guide.content, {
-                align: 'left',
-            });
+            doc.moveDown(2);
+
+            /* ---------- DIVIDER ---------- */
+
+            doc.moveTo(60, doc.y)
+                .lineTo(doc.page.width - 60, doc.y)
+                .strokeColor('#cccccc')
+                .stroke();
+
+            doc.moveDown(2);
+            doc.fillColor('#000');
+
+            /* ---------- GUIDE CONTENT ---------- */
+
+            doc.fontSize(12)
+                .font('Helvetica')
+                .text(guide.content, {
+                    width: doc.page.width - 120,
+                    align: 'left',
+                    lineGap: 4,
+                });
+
+            /* ---------- SCREENSHOTS ---------- */
+
+            if (screenshots.length > 0) {
+                doc.addPage();
+
+                doc.font('Helvetica-Bold').fontSize(20).text('Screenshots');
+
+                doc.moveDown(1.5);
+
+                const imageWidth = 240;
+                const imageHeight = 170;
+                const gap = 30;
+
+                let x = 60;
+                let y = doc.y;
+
+                screenshots.forEach((shot: any, index: number) => {
+                    const imagePath = path.join(
+                        process.cwd(),
+                        shot.filePath.replace(/^\/+/, ''),
+                    );
+
+                    if (!fs.existsSync(imagePath)) {
+                        return;
+                    }
+
+                    try {
+                        const buffer = fs.readFileSync(imagePath);
+
+                        doc.image(buffer, x, y, {
+                            width: imageWidth,
+                            height: imageHeight,
+                        });
+
+                        doc.fontSize(10)
+                            .fillColor('#555')
+                            .text(
+                                `Picture ${index + 1}`,
+                                x,
+                                y + imageHeight + 5,
+                                {
+                                    width: imageWidth,
+                                    align: 'center',
+                                },
+                            );
+
+                        doc.fillColor('#000');
+                    } catch (err) {
+                        console.log('PDF image error:', err);
+                    }
+
+                    if (x === 60) {
+                        x += imageWidth + gap;
+                    } else {
+                        x = 60;
+                        y += imageHeight + 40;
+
+                        if (y > doc.page.height - 200) {
+                            doc.addPage();
+                            y = 60;
+                        }
+                    }
+                });
+            }
+
+            /* ---------- FOOTER ---------- */
+
+            const pageCount = doc.bufferedPageRange().count;
+
+            for (let i = 0; i < pageCount; i++) {
+                doc.switchToPage(i);
+
+                doc.fontSize(8)
+                    .fillColor('#888')
+                    .text(
+                        `Generated Guide • Page ${i + 1}`,
+                        60,
+                        doc.page.height - 40,
+                        {
+                            align: 'center',
+                            width: doc.page.width - 120,
+                        },
+                    );
+            }
 
             doc.end();
         });

@@ -1,64 +1,110 @@
 <div class="page">
-    <div class="page-title">
-        <h1>{{ guide()?.title }}</h1>
+    <!-- HEADER -->
+
+    <div class="page-header">
+        <button class="back-button" (click)="goBack()">← Back</button>
+        <h1 class="page-title">{{ guide()?.title }}</h1>
     </div>
 
-    <div class="guide-container">
-        <div class="rating-container">
-            <span class="rating-label">Your Rating:</span>
+    <div class="page-content">
+        <!-- GUIDE -->
 
-            @for (star of [1,2,3,4,5]; track star) {
-            <span
-                class="star"
-                [class.active]="star <= (hoverRating() || rating())"
-                (click)="rateGuide(star)"
-                (mouseenter)="hoverRating.set(star)"
-                (mouseleave)="hoverRating.set(0)"
-            >
-                ★
-            </span>
-            }
+        <div class="page-card">
+            <div class="guide-header">
+                <div class="guide-meta">
+                    by {{ guide()?.author }} • {{ guide()?.createdAt | date:'mediumDate' }}
+                </div>
 
-            <div class="avg-rating">
-                Avg: {{ guide()?.avgRating }} / 5 @for (star of [1,2,3,4,5]; track star) {
-                <span class="star static" [class.active]="star <= (guide()?.avgRating || 0)">
-                    ★
-                </span>
+                <div class="guide-rating">⭐ {{ guide()?.avgRating || 0 }}</div>
+            </div>
+
+            <!-- USER RATING -->
+
+            <div class="form-group">
+                <label>Your Rating</label>
+
+                <div class="rating-container">
+                    @for (star of [1,2,3,4,5]; track star) {
+
+                    <span
+                        class="star"
+                        [class.active]="star <= (hoverRating() || rating())"
+                        (click)="rateGuide(star)"
+                        (mouseenter)="hoverRating.set(star)"
+                        (mouseleave)="hoverRating.set(0)"
+                    >
+                        ★
+                    </span>
+
+                    }
+                </div>
+            </div>
+
+            <!-- GUIDE CONTENT -->
+
+            <div class="form-group">
+                <label>Guide Content</label>
+
+                <div class="guide-content">{{ guide()?.content }}</div>
+            </div>
+
+            <!-- BUTTON -->
+
+            <div class="button-row">
+                <button class="submit-button" (click)="downloadPDF()">Download PDF</button>
+            </div>
+        </div>
+
+        <!-- SCREENSHOTS -->
+
+        @if (guide()?.screenshots?.length) {
+
+        <div class="page-card">
+            <h3 class="section-title">Screenshots</h3>
+
+            <div class="screenshots">
+                @for (shot of guide()?.screenshots; track shot; let i = $index) {
+
+                <div class="screenshot-item">
+                    <div class="screenshot-wrapper">
+                        <div class="screenshot-number">Picture {{ i + 1 }}</div>
+
+                        <img
+                            [src]="'http://localhost:3000' + shot"
+                            class="guide-screenshot"
+                            (click)="openImage('http://localhost:3000' + shot)"
+                        />
+                    </div>
+
+                    <div class="screenshot-label">Picture {{ i + 1 }}</div>
+                </div>
+
                 }
             </div>
         </div>
 
-        <div class="guide-meta">
-            <span class="user-name-text">by {{ guide()?.author }}</span>
-            <span class="guide-date"> {{ guide()?.createdAt | date:'mediumDate' }} </span>
-        </div>
+        }
 
-        <div class="guide-content">{{ guide()?.content }}</div>
+        <!-- COMMENTS -->
 
-        <div class="guide-actions">
-            <button class="normal-button" (click)="downloadPDF()">Download PDF</button>
-        </div>
+        @if (guide()?.id) {
+
+        <app-comments [guideId]="guide()?.id!"></app-comments>
+
+        }
     </div>
-
-    @if (guide()?.screenshots?.length) {
-
-    <div class="screenshots-container">
-        <h3>Screenshots</h3>
-
-        <div class="screenshots">
-            @for (shot of guide()?.screenshots; track shot; let i = $index) {
-
-            <div class="screenshot-item">
-                <img [src]="'http://localhost:3000/uploads/' + shot" class="guide-screenshot" />
-
-                <div class="screenshot-label">Screenshot {{ i + 1 }}</div>
-            </div>
-
-            }
-        </div>
-    </div>
-
-    } @if (guide()?.id) {
-    <app-comments [guideId]="guide()?.id!"></app-comments>
-    }
 </div>
+
+<!-- IMAGE LIGHTBOX -->
+
+@if (activeImage()) {
+
+<div class="image-overlay" (click)="closeImage()">
+    <div class="image-modal" (click)="$event.stopPropagation()">
+        <button class="close-image" (click)="closeImage()">✕</button>
+
+        <img [src]="activeImage()" class="modal-image" />
+    </div>
+</div>
+
+}

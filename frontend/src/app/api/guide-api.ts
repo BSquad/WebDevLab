@@ -61,6 +61,15 @@ export class GuideApi extends BaseApi {
         );
     }
 
+    // Delete Screenshot
+    async deleteScreenshot(guideId: number, filePath: string): Promise<boolean> {
+        return await this.request(
+            this.http.delete<boolean>(`${this.apiUrl}/guides/${guideId}/screenshot`, {
+                body: { filePath },
+            }),
+        );
+    }
+
     // MH15 – PDF Download
     async downloadPdf(guideId: number): Promise<Blob> {
         return await this.request(

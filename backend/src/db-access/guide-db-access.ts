@@ -1,5 +1,6 @@
 import { Db } from '../db.js';
 import type { Guide } from '../../../shared/models/guide.ts';
+import fs from 'fs';
 
 export class GuideDbAccess {
     private db: Db = new Db();
@@ -82,7 +83,27 @@ export class GuideDbAccess {
       GROUP BY g.id
     `;
 
-        return (await this.db.executeSQL(sql, [id], true)) as Guide | undefined;
+        const guide = (await this.db.executeSQL(sql, [id], true)) as
+            | Guide
+            | undefined;
+
+        if (!guide) {
+            return undefined;
+        }
+
+        // Screenshots laden
+        const screenshotRows = await this.db.executeSQL(
+            `
+        SELECT filePath
+        FROM screenshots
+        WHERE guideId = ?
+        `,
+            [id],
+        );
+
+        guide.screenshots = screenshotRows.map((row: any) => row.filePath);
+
+        return guide;
     };
 
     updateGuide = async (
@@ -155,6 +176,17 @@ export class GuideDbAccess {
         return (await this.db.executeSQL(sql, [gameId])) as Guide[];
     };
 
+    async getScreenshotsByGuideId(guideId: number) {
+        const sql = `
+        SELECT filePath
+        FROM screenshots
+        WHERE guideId = ?
+        ORDER BY id ASC
+    `;
+
+        return await this.db.executeSQL(sql, [guideId]);
+    }
+
     addScreenshot = async (guideId: number, filePath: string) => {
         await this.db.executeSQL(
             `
@@ -163,5 +195,23 @@ export class GuideDbAccess {
         `,
             [guideId, filePath],
         );
+    };
+
+    deleteScreenshot = async (guideId: number, filePath: string) => {
+        await this.db.executeSQL(
+            `
+        DELETE FROM screenshots
+        WHERE guideId = ? AND filePath = ?
+        `,
+            [guideId, filePath],
+        );
+
+        const fs = await import('fs');
+
+        const fullPath = './uploads' + filePath;
+
+        if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath);
+        }
     };
 }

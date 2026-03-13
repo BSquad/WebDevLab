@@ -6,6 +6,7 @@ import { Guide } from '../../../../../shared/models/guide';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../services/auth-service';
 import { CommentsComponent } from './gude-comments/guide-comments-page';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-read-guide-page',
@@ -23,6 +24,7 @@ export class ReadGuidePage {
         private guideService: GuideService,
         private toastService: ToastService,
         private authService: AuthService,
+        private location: Location,
     ) {}
 
     async ngOnInit() {
@@ -52,6 +54,16 @@ export class ReadGuidePage {
         }
     }
 
+    activeImage = signal<string | null>(null);
+
+    openImage(url: string) {
+        this.activeImage.set(url);
+    }
+
+    closeImage() {
+        this.activeImage.set(null);
+    }
+
     async downloadPDF() {
         try {
             const guideId = this.guide()?.id;
@@ -73,5 +85,8 @@ export class ReadGuidePage {
         } catch (err: any) {
             this.toastService.showError('Failed to download PDF');
         }
+    }
+    goBack() {
+        this.location.back();
     }
 }

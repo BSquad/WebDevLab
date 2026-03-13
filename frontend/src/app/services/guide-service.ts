@@ -40,6 +40,10 @@ export class GuideService {
         return await this.guideApi.uploadScreenshot(guideId, file);
     }
 
+    async deleteScreenshot(guideId: number, filePath: string): Promise<boolean> {
+        return await this.guideApi.deleteScreenshot(guideId, filePath);
+    }
+
     async downloadPdf(guideId: number): Promise<Blob> {
         return await this.guideApi.downloadPdf(guideId);
     }

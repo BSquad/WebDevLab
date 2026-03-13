@@ -1,26 +1,144 @@
 @use '../../../styles/_global' as g;
 
-.guide-container {
-    background: rgba(g.$color-black, 0.25);
-    padding: 1.5rem;
-    border-radius: g.$radius-medium;
+/* PAGE */
+
+.page {
+    padding: 2rem;
 }
 
-/* Rating */
+/* HEADER */
+
+.page-header {
+    max-width: 900px;
+    margin: 0 auto 2rem auto;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: g.$color-white;
+}
+
+/* CONTENT */
+
+.page-content {
+    max-width: 900px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* BACK BUTTON */
+
+.back-button {
+    padding: 6px 12px;
+
+    background: #2d2d2d;
+    color: white;
+
+    border-radius: 6px;
+    border: none;
+
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+
+.back-button:hover {
+    background: #444;
+}
+
+/* CARD LAYOUT */
+
+.page-card {
+    width: 100%;
+
+    padding: 2rem;
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    backdrop-filter: blur(6px);
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* SECTION TITLE */
+
+.section-title {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: g.$color-white;
+}
+
+/* GUIDE HEADER */
+
+.guide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 1.5rem;
+}
+
+.guide-meta {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.guide-rating {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: g.$color-white;
+}
+
+/* FORM */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    color: g.$color-white;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+/* GUIDE CONTENT */
+
+.guide-content {
+    padding: 1rem;
+
+    border-radius: g.$radius-small;
+    background: rgba(255, 255, 255, 0.06);
+
+    color: g.$color-white;
+
+    line-height: 1.7;
+    font-size: 0.95rem;
+
+    white-space: pre-line;
+
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* RATING */
 
 .rating-container {
     display: flex;
-    align-items: center;
-    gap: 10px;
-
-    margin-bottom: 1rem;
-
-    font-size: 22px;
-}
-
-.rating-label {
-    font-size: 0.95rem;
-    color: g.$color-white;
+    gap: 12px;
+    font-size: 24px;
 }
 
 .star {
@@ -44,63 +162,194 @@
     cursor: default;
 }
 
-/* Avg rating */
+/* BUTTONS */
 
-.avg-rating {
-    margin-left: 15px;
-    font-size: 0.9rem;
-    color: g.$color-white;
-}
-
-/* Meta */
-
-.guide-meta {
+.button-row {
     display: flex;
-    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.submit-button {
+    padding: 0.9rem 1.5rem;
+
+    background: g.$gradient;
     color: g.$color-white;
-    margin-bottom: 1rem;
+
+    border: none;
+    border-radius: g.$radius-small;
+
+    font-weight: 700;
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    transition: filter 0.2s;
 }
 
-/* Content */
-
-.guide-content {
-    color: g.$color-white;
-    line-height: 1.6;
-    white-space: pre-line;
-    margin-bottom: 1.5rem;
+.submit-button:hover {
+    filter: brightness(1.1);
 }
 
-/* Screenshots */
-
-.screenshots-container {
-    margin-top: 2rem;
-}
-
-.screenshots-container h3 {
-    margin-bottom: 0.8rem;
-    color: g.$color-white;
-}
+/* SCREENSHOTS GRID */
 
 .screenshots {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
 }
 
 .screenshot-item {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
+
+.screenshot-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+/* SCREENSHOT IMAGE */
 
 .guide-screenshot {
     width: 100%;
     border-radius: g.$radius-small;
+
     box-shadow: g.$shadow-medium;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
 }
+
+.guide-screenshot:hover {
+    transform: scale(1.05);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45);
+    filter: brightness(1.05);
+}
+
+/* SCREENSHOT NUMBER */
+
+.screenshot-number {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+
+    background: rgba(0, 0, 0, 0.75);
+    padding: 4px 8px;
+
+    font-size: 0.8rem;
+    border-radius: 4px;
+
+    color: white;
+}
+
+/* SCREENSHOT LABEL */
 
 .screenshot-label {
     font-size: 0.85rem;
-    color: g.$color-white;
     text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* IMAGE LIGHTBOX */
+
+.image-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.9);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1000;
+}
+
+.image-modal {
+    position: relative;
+}
+
+.modal-image {
+    max-width: 90vw;
+    max-height: 85vh;
+
+    border-radius: g.$radius-small;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.close-image {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+
+    width: 36px;
+    height: 36px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #e74c3c;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease;
+}
+
+.close-image:hover {
+    transform: scale(1.1);
+}
+
+/* COMMENTS */
+
+.page-content app-comments {
+    width: 100%;
+    display: block;
+    color: g.$color-white;
+}
+
+/* Comments title */
+
+.page-content app-comments h2,
+.page-content app-comments h3 {
+    color: g.$color-white;
+}
+
+/* Comment text */
+
+.page-content app-comments p,
+.page-content app-comments span,
+.page-content app-comments div {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Comment meta */
+
+.page-content app-comments .comment-meta {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+/* Comment inputs */
+
+.page-content app-comments textarea,
+.page-content app-comments input {
+    background: rgba(255, 255, 255, 0.06);
+    color: g.$color-white;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Placeholder */
+
+.page-content app-comments textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
