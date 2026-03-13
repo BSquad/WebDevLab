@@ -15,7 +15,7 @@ import {
     GuideServiceMock,
     ActivatedRouteMock,
 } from '../../tests/mock-classes.spec';
-import { MOCK_GAME, MOCK_GAMES } from '../../tests/mock-data.spec';
+import { MOCK_GAME, MOCK_GAMES, MOCK_USER } from '../../tests/mock-data.spec';
 
 describe('GameDetailPage', () => {
     let component: GameDetailPage;
@@ -91,5 +91,59 @@ describe('GameDetailPage', () => {
 
         expect(gameService.toggleTrackGame).toHaveBeenCalled();
         expect(component.game()?.isTracked).toBeTrue();
+    });
+
+    it('should navigate to read guide', () => {
+        const guide = { id: 123 } as any;
+        component.goToReadGuide(guide);
+
+        expect(router.navigate).toHaveBeenCalledWith(['/read-guide', 123]);
+    });
+
+    it('should navigate to edit guide', () => {
+        const guide = { id: 456 } as any;
+        component.goToEditGuide(guide);
+
+        expect(router.navigate).toHaveBeenCalledWith(['/edit-guide', 456]);
+    });
+
+    it('should navigate to achievements', () => {
+        component.game.set(MOCK_GAME);
+        component.goToAchievements();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/achievements', MOCK_GAME.id]);
+    });
+
+    it('should get game image path', () => {
+        const pathBuilder = TestBed.inject(PathBuilder) as any;
+        component.getGameImagePath('test.png');
+
+        expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith('test.png');
+    });
+
+    it('should handle null game when navigating', () => {
+        component.game.set(null);
+        component.goToAchievements();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/achievements', undefined]);
+    });
+
+    it('should handle toggle tracking failure', async () => {
+        gameService.toggleTrackGame.and.resolveTo(false);
+        const mockGame = { ...MOCK_GAME, isTracked: false };
+        component.game.set(mockGame);
+        const event = { stopPropagation: jasmine.createSpy() } as any;
+
+        await component.toggleTrackGame(event);
+
+        expect(component.game()?.isTracked).toBeFalse();
+    });
+
+    it('should handle different gameId from route', async () => {
+        route.snapshot.paramMap.get.and.returnValue('42');
+
+        await component.ngOnInit();
+
+        expect(gameService.getGame).toHaveBeenCalledWith(42, 1);
     });
 });

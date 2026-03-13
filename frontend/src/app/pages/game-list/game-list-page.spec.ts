@@ -12,7 +12,8 @@ import { GameServiceMock } from '../../tests/mock-classes.spec';
 import { ToastServiceMock } from '../../tests/mock-classes.spec';
 import { AuthServiceMock } from '../../tests/mock-classes.spec';
 import { PathBuilderMock } from '../../tests/mock-classes.spec';
-import { MOCK_GAMES, MOCK_POPULAR_GAMES } from '../../tests/mock-data.spec';
+import { MOCK_GAMES, MOCK_POPULAR_GAMES, MOCK_USER } from '../../tests/mock-data.spec';
+import { of } from 'rxjs';
 
 describe('GameListPage', () => {
     let component: GameListPage;
@@ -107,5 +108,106 @@ describe('GameListPage', () => {
         component.filters.releaseFrom = '';
         component.filters.releaseTo = '2022-12-12';
         expect(component.getfilteredGames().map((g) => g.id)).toEqual([3]);
+    });
+
+    it('should handle error during ngOnInit', async () => {
+        gameService.getGames.and.rejectWith(new Error('Network error'));
+
+        await component.ngOnInit();
+
+        expect(toastService.showError).toHaveBeenCalledWith('Error: Error: Network error');
+    });
+
+    it('should handle toggle tracking failure', async () => {
+        gameService.toggleTrackGame.and.resolveTo(false);
+        const game = { ...MOCK_GAMES[0], isTracked: false };
+        component.games.set([game]);
+        const event = { stopPropagation: jasmine.createSpy() } as any;
+
+        await component.toggleTrackGame(game, event);
+
+        expect(component.games()[0].isTracked).toBeFalse();
+    });
+
+    it('should handle null user when loading games', async () => {
+        const authServiceMock = TestBed.inject(AuthService) as any;
+        authServiceMock.currentUser$ = of(null);
+
+        fixture = TestBed.createComponent(GameListPage);
+        component = fixture.componentInstance;
+
+        await component.ngOnInit();
+
+        expect(gameService.getGames).toHaveBeenCalledWith(undefined);
+    });
+
+    it('should return empty tags when no games', () => {
+        component.games.set([]);
+
+        const tags = component.getAllTags();
+
+        expect(tags).toEqual([]);
+    });
+
+    it('should handle games without tags', () => {
+        const gamesWithoutTags = [
+            { ...MOCK_GAMES[0], tags: undefined } as unknown as Game,
+            { ...MOCK_GAMES[1], tags: [] },
+        ];
+        component.games.set(gamesWithoutTags);
+
+        const tags = component.getAllTags();
+
+        expect(tags).toEqual([]);
+    });
+
+    it('should filter games with case insensitive title', () => {
+        component.games.set(MOCK_GAMES);
+
+        component.filters.title = 'ALPHA';
+        expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+
+        component.filters.title = 'beta';
+        expect(component.getfilteredGames().map((g) => g.id)).toEqual([2]);
+    });
+
+    it('should filter games with multiple tags', () => {
+        component.games.set(MOCK_GAMES);
+
+        component.filters.tags = { rpg: true, adventure: true };
+        expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+    });
+
+    it('should handle empty filters', () => {
+        component.games.set(MOCK_GAMES);
+
+        component.filters.title = '';
+        component.filters.tags = {};
+        component.filters.releaseFrom = '';
+        component.filters.releaseTo = '';
+
+        const filtered = component.getfilteredGames();
+        expect(filtered.length).toBe(MOCK_GAMES.length);
+        expect(filtered).toEqual(MOCK_GAMES);
+    });
+
+    it('should handle games without release date', () => {
+        const gamesWithoutDate = [
+            { ...MOCK_GAMES[0], releaseDate: '' },
+            { ...MOCK_GAMES[1], releaseDate: undefined as any },
+        ];
+        component.games.set(gamesWithoutDate);
+
+        component.filters.releaseFrom = '2023-01-01';
+        component.filters.releaseTo = '2023-12-31';
+
+        const filtered = component.getfilteredGames();
+        expect(filtered.length).toBe(2);
+    });
+
+    it('should get game image path without parameter', () => {
+        component.getGameImagePath();
+
+        expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith(undefined);
     });
 });
