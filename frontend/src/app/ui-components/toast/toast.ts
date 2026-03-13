@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 
 @Component({
-    selector: 'app-toast',
+    selector: 'toast',
     imports: [],
     templateUrl: './toast.html',
     styleUrl: './toast.scss',

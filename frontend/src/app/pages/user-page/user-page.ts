@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { GuideCardComponent } from '../guide-card/guide-card';
+import { GuideCardComponent } from '../../ui-components/guide-card/guide-card';
 
 import { ToastService } from '../../services/toast-service';
 import { AuthService } from '../../services/auth-service';
@@ -15,7 +15,7 @@ import { UserService } from '../../services/user.service';
 import { AnalysisData } from '../../../../../shared/models/analysisData';
 import { UserProfile } from '../../../../../shared/models/user';
 import { RouterLink, RouterModule } from '@angular/router';
-import { EditProfileDialog } from '../../components/edit-profile-dialog/edit-profile-dialog';
+import { EditProfileDialog } from '../../ui-components/edit-profile-dialog/edit-profile-dialog';
 import { environment } from '../../../environments/environment';
 
 @Component({

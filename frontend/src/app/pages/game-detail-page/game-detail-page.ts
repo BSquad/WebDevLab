@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../../../shared/models/user';
 import { PathBuilder } from '../../services/path-builder';
-import { GuideCardComponent } from '../guide-card/guide-card';
+import { GuideCardComponent } from '../../ui-components/guide-card/guide-card';
 
 @Component({
     selector: 'app-game-detail-page',

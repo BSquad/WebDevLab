@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Toast } from '../ui/toast/toast';
+import { Toast } from '../ui-components/toast/toast';
 
 @Injectable({
     providedIn: 'root',
