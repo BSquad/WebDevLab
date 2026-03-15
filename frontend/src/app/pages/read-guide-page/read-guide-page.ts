@@ -42,15 +42,22 @@ export class ReadGuidePage {
             const guideId = this.guide()?.id;
             const user = this.authService.getCurrentUser();
 
-            if (!guideId || !user) return;
+            if (!guideId || !user) {
+                this.toastService.showError('User or guide missing');
+                return;
+            }
 
             await this.guideService.rateGuide(guideId, score, user.id);
 
             this.rating.set(score);
 
+            const updatedGuide = await this.guideService.getGuideById(guideId);
+
+            this.guide.set(updatedGuide);
+
             this.toastService.showSuccess('Rating saved');
         } catch (err: any) {
-            this.toastService.showError('Failed to rate guide');
+            this.toastService.showError('Failed to rate guide: ' + err.message);
         }
     }
 
