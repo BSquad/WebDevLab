@@ -3,13 +3,15 @@
         <button class="back-button" (click)="goBack()">← Back</button>
 
         <h1 class="page-title">
-            {{ isEditMode ? 'Edit Guide' : 'Create Guide for ' + game()?.title }}
+            {{ isEditMode ? 'Edit Guide' : 'Create Guide for ' + (game()?.title || '') }}
         </h1>
     </div>
 
     <div class="page-content">
         <div class="page-card">
             <form #guideCreationForm="ngForm" (ngSubmit)="onSubmit(guideCreationForm)">
+                <!-- TITLE -->
+
                 <div class="form-group">
                     <label for="title">Title</label>
 
@@ -17,11 +19,13 @@
                         type="text"
                         id="title"
                         name="title"
-                        [(ngModel)]="title"
+                        [(ngModel)]="guide.title"
                         required
                         placeholder="Enter guide title..."
                     />
                 </div>
+
+                <!-- CONTENT -->
 
                 <div class="form-group">
                     <label for="content">Content</label>
@@ -29,30 +33,42 @@
                     <textarea
                         id="content"
                         name="content"
-                        [(ngModel)]="content"
+                        [(ngModel)]="guide.content"
                         required
                         placeholder="Write your guide here... (You can reference screenshots like 'see picture 1')"
                     ></textarea>
                 </div>
 
+                <!-- SCREENSHOT UPLOAD -->
+
                 <div class="form-group upload-container">
-                    <label for="screenshots">Screenshots</label>
+                    <label>Screenshots</label>
 
                     <input
+                        #fileInput
                         type="file"
                         id="screenshots"
                         (change)="onFileSelected($event)"
                         multiple
                         accept="image/*"
+                        hidden
                     />
+
+                    <button type="button" class="upload-button" (click)="fileInput.click()">
+                        Select Screenshots
+                    </button>
+
+                    <!-- PREVIEW GRID -->
+
+                    @if (previewUrls.length > 0) {
 
                     <div class="preview-container">
                         @for (url of previewUrls; track $index; let i = $index) {
 
                         <div class="preview-wrapper">
-                            <div class="screenshot-label">Picture {{ i + 1 }}</div>
-
                             <img [src]="url" class="preview-image" (click)="openImage(url)" />
+
+                            <div class="screenshot-label">Picture {{ i + 1 }}</div>
 
                             <button
                                 type="button"
@@ -66,22 +82,10 @@
                         }
                     </div>
 
-                    @if (selectedFiles.length > 0) {
-
-                    <div class="selected-files">
-                        <p>Selected screenshots:</p>
-
-                        <ul>
-                            @for (file of selectedFiles; track file.name) {
-
-                            <li>{{ file.name }}</li>
-
-                            }
-                        </ul>
-                    </div>
-
                     }
                 </div>
+
+                <!-- ACTION BUTTONS -->
 
                 <div class="button-row">
                     <button class="submit-button" type="submit">
