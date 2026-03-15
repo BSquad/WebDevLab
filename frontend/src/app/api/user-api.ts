@@ -38,9 +38,11 @@ export class UserApi extends BaseApi {
         return await this.request(this.http.get<Guide[]>(url));
     }
 
-    // ANALYSIS
-    async startUserAnalysis(userId: number): Promise<AnalysisData> {
-        const url = `${this.userUrl}/analysis`;
-        return await this.request(this.http.post<AnalysisData>(url, { userId }));
+    async startUserAnalysis(userId: number): Promise<Response> {
+        return await fetch(`${this.userUrl}/analysis`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId }),
+        });
     }
 }

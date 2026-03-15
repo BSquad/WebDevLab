@@ -48,6 +48,7 @@ export class UserPage {
     // UI State Signals
     isAnalyzing = signal(false);
     analysisResult = signal<AnalysisData | null>(null);
+    analysisProgress = signal(0);
 
     userProfile: ResourceRef<UserProfile | null | undefined> = resource({
         params: () => ({ id: this.currentUser()?.id }),
@@ -111,11 +112,13 @@ export class UserPage {
         if (!user) return;
 
         this.isAnalyzing.set(true);
-        this.analysisResult.set(null); // Reset previous results
+        this.analysisResult.set(null);
+        this.analysisProgress.set(0);
 
         try {
-            // Simulate/Handle the 10s delay logic from backend
-            const data = await this.userService.startUserAnalysis(user.id);
+            const data = await this.userService.startUserAnalysis(user.id, (progress) => {
+                this.analysisProgress.set(progress);
+            });
             this.analysisResult.set(data);
             this.toastService.showSuccess('Analysis Complete!');
         } catch (error) {

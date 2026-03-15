@@ -3,6 +3,7 @@ import { AnalysisData } from '../../../shared/models/analysisData.js';
 import { GameDbAccess } from '../db-access/game-db-access.js';
 import { GuideDbAccess } from '../db-access/guide-db-access.js';
 import { UserProfile } from '../../../shared/models/user.js';
+import type { Request, Response } from 'express';
 
 export class UserService {
     private readonly gameDbAccess = new GameDbAccess();
@@ -51,7 +52,6 @@ export class UserService {
     };
 
     startUserAnalysis = async (userId: number): Promise<AnalysisData> => {
-        await new Promise((resolve) => setTimeout(resolve, 10_000));
         return await this.userDbAccess.startUserAnalysis(userId);
     };
 }

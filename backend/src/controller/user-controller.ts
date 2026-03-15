@@ -72,9 +72,45 @@ export class UserController {
     };
 
     startUserAnalysis = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.body.userId);
-        const analysisData = await this.userService.startUserAnalysis(userId);
-        console.log(analysisData);
-        res.json(analysisData);
+        const userId = Number(req.body?.userId);
+
+        await this.streamAnalysisProgress(res);
+        await this.sendFinalAnalysisData(res, userId);
     };
+
+    private async streamAnalysisProgress(res: Response): Promise<void> {
+        const totalSteps = 10;
+
+        for (let step = 1; step <= totalSteps; step++) {
+            const progress = Math.round((step / totalSteps) * 100);
+            res.write(`${progress}\n`);
+
+            await this.flushResponse(res);
+            await this.delay(1000);
+        }
+    }
+
+    private async flushResponse(res: Response): Promise<void> {
+        await new Promise<void>((resolve) =>
+            setTimeout(() => {
+                if ((res as any).flush) (res as any).flush();
+                else if ((res as any).socket?.flush)
+                    (res as any).socket.flush();
+                resolve();
+            }, 0),
+        );
+    }
+
+    private async delay(ms: number): Promise<void> {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    private async sendFinalAnalysisData(
+        res: Response,
+        userId: number,
+    ): Promise<void> {
+        const analysisData = await this.userService.startUserAnalysis(userId);
+        res.write(JSON.stringify(analysisData));
+        res.end();
+    }
 }

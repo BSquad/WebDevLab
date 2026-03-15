@@ -49,6 +49,15 @@
                     <p class="empty-msg">NO BADGES YET</p>
                     }
                 </mat-card-content>
+                @if (isAnalyzing()) {
+                <div class="analysis-progress">
+                    <mat-progress-bar
+                        mode="determinate"
+                        [value]="analysisProgress()"
+                    ></mat-progress-bar>
+                    <p class="progress-text">{{ analysisProgress() }}%</p>
+                </div>
+                }
                 <mat-card-actions>
                     <button
                         mat-flat-button
@@ -70,13 +79,13 @@
                 </mat-card-header>
                 <mat-card-content class="stats-grid">
                     <div class="stat-box">
-                        <span>GAMES</span><strong>{{ data.gameCount }}</strong>
+                        <span>GAMES TRACKED</span><strong>{{ data.gameCount }}</strong>
                     </div>
                     <div class="stat-box">
-                        <span>GENRE</span><strong>{{ data.mostPlayedGenre }}</strong>
+                        <span>FAVOURITE GENRE</span><strong>{{ data.mostPlayedGenre }}</strong>
                     </div>
                     <div class="stat-box">
-                        <span>RATE</span><strong>{{ data.completionRate }}%</strong>
+                        <span>COMPLETION RATE</span><strong>{{ data.completionRate }}%</strong>
                     </div>
                 </mat-card-content>
             </mat-card>
