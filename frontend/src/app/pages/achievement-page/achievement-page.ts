@@ -38,9 +38,11 @@ export class AchievementPage {
                 gameId,
                 this.user()?.id,
             );
+
             this.achievements.set(achievementsData);
         } catch (err: any) {
             this.toastService.showError('Error: ' + err.message);
+            throw err;
         }
     }
 
