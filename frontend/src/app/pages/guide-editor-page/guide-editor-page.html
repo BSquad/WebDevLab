@@ -10,8 +10,6 @@
     <div class="page-content">
         <div class="page-card">
             <form #guideCreationForm="ngForm" (ngSubmit)="onSubmit(guideCreationForm)">
-                <!-- TITLE -->
-
                 <div class="form-group">
                     <label for="title">Title</label>
 
@@ -25,8 +23,6 @@
                     />
                 </div>
 
-                <!-- CONTENT -->
-
                 <div class="form-group">
                     <label for="content">Content</label>
 
@@ -38,8 +34,6 @@
                         placeholder="Write your guide here... (You can reference screenshots like 'see picture 1')"
                     ></textarea>
                 </div>
-
-                <!-- SCREENSHOT UPLOAD -->
 
                 <div class="form-group upload-container">
                     <label>Screenshots</label>
@@ -57,8 +51,6 @@
                     <button type="button" class="upload-button" (click)="fileInput.click()">
                         Select Screenshots
                     </button>
-
-                    <!-- PREVIEW GRID -->
 
                     @if (previewUrls.length > 0) {
 
@@ -85,8 +77,6 @@
                     }
                 </div>
 
-                <!-- ACTION BUTTONS -->
-
                 <div class="button-row">
                     <button class="submit-button" type="submit">
                         {{ isEditMode ? 'Update Guide' : 'Create Guide' }}
@@ -104,8 +94,6 @@
         </div>
     </div>
 </div>
-
-<!-- IMAGE LIGHTBOX -->
 
 @if (activeImage()) {
 

@@ -156,37 +156,55 @@ export class GuideEditorPage {
 
         let guideId: number;
 
-        if (this.isEditMode && this.guideId) {
-            const success = await this.guideService.updateGuide(this.guideId, this.guide);
+        try {
+            if (this.isEditMode && this.guideId) {
+                const success = await this.guideService.updateGuide(this.guideId, this.guide);
 
-            if (!success) {
-                this.toastService.showError('Failed to update guide');
-                return;
+                if (!success) {
+                    this.toastService.showError('Failed to update guide');
+                    return;
+                }
+
+                guideId = this.guideId;
+
+                for (const filePath of this.deletedScreenshots) {
+                    await this.guideService.deleteScreenshot(guideId, filePath);
+                }
+            } else {
+                guideId = await this.guideService.createGuide(this.guide);
+
+                if (!guideId) {
+                    this.toastService.showError('Failed to create guide');
+                    return;
+                }
             }
 
-            guideId = this.guideId;
+            for (const file of this.selectedFiles) {
+                try {
+                    const success = await this.guideService.uploadScreenshot(guideId, file);
 
-            for (const filePath of this.deletedScreenshots) {
-                await this.guideService.deleteScreenshot(guideId, filePath);
-            }
-        } else {
-            guideId = await this.guideService.createGuide(this.guide);
+                    if (!success) {
+                        throw new Error('Screenshot upload failed');
+                    }
+                } catch (err: any) {
+                    if (!this.isEditMode) {
+                        await this.guideService.deleteGuide(guideId, this.userId!);
+                    }
 
-            if (!guideId) {
-                this.toastService.showError('Failed to create guide');
-                return;
+                    this.toastService.showError(err?.message || 'Screenshot upload failed');
+
+                    return;
+                }
             }
+
+            this.router.navigate(['/games', this.gameId]);
+
+            this.toastService.showSuccess(
+                this.isEditMode ? 'Guide updated successfully!' : 'Guide created successfully!',
+            );
+        } catch (err: any) {
+            this.toastService.showError(err?.message || 'Something went wrong');
         }
-
-        for (const file of this.selectedFiles) {
-            await this.guideService.uploadScreenshot(guideId, file);
-        }
-
-        this.router.navigate(['/games', this.gameId]);
-
-        this.toastService.showSuccess(
-            this.isEditMode ? 'Guide updated successfully!' : 'Guide created successfully!',
-        );
     }
 
     async deleteGuide() {
