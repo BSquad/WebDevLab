@@ -6,6 +6,7 @@ import { Game } from '../../../../../shared/models/game';
 import { AuthService } from '../../services/auth-service';
 import { User } from '../../../../../shared/models/user';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
     selector: 'app-achievement-page',
@@ -23,19 +24,24 @@ export class AchievementPage {
         private route: ActivatedRoute,
         private gameService: GameService,
         private authService: AuthService,
+        private toastService: ToastService,
     ) {
         this.user = toSignal(this.authService.currentUser$);
     }
 
     async ngOnInit() {
-        const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
-        const gameData = await this.gameService.getGame(gameId);
-        this.game.set(gameData);
-        const achievementsData = await this.gameService.getAchievementsByGameId(
-            gameId,
-            this.user()?.id,
-        );
-        this.achievements.set(achievementsData);
+        try {
+            const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
+            const gameData = await this.gameService.getGame(gameId);
+            this.game.set(gameData);
+            const achievementsData = await this.gameService.getAchievementsByGameId(
+                gameId,
+                this.user()?.id,
+            );
+            this.achievements.set(achievementsData);
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
+        }
     }
 
     goBack() {
@@ -43,16 +49,22 @@ export class AchievementPage {
     }
 
     async completeAchievement(achievement: Achievement) {
-        const success = await this.gameService.completeAchievement(
-            achievement.id,
-            this.user()!.id,
-            this.game()!.id,
-        );
-
-        if (success) {
-            this.achievements.update((list: any) =>
-                list.map((a: any) => (a.id === achievement.id ? { ...a, isCompleted: true } : a)),
+        try {
+            const success = await this.gameService.completeAchievement(
+                achievement.id,
+                this.user()!.id,
+                this.game()!.id,
             );
+
+            if (success) {
+                this.achievements.update((list: any) =>
+                    list.map((a: any) =>
+                        a.id === achievement.id ? { ...a, isCompleted: true } : a,
+                    ),
+                );
+            }
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
         }
     }
 }

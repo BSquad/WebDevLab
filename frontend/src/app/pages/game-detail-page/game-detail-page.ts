@@ -5,7 +5,6 @@ import { GuideService } from '../../services/guide-service';
 import { Game } from '../../../../../shared/models/game';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Guide } from '../../../../../shared/models/guide';
-import { DatePipe, SlicePipe } from '@angular/common';
 import { AuthService } from '../../services/auth-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../../../shared/models/user';
@@ -77,15 +76,19 @@ export class GameDetailPage {
     }
 
     async toggleTrackGame(event: Event) {
-        event.stopPropagation();
-        const success = await this.gameService.toggleTrackGame(
-            this.game()!.id,
-            this.user()!.id,
-            this.game()!.isTracked,
-        );
+        try {
+            event.stopPropagation();
+            const success = await this.gameService.toggleTrackGame(
+                this.game()!.id,
+                this.user()!.id,
+                this.game()!.isTracked,
+            );
 
-        if (success) {
-            this.game.update((g) => (g ? { ...g, isTracked: !g.isTracked } : null));
+            if (success) {
+                this.game.update((g) => (g ? { ...g, isTracked: !g.isTracked } : null));
+            }
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
         }
     }
 

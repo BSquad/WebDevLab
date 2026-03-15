@@ -53,17 +53,21 @@ export class GameListPage {
     }
 
     async toggleTrackGame(game: Game, event: Event) {
-        event.stopPropagation();
-        const success = await this.gameService.toggleTrackGame(
-            game.id,
-            this.user()!.id,
-            game.isTracked,
-        );
-
-        if (success) {
-            this.games.update((list) =>
-                list.map((g) => (g.id === game.id ? { ...g, isTracked: !g.isTracked } : g)),
+        try {
+            event.stopPropagation();
+            const success = await this.gameService.toggleTrackGame(
+                game.id,
+                this.user()!.id,
+                game.isTracked,
             );
+
+            if (success) {
+                this.games.update((list) =>
+                    list.map((g) => (g.id === game.id ? { ...g, isTracked: !g.isTracked } : g)),
+                );
+            }
+        } catch (err) {
+            this.toastService.showError('Error: ' + err);
         }
     }
 
