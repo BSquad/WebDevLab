@@ -10,7 +10,6 @@ import { User } from '../../../../shared/models/user';
 export class GameApi extends BaseApi {
     private gameUrl = `${this.apiUrl}/games`;
 
-    // --------- Game ---------
     async getGames(userId?: number): Promise<Game[]> {
         const url = userId ? `${this.gameUrl}?userId=${userId}` : this.gameUrl;
         return await this.request(this.http.get<Game[]>(url));
@@ -25,7 +24,6 @@ export class GameApi extends BaseApi {
         return await this.request(this.http.get<Game[]>(`${this.gameUrl}/popular`));
     }
 
-    // --------- Achievement ---------
     async getAchievementsByGameId(gameId: number, userId?: number): Promise<Achievement[]> {
         const url = `${this.gameUrl}/${gameId}/achievements${userId ? `?userId=${userId}` : ''}`;
         return await this.request(this.http.get<Achievement[]>(url));

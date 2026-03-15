@@ -57,7 +57,6 @@ export class GuideEditorPage {
             const guideId = this.route.snapshot.paramMap.get('guideId');
 
             if (guideId) {
-                // EDIT MODE
                 this.guideId = Number(guideId);
                 this.isEditMode = true;
 
@@ -74,7 +73,6 @@ export class GuideEditorPage {
                     return;
                 }
 
-                // Sicherheitscheck
                 if (this.guide.userId !== this.userId) {
                     this.toastService.showError('You cannot edit this guide.');
                     this.router.navigate(['/games']);
@@ -95,7 +93,6 @@ export class GuideEditorPage {
 
                 this.loadExistingScreenshots();
             } else {
-                // CREATE MODE
                 const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
 
                 this.gameId = gameId;
@@ -194,7 +191,6 @@ export class GuideEditorPage {
 
             guideId = this.guideId;
 
-            // Screenshots löschen (EDIT MODE)
             for (const filePath of this.deletedScreenshots) {
                 await this.guideService.deleteScreenshot(guideId, filePath);
             }
@@ -207,7 +203,6 @@ export class GuideEditorPage {
             }
         }
 
-        // Neue Screenshots hochladen
         for (const file of this.selectedFiles) {
             await this.guideService.uploadScreenshot(guideId, file);
         }

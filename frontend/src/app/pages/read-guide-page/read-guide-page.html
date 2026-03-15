@@ -1,14 +1,10 @@
 <div class="page">
-    <!-- HEADER -->
-
     <div class="page-header">
         <button class="back-button" (click)="goBack()">← Back</button>
         <h1 class="page-title">{{ guide()?.title }}</h1>
     </div>
 
     <div class="page-content">
-        <!-- GUIDE -->
-
         <div class="page-card">
             <div class="guide-header">
                 <div class="guide-meta">
@@ -17,8 +13,6 @@
 
                 <div class="guide-rating">⭐ {{ guide()?.avgRating || 0 }}</div>
             </div>
-
-            <!-- USER RATING -->
 
             <div class="form-group">
                 <label>Your Rating</label>
@@ -40,22 +34,16 @@
                 </div>
             </div>
 
-            <!-- GUIDE CONTENT -->
-
             <div class="form-group">
                 <label>Guide Content</label>
 
                 <div class="guide-content">{{ guide()?.content }}</div>
             </div>
 
-            <!-- BUTTON -->
-
             <div class="button-row">
                 <button class="submit-button" (click)="downloadPDF()">Download PDF</button>
             </div>
         </div>
-
-        <!-- SCREENSHOTS -->
 
         @if (guide()?.screenshots?.length) {
 
@@ -83,19 +71,13 @@
             </div>
         </div>
 
-        }
-
-        <!-- COMMENTS -->
-
-        @if (guide()?.id) {
+        } @if (guide()?.id) {
 
         <app-comments [guideId]="guide()?.id!"></app-comments>
 
         }
     </div>
 </div>
-
-<!-- IMAGE LIGHTBOX -->
 
 @if (activeImage()) {
 

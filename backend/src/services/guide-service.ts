@@ -82,15 +82,11 @@ export class GuideService {
             doc.on('end', () => resolve(Buffer.concat(chunks)));
             doc.on('error', reject);
 
-            /* ---------- TITLE ---------- */
-
             doc.font('Helvetica-Bold')
                 .fontSize(26)
                 .text(guide.title, { align: 'center' });
 
             doc.moveDown(1);
-
-            /* ---------- META ---------- */
 
             doc.font('Helvetica').fontSize(11).fillColor('#555');
 
@@ -104,8 +100,6 @@ export class GuideService {
 
             doc.moveDown(2);
 
-            /* ---------- DIVIDER ---------- */
-
             doc.moveTo(60, doc.y)
                 .lineTo(doc.page.width - 60, doc.y)
                 .strokeColor('#cccccc')
@@ -113,8 +107,6 @@ export class GuideService {
 
             doc.moveDown(2);
             doc.fillColor('#000');
-
-            /* ---------- GUIDE CONTENT ---------- */
 
             doc.fontSize(12)
                 .font('Helvetica')
@@ -124,8 +116,7 @@ export class GuideService {
                     lineGap: 4,
                 });
 
-            /* ---------- SCREENSHOTS ---------- */
-
+            //screenshots
             if (screenshots.length > 0) {
                 doc.addPage();
 
@@ -188,8 +179,6 @@ export class GuideService {
                     }
                 });
             }
-
-            /* ---------- FOOTER ---------- */
 
             const pageCount = doc.bufferedPageRange().count;
 

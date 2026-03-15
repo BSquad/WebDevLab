@@ -12,7 +12,6 @@ router.get('/:id/games', userController.getGames);
 router.get('/:id/achievements', userController.getAchievements);
 router.get('/:id/guides', userController.getGuides);
 
-// CRUD ohne C
 router.get('/:id', userController.getUser);
 router.put('/:id', upload.single('profilePic'), userController.updateUser);
 router.delete('/:id', userController.deleteUser);
