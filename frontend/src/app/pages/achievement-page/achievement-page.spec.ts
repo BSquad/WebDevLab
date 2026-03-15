@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AchievementPage } from './achievement-page';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game-service';
 import { AuthService } from '../../services/auth-service';
 import {
@@ -9,15 +9,17 @@ import {
     AuthServiceMock,
     ActivatedRouteMock,
 } from '../../tests/mock-classes.spec';
-import { MOCK_ACHIEVEMENTS, MOCK_GAME, MOCK_USER } from '../../tests/mock-data.spec';
-import { of } from 'rxjs';
+import { MOCK_ACHIEVEMENTS, MOCK_GAME } from '../../tests/mock-data.spec';
+import { ToastService } from '../../services/toast-service';
+import { ToastServiceMock } from '../../tests/mock-classes.spec';
 
 describe('AchievementPage', () => {
     let component: AchievementPage;
     let fixture: ComponentFixture<AchievementPage>;
-    let gameService: GameServiceMock;
     let router: RouterMock;
+    let gameService: GameServiceMock;
     let route: ActivatedRouteMock;
+    let toastService: ToastServiceMock;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
@@ -27,20 +29,22 @@ describe('AchievementPage', () => {
                 { provide: ActivatedRoute, useClass: ActivatedRouteMock },
                 { provide: GameService, useClass: GameServiceMock },
                 { provide: AuthService, useClass: AuthServiceMock },
+                { provide: ToastService, useClass: ToastServiceMock },
             ],
         }).compileComponents();
 
         fixture = TestBed.createComponent(AchievementPage);
         component = fixture.componentInstance;
 
-        gameService = TestBed.inject(GameService) as any as GameServiceMock;
         router = TestBed.inject(Router) as any as RouterMock;
         route = TestBed.inject(ActivatedRoute) as any as ActivatedRouteMock;
+        gameService = TestBed.inject(GameService) as any as GameServiceMock;
+        toastService = TestBed.inject(ToastService) as any as ToastServiceMock;
 
         fixture.detectChanges();
     });
 
-    it('should load game and achievements on init', async () => {
+    it('should load achievements on init', async () => {
         await component.ngOnInit();
 
         expect(gameService.getGame).toHaveBeenCalledWith(1);
@@ -54,7 +58,7 @@ describe('AchievementPage', () => {
         expect(router.navigate).toHaveBeenCalledWith(['/games', '1']);
     });
 
-    it('should complete an achievement and update the signal', async () => {
+    it('should handle achievement completion success', async () => {
         const achievementToComplete = MOCK_ACHIEVEMENTS[0];
         component.achievements.set(MOCK_ACHIEVEMENTS);
         component.game.set(MOCK_GAME);
@@ -81,7 +85,7 @@ describe('AchievementPage', () => {
         expect(updatedAchievement?.isCompleted).toBeFalse();
     });
 
-    it('should handle different gameId from route params', async () => {
+    it('should handle different gameId from route', async () => {
         route.snapshot.paramMap.get.and.returnValue('42');
 
         await component.ngOnInit();
@@ -90,15 +94,15 @@ describe('AchievementPage', () => {
         expect(gameService.getAchievementsByGameId).toHaveBeenCalledWith(42, 1);
     });
 
-    it('should handle error when loading game', async () => {
-        gameService.getGame.and.rejectWith(new Error('Game not found'));
+    it('should handle error when loading on init', async () => {
+        gameService.getGame.and.rejectWith(new Error('Test Error'));
 
-        await expectAsync(component.ngOnInit()).toBeRejected();
+        await component.ngOnInit();
 
-        expect(gameService.getGame).toHaveBeenCalledWith(1);
+        expect(toastService.showError).toHaveBeenCalledWith('Error: Test Error');
     });
 
-    it('should handle empty achievements array', async () => {
+    it('should handle empty achievements list', async () => {
         gameService.getAchievementsByGameId.and.resolveTo([]);
 
         await component.ngOnInit();

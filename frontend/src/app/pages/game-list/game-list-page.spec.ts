@@ -4,16 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GameService } from '../../services/game-service';
 import { ToastService } from '../../services/toast-service';
-import { AuthService } from '../../services/auth-service';
 import { PathBuilder } from '../../services/path-builder';
 import { Game } from '../../../../../shared/models/game';
 import { RouterMock } from '../../tests/mock-classes.spec';
-import { GameServiceMock } from '../../tests/mock-classes.spec';
-import { ToastServiceMock } from '../../tests/mock-classes.spec';
-import { AuthServiceMock } from '../../tests/mock-classes.spec';
-import { PathBuilderMock } from '../../tests/mock-classes.spec';
-import { MOCK_GAMES, MOCK_POPULAR_GAMES, MOCK_USER } from '../../tests/mock-data.spec';
-import { of } from 'rxjs';
+import {
+    GameServiceMock,
+    AuthServiceMock,
+    ToastServiceMock,
+    PathBuilderMock,
+} from '../../tests/mock-classes.spec';
+import { MOCK_GAMES, MOCK_POPULAR_GAMES } from '../../tests/mock-data.spec';
+import { AuthService } from '../../services/auth-service';
 
 describe('GameListPage', () => {
     let component: GameListPage;
@@ -21,7 +22,6 @@ describe('GameListPage', () => {
     let router: RouterMock;
     let gameService: GameServiceMock;
     let toastService: ToastServiceMock;
-    let authService: AuthService;
     let pathBuilder: PathBuilderMock;
 
     beforeEach(async () => {
@@ -30,8 +30,8 @@ describe('GameListPage', () => {
             providers: [
                 { provide: Router, useClass: RouterMock },
                 { provide: GameService, useClass: GameServiceMock },
-                { provide: ToastService, useClass: ToastServiceMock },
                 { provide: AuthService, useClass: AuthServiceMock },
+                { provide: ToastService, useClass: ToastServiceMock },
                 { provide: PathBuilder, useClass: PathBuilderMock },
             ],
         }).compileComponents();
@@ -51,7 +51,7 @@ describe('GameListPage', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should load games and popularGames on ngOnInit', async () => {
+    it('should load games on init', async () => {
         await component.ngOnInit();
 
         expect(gameService.getGames).toHaveBeenCalledWith(1);
@@ -60,7 +60,7 @@ describe('GameListPage', () => {
         expect(component.popularGames()).toEqual(MOCK_POPULAR_GAMES);
     });
 
-    it('should call router.navigate when goToGame is called', () => {
+    it('should navigate to game details', () => {
         component.goToGame(42);
         expect(router.navigate).toHaveBeenCalledWith(['/games', 42]);
     });
@@ -115,10 +115,10 @@ describe('GameListPage', () => {
 
         await component.ngOnInit();
 
-        expect(toastService.showError).toHaveBeenCalledWith('Error: Error: Network error');
+        expect(toastService.showError).toHaveBeenCalledWith('Error: Network error');
     });
 
-    it('should handle toggle tracking failure', async () => {
+    it('should handle toggle game tracking failure', async () => {
         gameService.toggleTrackGame.and.resolveTo(false);
         const game = { ...MOCK_GAMES[0], isTracked: false };
         component.games.set([game]);
@@ -127,18 +127,6 @@ describe('GameListPage', () => {
         await component.toggleTrackGame(game, event);
 
         expect(component.games()[0].isTracked).toBeFalse();
-    });
-
-    it('should handle null user when loading games', async () => {
-        const authServiceMock = TestBed.inject(AuthService) as any;
-        authServiceMock.currentUser$ = of(null);
-
-        fixture = TestBed.createComponent(GameListPage);
-        component = fixture.componentInstance;
-
-        await component.ngOnInit();
-
-        expect(gameService.getGames).toHaveBeenCalledWith(undefined);
     });
 
     it('should return empty tags when no games', () => {

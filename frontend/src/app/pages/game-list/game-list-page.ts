@@ -43,8 +43,8 @@ export class GameListPage {
             this.games.set(data);
             const popularGames = await this.gameService.getPopularGames();
             this.popularGames.set(popularGames);
-        } catch (err) {
-            this.toastService.showError('Error: ' + err);
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
         }
     }
 
@@ -66,8 +66,8 @@ export class GameListPage {
                     list.map((g) => (g.id === game.id ? { ...g, isTracked: !g.isTracked } : g)),
                 );
             }
-        } catch (err) {
-            this.toastService.showError('Error: ' + err);
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
         }
     }
 
