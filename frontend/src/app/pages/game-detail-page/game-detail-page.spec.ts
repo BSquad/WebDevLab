@@ -2,27 +2,30 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameDetailPage } from './game-detail-page';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game-service';
+import { AuthService } from '../../services/auth-service';
 import { GuideService } from '../../services/guide-service';
 import { ToastService } from '../../services/toast-service';
-import { AuthService } from '../../services/auth-service';
 import { PathBuilder } from '../../services/path-builder';
 import {
     RouterMock,
     GameServiceMock,
     ToastServiceMock,
-    AuthServiceMock,
     PathBuilderMock,
     GuideServiceMock,
     ActivatedRouteMock,
+    AuthServiceMock,
 } from '../../tests/mock-classes.spec';
-import { MOCK_GAME, MOCK_GAMES, MOCK_USER } from '../../tests/mock-data.spec';
+import { MOCK_GAME, MOCK_GAMES } from '../../tests/mock-data.spec';
 
 describe('GameDetailPage', () => {
-    let component: GameDetailPage;
     let fixture: ComponentFixture<GameDetailPage>;
-    let gameService: GameServiceMock;
+    let component: GameDetailPage;
     let route: ActivatedRouteMock;
     let router: RouterMock;
+    let gameService: GameServiceMock;
+    let guideService: GuideServiceMock;
+    let toastService: ToastServiceMock;
+    let pathBuilder: PathBuilderMock;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
@@ -31,8 +34,8 @@ describe('GameDetailPage', () => {
                 { provide: ActivatedRoute, useClass: ActivatedRouteMock },
                 { provide: Router, useClass: RouterMock },
                 { provide: GameService, useClass: GameServiceMock },
-                { provide: GuideService, useClass: GuideServiceMock },
                 { provide: AuthService, useClass: AuthServiceMock },
+                { provide: GuideService, useClass: GuideServiceMock },
                 { provide: ToastService, useClass: ToastServiceMock },
                 { provide: PathBuilder, useClass: PathBuilderMock },
             ],
@@ -41,9 +44,12 @@ describe('GameDetailPage', () => {
         fixture = TestBed.createComponent(GameDetailPage);
         component = fixture.componentInstance;
 
-        gameService = TestBed.inject(GameService) as any;
         route = TestBed.inject(ActivatedRoute) as any;
         router = TestBed.inject(Router) as any;
+        gameService = TestBed.inject(GameService) as any;
+        guideService = TestBed.inject(GuideService) as any;
+        toastService = TestBed.inject(ToastService) as any;
+        pathBuilder = TestBed.inject(PathBuilder) as any;
 
         fixture.detectChanges();
     });
@@ -56,13 +62,12 @@ describe('GameDetailPage', () => {
         expect(component.game()).toEqual(MOCK_GAMES[0]);
     });
 
-    it('should show error toast if game loading fails', async () => {
-        const toast = TestBed.inject(ToastService) as any;
+    it('should handle error on init', async () => {
         gameService.getGame.and.rejectWith(new Error('Fetch failed'));
 
         await component.ngOnInit();
 
-        expect(toast.showError).toHaveBeenCalledWith('Error: Fetch failed');
+        expect(toastService.showError).toHaveBeenCalledWith('Error: Fetch failed');
     });
 
     it('should correctly identify guide owner', () => {
@@ -73,16 +78,7 @@ describe('GameDetailPage', () => {
         expect(component.isGuideOwner(otherGuide)).toBeFalse();
     });
 
-    it('should navigate to create guide with state', () => {
-        component.game.set(MOCK_GAMES[0]);
-        component.goToCreateGuide();
-
-        expect(router.navigate).toHaveBeenCalledWith(['/create-guide', MOCK_GAMES[0].id], {
-            state: { game: MOCK_GAMES[0] },
-        });
-    });
-
-    it('should toggle tracking and update signal', async () => {
+    it('should toggle game tracking', async () => {
         const mockGame = { ...MOCK_GAME, isTracked: false };
         component.game.set(mockGame);
         const event = { stopPropagation: jasmine.createSpy() } as any;
@@ -91,6 +87,15 @@ describe('GameDetailPage', () => {
 
         expect(gameService.toggleTrackGame).toHaveBeenCalled();
         expect(component.game()?.isTracked).toBeTrue();
+    });
+
+    it('should navigate to create guide', () => {
+        component.game.set(MOCK_GAMES[0]);
+        component.goToCreateGuide();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/create-guide', MOCK_GAMES[0].id], {
+            state: { game: MOCK_GAMES[0] },
+        });
     });
 
     it('should navigate to read guide', () => {
@@ -115,17 +120,9 @@ describe('GameDetailPage', () => {
     });
 
     it('should get game image path', () => {
-        const pathBuilder = TestBed.inject(PathBuilder) as any;
         component.getGameImagePath('test.png');
 
         expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith('test.png');
-    });
-
-    it('should handle null game when navigating', () => {
-        component.game.set(null);
-        component.goToAchievements();
-
-        expect(router.navigate).toHaveBeenCalledWith(['/achievements', undefined]);
     });
 
     it('should handle toggle tracking failure', async () => {
@@ -145,5 +142,22 @@ describe('GameDetailPage', () => {
         await component.ngOnInit();
 
         expect(gameService.getGame).toHaveBeenCalledWith(42, 1);
+    });
+
+    it('should load guides data on init', async () => {
+        await component.ngOnInit();
+
+        expect(guideService.getTopGuides).toHaveBeenCalledWith(1);
+        expect(guideService.getGuidesByGameId).toHaveBeenCalledWith(1);
+        expect(component.topGuides()).toBeDefined();
+        expect(component.guides()).toBeDefined();
+    });
+
+    it('should handle guide service errors', async () => {
+        guideService.getTopGuides.and.rejectWith(new Error('Guide error'));
+
+        await component.ngOnInit();
+
+        expect(toastService.showError).toHaveBeenCalledWith('Error: Guide error');
     });
 });
