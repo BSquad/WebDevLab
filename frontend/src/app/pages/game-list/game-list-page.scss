@@ -60,6 +60,15 @@
             color: g.$color-white;
             background: g.$gradient;
             cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+
+            &:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+            }
         }
 
         .game-image-small {
