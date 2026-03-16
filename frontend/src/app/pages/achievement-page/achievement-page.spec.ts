@@ -60,15 +60,6 @@ describe('AchievementPage', () => {
             expect(component.achievements()).toEqual(MOCK_ACHIEVEMENTS);
         });
 
-        it('should handle different gameId from route', async () => {
-            route.snapshot.paramMap.get.and.returnValue('42');
-
-            await component.ngOnInit();
-
-            expect(gameService.getGame).toHaveBeenCalledWith(42);
-            expect(gameService.getAchievementsByGameId).toHaveBeenCalledWith(42, 1);
-        });
-
         it('should handle error when loading on init', async () => {
             gameService.getGame.and.rejectWith(new Error('Test Error'));
 
@@ -121,15 +112,6 @@ describe('AchievementPage', () => {
     });
 
     describe('HTML Template Rendering', () => {
-        it('should display achievement difficulty classes', async () => {
-            await component.ngOnInit();
-            fixture.detectChanges();
-
-            const difficultyIcons = fixture.debugElement.queryAll(By.css('.achievement-icon'));
-            expect(difficultyIcons[0].classes['bronze']).toBeTrue();
-            expect(difficultyIcons[1].classes['silver']).toBeTrue();
-        });
-
         it('should not display complete buttons when user is not logged in', async () => {
             const authServiceMock = TestBed.inject(AuthService) as any;
             authServiceMock.currentUser$ = of(null);

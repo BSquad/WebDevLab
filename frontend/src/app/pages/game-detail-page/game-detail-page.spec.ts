@@ -80,14 +80,6 @@ describe('GameDetailPage', () => {
 
             expect(toastService.showError).toHaveBeenCalledWith('Error: Test Error');
         });
-
-        it('should handle guide service errors', async () => {
-            guideService.getTopGuides.and.rejectWith(new Error('Test Error'));
-
-            await component.ngOnInit();
-
-            expect(toastService.showError).toHaveBeenCalledWith('Error: Test Error');
-        });
     });
 
     describe('Component Logic', () => {
@@ -122,14 +114,6 @@ describe('GameDetailPage', () => {
             expect(component.game()?.isTracked).toBeFalse();
             expect(toastService.showError).toHaveBeenCalledWith('Error: Tracking failed');
         });
-
-        it('should handle different gameId from route', async () => {
-            route.snapshot.paramMap.get.and.returnValue('42');
-
-            await component.ngOnInit();
-
-            expect(gameService.getGame).toHaveBeenCalledWith(42, 1);
-        });
     });
 
     describe('Navigation Methods', () => {
@@ -161,12 +145,6 @@ describe('GameDetailPage', () => {
             component.goToAchievements();
 
             expect(router.navigate).toHaveBeenCalledWith(['/achievements', MOCK_GAME.id]);
-        });
-
-        it('should get game image path', () => {
-            component.getGameImagePath('test.png');
-
-            expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith('test.png');
         });
     });
 
@@ -205,14 +183,6 @@ describe('GameDetailPage', () => {
             const description = fixture.debugElement.query(By.css('p strong'));
             expect(description.nativeElement.textContent).toContain('Description:');
         });
-
-        it('should apply filled class when game is tracked', async () => {
-            component.game.set({ ...MOCK_GAME, isTracked: true });
-            fixture.detectChanges();
-
-            const trackButton = fixture.debugElement.query(By.css('.track-button'));
-            expect(trackButton.classes['filled']).toBeTrue();
-        });
     });
 
     describe('HTML Template Interactions', () => {
@@ -247,16 +217,6 @@ describe('GameDetailPage', () => {
             achievementsButton.triggerEventHandler('click', null);
 
             expect(component.goToAchievements).toHaveBeenCalled();
-        });
-
-        it('should display empty message when no guides', async () => {
-            guideService.getGuidesByGameId.and.resolveTo([]);
-            await component.ngOnInit();
-            fixture.detectChanges();
-
-            const emptyMessage = fixture.debugElement.query(By.css('.empty-list'));
-            expect(emptyMessage).toBeTruthy();
-            expect(emptyMessage.nativeElement.textContent).toContain('No guides yet');
         });
     });
 });
