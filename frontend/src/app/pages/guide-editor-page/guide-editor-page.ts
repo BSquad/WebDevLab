@@ -80,7 +80,6 @@ export class GuideEditorPage {
                 }
 
                 this.guide = guideData;
-
                 this.gameId = guideData.gameId;
 
                 this.loadExistingScreenshots();
@@ -98,8 +97,9 @@ export class GuideEditorPage {
                 this.guide.gameId = gameId;
                 this.guide.userId = this.userId!;
             }
-        } catch (err: any) {
-            this.toastService.showError('Error: ' + err.message);
+        } catch (err) {
+            console.error('Guide editor initialization failed', err);
+            this.toastService.showError('The guide could not be loaded.');
         } finally {
             this.isLoaded = true;
         }
@@ -116,7 +116,6 @@ export class GuideEditorPage {
             this.selectedFiles.push(file);
 
             const preview = URL.createObjectURL(file);
-
             this.previewUrls.push(preview);
         }
 
@@ -161,7 +160,7 @@ export class GuideEditorPage {
                 const success = await this.guideService.updateGuide(this.guideId, this.guide);
 
                 if (!success) {
-                    this.toastService.showError('Failed to update guide');
+                    this.toastService.showError('Guide could not be updated.');
                     return;
                 }
 
@@ -174,7 +173,7 @@ export class GuideEditorPage {
                 guideId = await this.guideService.createGuide(this.guide);
 
                 if (!guideId) {
-                    this.toastService.showError('Failed to create guide');
+                    this.toastService.showError('Guide could not be created.');
                     return;
                 }
             }
@@ -184,15 +183,16 @@ export class GuideEditorPage {
                     const success = await this.guideService.uploadScreenshot(guideId, file);
 
                     if (!success) {
-                        throw new Error('Screenshot upload failed');
+                        throw new Error();
                     }
-                } catch (err: any) {
+                } catch (err) {
+                    console.error('Screenshot upload failed', err);
+
                     if (!this.isEditMode) {
                         await this.guideService.deleteGuide(guideId, this.userId!);
                     }
 
-                    this.toastService.showError(err?.message || 'Screenshot upload failed');
-
+                    this.toastService.showError('A screenshot could not be uploaded.');
                     return;
                 }
             }
@@ -202,8 +202,9 @@ export class GuideEditorPage {
             this.toastService.showSuccess(
                 this.isEditMode ? 'Guide updated successfully!' : 'Guide created successfully!',
             );
-        } catch (err: any) {
-            this.toastService.showError(err?.message || 'Something went wrong');
+        } catch (err) {
+            console.error('Guide save failed', err);
+            this.toastService.showError('The guide could not be saved.');
         }
     }
 
@@ -214,12 +215,16 @@ export class GuideEditorPage {
 
         if (!confirmed) return;
 
-        const success = await this.guideService.deleteGuide(this.guideId, this.userId);
+        try {
+            const success = await this.guideService.deleteGuide(this.guideId, this.userId);
 
-        if (success) {
-            this.toastService.showSuccess('Guide deleted');
-
-            this.router.navigate(['/games', this.gameId]);
+            if (success) {
+                this.toastService.showSuccess('Guide deleted');
+                this.router.navigate(['/games', this.gameId]);
+            }
+        } catch (err) {
+            console.error('Guide deletion failed', err);
+            this.toastService.showError('The guide could not be deleted.');
         }
     }
 

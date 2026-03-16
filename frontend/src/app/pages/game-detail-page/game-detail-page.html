@@ -1,8 +1,6 @@
 <div class="page">
     <div class="game-detail-page">
-        <!-- LEFT SIDE: GUIDES -->
         <div class="guides-column">
-            <!-- TOP GUIDES -->
             @if (topGuides().length > 0) {
 
             <div class="guides-container">
@@ -21,7 +19,6 @@
 
             }
 
-            <!-- ALL GUIDES -->
             <div class="guides-container">
                 <div class="section-header guides-header">
                     <h2>All Guides</h2>
@@ -31,7 +28,6 @@
                     </button>
                 </div>
 
-                <!-- NEU: Scroll Container -->
                 <div class="guides-scroll">
                     <ul class="guides-list">
                         @for (guide of guides(); track guide.id) {
@@ -48,9 +44,7 @@
             </div>
         </div>
 
-        <!-- RIGHT SIDE -->
         <div class="game-right-column">
-            <!-- GAME INFO -->
             <div class="game-info-container">
                 <img class="game-image-big" [src]="getGameImagePath(game()?.imageName)" />
 
@@ -95,8 +89,7 @@
                 </div>
             </div>
 
-            <!-- TOP PLAYERS -->
-            @if (bestUsers()?.length > 0) {
+            @if (bestUsers().length > 0) {
 
             <div class="top-players-container">
                 <h3>🏆 Top Players</h3>

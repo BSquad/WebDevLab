@@ -19,6 +19,8 @@ export class ReadGuidePage {
     rating = signal<number>(0);
     hoverRating = signal<number>(0);
 
+    activeImage = signal<string | null>(null);
+
     constructor(
         private route: ActivatedRoute,
         private guideService: GuideService,
@@ -30,38 +32,43 @@ export class ReadGuidePage {
     async ngOnInit() {
         try {
             const guideId = Number(this.route.snapshot.paramMap.get('guideId'));
+
+            if (!guideId) {
+                console.error('Invalid guideId in route');
+                return;
+            }
+
             const guideData = await this.guideService.getGuideById(guideId);
             this.guide.set(guideData);
-        } catch (err: any) {
-            this.toastService.showError('Failed to load guide: ' + err.message);
+        } catch (err) {
+            console.error('Failed to load guide', err);
+            this.toastService.showError('The guide could not be loaded.');
         }
     }
 
     async rateGuide(score: number) {
+        const guideId = this.guide()?.id;
+        const user = this.authService.getCurrentUser();
+
+        if (!guideId || !user) {
+            console.error('Missing guide or user for rating');
+            return;
+        }
+
         try {
-            const guideId = this.guide()?.id;
-            const user = this.authService.getCurrentUser();
-
-            if (!guideId || !user) {
-                this.toastService.showError('User or guide missing');
-                return;
-            }
-
             await this.guideService.rateGuide(guideId, score, user.id);
 
             this.rating.set(score);
 
             const updatedGuide = await this.guideService.getGuideById(guideId);
-
             this.guide.set(updatedGuide);
 
             this.toastService.showSuccess('Rating saved');
-        } catch (err: any) {
-            this.toastService.showError('Failed to rate guide: ' + err.message);
+        } catch (err) {
+            console.error('Failed to rate guide', err);
+            this.toastService.showError('The rating could not be saved.');
         }
     }
-
-    activeImage = signal<string | null>(null);
 
     openImage(url: string) {
         this.activeImage.set(url);
@@ -72,10 +79,14 @@ export class ReadGuidePage {
     }
 
     async downloadPDF() {
-        try {
-            const guideId = this.guide()?.id;
-            if (!guideId) return;
+        const guideId = this.guide()?.id;
 
+        if (!guideId) {
+            console.error('Missing guideId for PDF download');
+            return;
+        }
+
+        try {
             const pdfBlob = await this.guideService.downloadPdf(guideId);
 
             const url = window.URL.createObjectURL(pdfBlob);
@@ -89,10 +100,12 @@ export class ReadGuidePage {
 
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-        } catch (err: any) {
-            this.toastService.showError('Failed to download PDF');
+        } catch (err) {
+            console.error('Failed to download PDF', err);
+            this.toastService.showError('The PDF could not be downloaded.');
         }
     }
+
     goBack() {
         this.location.back();
     }

@@ -67,7 +67,7 @@ describe('GameDetailPage', () => {
 
         await component.ngOnInit();
 
-        expect(toastService.showError).toHaveBeenCalledWith('Error: Fetch failed');
+        expect(toastService.showError).toHaveBeenCalledWith('The game data could not be loaded.');
     });
 
     it('should correctly identify guide owner', () => {
@@ -158,6 +158,6 @@ describe('GameDetailPage', () => {
 
         await component.ngOnInit();
 
-        expect(toastService.showError).toHaveBeenCalledWith('Error: Guide error');
+        expect(toastService.showError).toHaveBeenCalledWith('The game data could not be loaded.');
     });
 });

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, Signal } from '@angular/core';
 import { ToastService } from '../../services/toast-service';
 import { GameService } from '../../services/game-service';
 import { GuideService } from '../../services/guide-service';
@@ -19,9 +19,9 @@ import { GuideCardComponent } from '../../ui-components/guide-card/guide-card';
 })
 export class GameDetailPage {
     game = signal<Game | null>(null);
-    guides: any = signal<Guide[]>([]);
-    user: any = signal<User | null>(null);
-    bestUsers: any = signal<User[]>([]);
+    guides = signal<Guide[]>([]);
+    user: Signal<User | null>;
+    bestUsers = signal<User[]>([]);
     topGuides = signal<Guide[]>([]);
 
     constructor(
@@ -33,22 +33,34 @@ export class GameDetailPage {
         private toastService: ToastService,
         private pathBuilder: PathBuilder,
     ) {
-        this.user = toSignal(this.authService.currentUser$);
+        this.user = toSignal(this.authService.currentUser$, { initialValue: null });
     }
 
     async ngOnInit() {
+        const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
+
+        if (!gameId) {
+            console.error('Invalid gameId in route');
+            return;
+        }
+
         try {
-            const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
-            const topGuidesData = await this.guideService.getTopGuides(gameId);
+            const [topGuidesData, gameData, guidesData, bestUsersData] = await Promise.all([
+                this.guideService.getTopGuides(gameId),
+                this.gameService.getGame(gameId, this.user()?.id),
+                this.guideService.getGuidesByGameId(gameId),
+                this.gameService.getBestUsersByGameId(gameId),
+            ]);
+
             this.topGuides.set(topGuidesData);
-            const gameData = await this.gameService.getGame(gameId, this.user()?.id);
             this.game.set(gameData);
-            const guidesData = await this.guideService.getGuidesByGameId(gameId);
             this.guides.set(guidesData);
-            const bestUsersData = await this.gameService.getBestUsersByGameId(gameId);
             this.bestUsers.set(bestUsersData);
-        } catch (err: any) {
-            this.toastService.showError('Error: ' + err.message);
+        } catch (err) {
+            console.error('Failed to load game detail page', err);
+
+            // Nur generische Meldung für User
+            this.toastService.showError('The game data could not be loaded.');
         }
     }
 
@@ -76,19 +88,29 @@ export class GameDetailPage {
     }
 
     async toggleTrackGame(event: Event) {
+        event.stopPropagation();
+
+        const game = this.game();
+        const user = this.user();
+
+        if (!game || !user) {
+            console.error('Missing user or game for toggleTrackGame');
+            return;
+        }
+
         try {
-            event.stopPropagation();
             const success = await this.gameService.toggleTrackGame(
-                this.game()!.id,
-                this.user()!.id,
-                this.game()!.isTracked,
+                game.id,
+                user.id,
+                game.isTracked,
             );
 
             if (success) {
                 this.game.update((g) => (g ? { ...g, isTracked: !g.isTracked } : null));
             }
-        } catch (err: any) {
-            this.toastService.showError('Error: ' + err.message);
+        } catch (err) {
+            console.error('Toggle track game failed', err);
+            this.toastService.showError('Tracking status could not be updated.');
         }
     }
 

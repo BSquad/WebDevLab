@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { signal } from '@angular/core';
 
 import { CommentsService } from '../../../services/comment-service';
 import { AuthService } from '../../../services/auth-service';
+import { ToastService } from '../../../services/toast-service';
 import { GuideComment } from '../../../../../../shared/models/guide-comment';
 
 @Component({
@@ -30,11 +30,17 @@ export class CommentsComponent {
     constructor(
         private commentsService: CommentsService,
         private authService: AuthService,
+        private toastService: ToastService,
     ) {}
 
     async loadComments() {
-        const data = await this.commentsService.getComments(this._guideId);
-        this.comments.set(data);
+        try {
+            const data = await this.commentsService.getComments(this._guideId);
+            this.comments.set(data);
+        } catch (err) {
+            console.error('Failed to load comments', err);
+            this.toastService.showError('Comments could not be loaded.');
+        }
     }
 
     async submitComment() {
@@ -42,14 +48,19 @@ export class CommentsComponent {
 
         if (!user || !this.newComment.trim()) return;
 
-        await this.commentsService.createComment({
-            guideId: this._guideId,
-            userId: user.id,
-            commentText: this.newComment,
-        });
+        try {
+            await this.commentsService.createComment({
+                guideId: this._guideId,
+                userId: user.id,
+                commentText: this.newComment,
+            });
 
-        this.newComment = '';
+            this.newComment = '';
 
-        await this.loadComments();
+            await this.loadComments();
+        } catch (err) {
+            console.error('Failed to create comment', err);
+            this.toastService.showError('Your comment could not be posted.');
+        }
     }
 }
