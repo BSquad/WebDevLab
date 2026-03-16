@@ -1,6 +1,5 @@
 @use './../styles/global' as *;
 
-// --- TOOLBAR LAYOUT & THEMING ---
 .main-header {
     height: 64px;
     position: sticky;
@@ -14,7 +13,6 @@
     ) !important;
     color: $color-white !important;
 
-    // THE FIX: Forcing the border and shadow directly on the toolbar host
     border-bottom: 4px solid $color-white !important;
     box-shadow: 0px 6px 0px rgba($color-black, 0.8) !important;
 }

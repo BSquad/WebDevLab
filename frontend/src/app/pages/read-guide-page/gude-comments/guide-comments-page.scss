@@ -26,7 +26,6 @@
     width: 100%;
     display: block;
 }
-/* INPUT AREA */
 
 .comment-input {
     width: 100%;
@@ -37,8 +36,6 @@
 
     margin-bottom: 1.5rem;
 }
-
-/* TEXTAREA */
 
 .comment-input textarea {
     width: 100%;
@@ -57,22 +54,16 @@
     box-sizing: border-box;
 }
 
-/* BUTTON ROW */
-
 .comment-actions {
     display: flex;
     justify-content: flex-end;
 }
-
-/* LIST */
 
 .comments-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
-/* COMMENT ITEM */
 
 .comment-item {
     padding: 12px 0;
