@@ -13,6 +13,8 @@
 
     display: flex;
 
+    position: relative;
+
     overflow: hidden;
 
     transition:
@@ -27,8 +29,9 @@
 
 .guide-header {
     display: flex;
-    justify-content: space-between;
     align-items: stretch;
+    gap: 10px;
+
     height: 100%;
 }
 
@@ -36,17 +39,17 @@
     flex: 1;
     min-width: 0;
 
-    display: flex;
-    flex-direction: column;
+    padding-right: 60px;
 }
-
 .guide-actions {
+    position: absolute;
+
+    right: 10px;
+    bottom: 10px;
+
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-
-    margin-top: auto;
-    justify-content: flex-end;
 }
 
 .guide-title {
