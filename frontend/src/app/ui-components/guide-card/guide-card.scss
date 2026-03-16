@@ -3,12 +3,17 @@
 .guide-item {
     padding: 0.8rem 1rem;
     margin-bottom: 0.6rem;
-    min-height: 70px;
+
+    height: 140px;
 
     border-radius: g.$radius-small;
     background: g.$gradient;
     color: g.$color-white;
     box-shadow: g.$shadow-medium;
+
+    display: flex;
+
+    overflow: hidden;
 
     transition:
         transform 0.2s ease,
@@ -19,30 +24,47 @@
     transform: translateY(-3px);
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
 }
+
 .guide-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
+    height: 100%;
 }
 
 .guide-left {
     flex: 1;
     min-width: 0;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .guide-actions {
     display: flex;
+    flex-direction: column;
     gap: 0.4rem;
-    flex-shrink: 0;
+
+    margin-top: auto;
+    justify-content: flex-end;
 }
 
 .guide-title {
     font-size: 1.2rem;
     font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 .guide-author {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .guide-meta {
@@ -53,6 +75,7 @@
 
     font-size: 0.8rem;
 }
+
 .guide-meta span:not(:last-child)::after {
     margin-left: 0.6rem;
     opacity: 0.5;
@@ -61,6 +84,10 @@
 .guide-rating {
     font-weight: 600;
     color: #ffd54a;
+
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
 .user-name-text {
@@ -69,15 +96,15 @@
 }
 
 .guide-content {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
+    margin-top: 6px;
+    color: #aaa;
     line-height: 1.4;
-}
+    display: -webkit-box;
 
-.guide-rating {
-    display: flex;
-    align-items: center;
-    gap: 2px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
 }
 
 .star {
