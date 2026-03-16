@@ -4,9 +4,6 @@ import app from '../src/app.js';
 describe('Guide API – Modul A', () => {
     let createdGuideId: number;
 
-    // -----------------------------
-    // MH11 – CREATE GUIDE
-    // -----------------------------
     it('should create a guide', async () => {
         const response = await request(app).post('/guides').send({
             userId: 1,
@@ -17,16 +14,12 @@ describe('Guide API – Modul A', () => {
 
         expect(response.status).toBe(200);
 
-        // API returns new guide id
         expect(typeof response.body).toBe('number');
         expect(response.body).toBeGreaterThan(0);
 
         createdGuideId = response.body;
     });
 
-    // -----------------------------
-    // GET BY GAME
-    // -----------------------------
     it('should return guides by gameId', async () => {
         const response = await request(app).get('/guides/game/1');
 
@@ -41,9 +34,6 @@ describe('Guide API – Modul A', () => {
         createdGuideId = guide.id;
     });
 
-    // -----------------------------
-    // GET BY ID
-    // -----------------------------
     it('should return guide by id', async () => {
         const response = await request(app).get(`/guides/${createdGuideId}`);
 
@@ -51,9 +41,6 @@ describe('Guide API – Modul A', () => {
         expect(response.body.id).toBe(createdGuideId);
     });
 
-    // -----------------------------
-    // MH12 – UPDATE GUIDE
-    // -----------------------------
     it('should update guide', async () => {
         const response = await request(app)
             .put(`/guides/${createdGuideId}`)
@@ -71,9 +58,6 @@ describe('Guide API – Modul A', () => {
         expect(check.body.title).toBe('Updated Title');
     });
 
-    // -----------------------------
-    // MH13 – RATE GUIDE
-    // -----------------------------
     it('should rate guide', async () => {
         const response = await request(app)
             .post(`/guides/${createdGuideId}/rate`)
@@ -86,7 +70,6 @@ describe('Guide API – Modul A', () => {
         expect(response.body).toBe(true);
     });
 
-    // Invalid rating
     it('should reject invalid rating', async () => {
         const response = await request(app)
             .post(`/guides/${createdGuideId}/rate`)
@@ -98,9 +81,6 @@ describe('Guide API – Modul A', () => {
         expect(response.status).toBeGreaterThanOrEqual(400);
     });
 
-    // -----------------------------
-    // TOP 3
-    // -----------------------------
     it('should return top guides', async () => {
         const response = await request(app).get('/guides/top/1');
 
@@ -109,9 +89,6 @@ describe('Guide API – Modul A', () => {
         expect(response.body.length).toBeLessThanOrEqual(3);
     });
 
-    // -----------------------------
-    // MH15 – PDF
-    // -----------------------------
     it('should download guide as pdf', async () => {
         const response = await request(app).get(
             `/guides/${createdGuideId}/pdf`,
@@ -121,9 +98,6 @@ describe('Guide API – Modul A', () => {
         expect(response.headers['content-type']).toContain('application/pdf');
     });
 
-    // -----------------------------
-    // MH14 – UPLOAD
-    // -----------------------------
     it('should upload screenshot', async () => {
         const response = await request(app)
             .post(`/guides/${createdGuideId}/upload`)
@@ -132,9 +106,6 @@ describe('Guide API – Modul A', () => {
         expect(response.status).toBe(200);
     });
 
-    // -----------------------------
-    // MH21 – DELETE GUIDE
-    // -----------------------------
     it('should delete guide', async () => {
         const response = await request(app)
             .delete(`/guides/${createdGuideId}`)
