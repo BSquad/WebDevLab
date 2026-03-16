@@ -29,7 +29,7 @@ export class EditProfileDialog {
     profilePicture: File | null = null;
 
     form = this.fb.group({
-        name: [this.data.name, [Validators.required, Validators.minLength(3)]],
+        name: [this.data.name, [Validators.required]],
         email: [this.data.email, [Validators.required, Validators.email]],
     });
 

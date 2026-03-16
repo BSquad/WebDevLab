@@ -1,0 +1,15 @@
+<div class="dialog-wrapper">
+    <h2 mat-dialog-title class="dialog-header">
+        <mat-icon fontIcon="warning"></mat-icon>
+        <span>{{ data.title || 'Confirm Action' }}</span>
+    </h2>
+
+    <mat-dialog-content>
+        <p>{{ data.message || 'Are you sure you want to proceed?' }}</p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button class="action-secondary" (click)="onCancel()">Cancel</button>
+        <button mat-flat-button class="action-primary" (click)="onConfirm()">OK</button>
+    </mat-dialog-actions>
+</div>
