@@ -15,6 +15,7 @@ import {
 } from '../../tests/mock-classes.spec';
 import { MOCK_GAMES, MOCK_POPULAR_GAMES } from '../../tests/mock-data.spec';
 import { AuthService } from '../../services/auth-service';
+import { By } from '@angular/platform-browser';
 
 describe('GameListPage', () => {
     let component: GameListPage;
@@ -47,155 +48,301 @@ describe('GameListPage', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
+    describe('Component Initialization', () => {
+        it('should create component', () => {
+            expect(component).toBeTruthy();
+        });
+
+        it('should load games on init', async () => {
+            await component.ngOnInit();
+
+            expect(gameService.getGames).toHaveBeenCalledWith(1);
+            expect(gameService.getPopularGames).toHaveBeenCalled();
+            expect(component.games()).toEqual(MOCK_GAMES);
+            expect(component.popularGames()).toEqual(MOCK_POPULAR_GAMES);
+        });
+
+        it('should handle error during ngOnInit', async () => {
+            gameService.getGames.and.rejectWith(new Error('Network error'));
+
+            await component.ngOnInit();
+
+            expect(toastService.showError).toHaveBeenCalledWith('Error: Network error');
+        });
     });
 
-    it('should load games on init', async () => {
-        await component.ngOnInit();
+    describe('Component Logic', () => {
+        it('should return image path from PathBuilder', () => {
+            const path = component.getGameImagePath('cover.png');
+            expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith('cover.png');
+            expect(path).toBe('/uploads/images/cover.png');
+        });
 
-        expect(gameService.getGames).toHaveBeenCalledWith(1);
-        expect(gameService.getPopularGames).toHaveBeenCalled();
-        expect(component.games()).toEqual(MOCK_GAMES);
-        expect(component.popularGames()).toEqual(MOCK_POPULAR_GAMES);
+        it('should collect all unique tags', () => {
+            component.games.set(MOCK_POPULAR_GAMES);
+
+            const tags = component.getAllTags();
+            expect(tags.sort()).toEqual(['multiplayer', 'racing']);
+        });
+
+        it('should return empty tags when no games', () => {
+            component.games.set([]);
+
+            const tags = component.getAllTags();
+            expect(tags).toEqual([]);
+        });
+
+        it('should handle games without tags', () => {
+            const gamesWithoutTags = [
+                { ...MOCK_GAMES[0], tags: undefined } as unknown as Game,
+                { ...MOCK_GAMES[1], tags: [] },
+            ];
+            component.games.set(gamesWithoutTags);
+
+            const tags = component.getAllTags();
+            expect(tags).toEqual([]);
+        });
+
+        it('should filter games by title, tags, and release date', () => {
+            component.games.set(MOCK_GAMES);
+
+            component.filters.title = 'alpha';
+            expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+
+            component.filters.title = '';
+            component.filters.tags = { rpg: true };
+            expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+
+            component.filters.tags = {};
+            component.filters.releaseFrom = '2023-02-01';
+            expect(component.getfilteredGames().map((g) => g.id)).toEqual([2, 4]);
+
+            component.filters.releaseFrom = '';
+            component.filters.releaseTo = '2022-12-12';
+            expect(component.getfilteredGames().map((g) => g.id)).toEqual([3]);
+        });
+
+        it('should filter games with case insensitive title', () => {
+            component.games.set(MOCK_GAMES);
+
+            component.filters.title = 'ALPHA';
+            expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+
+            component.filters.title = 'beta';
+            expect(component.getfilteredGames().map((g) => g.id)).toEqual([2]);
+        });
+
+        it('should filter games with multiple tags', () => {
+            component.games.set(MOCK_GAMES);
+
+            component.filters.tags = { rpg: true, adventure: true };
+            expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+        });
+
+        it('should handle empty filters', async () => {
+            component.games.set(MOCK_GAMES);
+
+            component.filters.title = '';
+            component.filters.tags = {};
+            component.filters.releaseFrom = '';
+            component.filters.releaseTo = '';
+
+            const filtered = component.getfilteredGames();
+            expect(filtered.length).toBe(MOCK_GAMES.length);
+            expect(filtered).toEqual(MOCK_GAMES);
+        });
+
+        it('should handle games without release date', () => {
+            const gamesWithoutDate = [
+                { ...MOCK_GAMES[0], releaseDate: '' },
+                { ...MOCK_GAMES[1], releaseDate: undefined as any },
+            ];
+            component.games.set(gamesWithoutDate);
+
+            component.filters.releaseFrom = '2023-01-01';
+            component.filters.releaseTo = '2023-12-31';
+
+            const filtered = component.getfilteredGames();
+            expect(filtered.length).toBe(2);
+        });
+
+        it('should get game image path without parameter', () => {
+            component.getGameImagePath();
+
+            expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith(undefined);
+        });
     });
 
-    it('should navigate to game details', () => {
-        component.goToGame(42);
-        expect(router.navigate).toHaveBeenCalledWith(['/games', 42]);
+    describe('Navigation Methods', () => {
+        it('should navigate to game details', () => {
+            component.goToGame(42);
+            expect(router.navigate).toHaveBeenCalledWith(['/games', 42]);
+        });
+
+        it('should toggle game tracking', async () => {
+            const game: Game = MOCK_GAMES[0];
+            component.games.set([game]);
+
+            const event = {
+                stopPropagation: jasmine.createSpy('stopPropagation'),
+            } as unknown as Event;
+
+            await component.toggleTrackGame(game, event);
+
+            expect(event.stopPropagation).toHaveBeenCalled();
+            expect(gameService.toggleTrackGame).toHaveBeenCalledWith(1, 1, false);
+            expect(component.games()[0].isTracked).toBe(true);
+        });
+
+        it('should handle toggle game tracking failure', async () => {
+            gameService.toggleTrackGame.and.rejectWith(new Error('Tracking failed'));
+            const game = { ...MOCK_GAMES[0], isTracked: false };
+            component.games.set([game]);
+            const event = { stopPropagation: jasmine.createSpy() } as any;
+
+            await component.toggleTrackGame(game, event);
+
+            expect(toastService.showError).toHaveBeenCalledWith('Error: Tracking failed');
+            expect(component.games()[0].isTracked).toBeFalse();
+        });
     });
 
-    it('should toggle game tracking', async () => {
-        const game: Game = MOCK_GAMES[0];
-        component.games.set([game]);
+    describe('HTML Template Rendering', () => {
+        it('should display popular games section', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        const event = { stopPropagation: jasmine.createSpy('stopPropagation') } as unknown as Event;
+            const popularGamesSection = fixture.debugElement.query(By.css('.popular-games-list'));
+            expect(popularGamesSection).toBeTruthy();
+        });
 
-        await component.toggleTrackGame(game, event);
+        it('should display game items', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        expect(event.stopPropagation).toHaveBeenCalled();
-        expect(gameService.toggleTrackGame).toHaveBeenCalledWith(1, 1, false);
-        expect(component.games()[0].isTracked).toBe(true);
+            const gameItems = fixture.debugElement.queryAll(By.css('.game-item'));
+            expect(gameItems.length).toBe(MOCK_GAMES.length);
+        });
+
+        it('should display track buttons when user is logged in', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
+
+            const trackButtons = fixture.debugElement.queryAll(By.css('.track-button'));
+            expect(trackButtons.length).toBe(MOCK_GAMES.length);
+        });
+
+        it('should apply filled class for tracked games', async () => {
+            component.games.set([{ ...MOCK_GAMES[0], isTracked: true }]);
+            fixture.detectChanges();
+
+            const trackButton = fixture.debugElement.query(By.css('.track-button'));
+            expect(trackButton.classes['filled']).toBeTrue();
+        });
+
+        it('should display filter inputs', async () => {
+            fixture.detectChanges();
+
+            const searchInput = fixture.debugElement.query(By.css('#search-title'));
+            const dateFromInput = fixture.debugElement.query(By.css('#release-from'));
+            const dateToInput = fixture.debugElement.query(By.css('#release-to'));
+
+            expect(searchInput).toBeTruthy();
+            expect(dateFromInput).toBeTruthy();
+            expect(dateToInput).toBeTruthy();
+        });
+
+        it('should display empty message when no games', async () => {
+            gameService.getGames.and.resolveTo([]);
+            await component.ngOnInit();
+            fixture.detectChanges();
+
+            const emptyMessage = fixture.debugElement.query(By.css('li'));
+            expect(emptyMessage).toBeTruthy();
+            expect(emptyMessage.nativeElement.textContent).toContain('No games');
+        });
     });
 
-    it('should return image path from PathBuilder', () => {
-        const path = component.getGameImagePath('cover.png');
-        expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith('cover.png');
-        expect(path).toBe('/uploads/images/cover.png');
-    });
+    describe('HTML Template Interactions', () => {
+        it('should call goToGame when game item is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-    it('should collect all unique tags', () => {
-        component.games.set(MOCK_POPULAR_GAMES);
+            spyOn(component, 'goToGame');
+            const gameItem = fixture.debugElement.query(By.css('.game-item'));
+            gameItem.triggerEventHandler('click', null);
 
-        const tags = component.getAllTags();
-        expect(tags.sort()).toEqual(['multiplayer', 'racing']);
-    });
+            expect(component.goToGame).toHaveBeenCalledWith(MOCK_GAMES[0].id);
+        });
 
-    it('should filter games by title, tags, and release date', () => {
-        component.games.set(MOCK_GAMES);
+        it('should call goToGame when popular game item is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        component.filters.title = 'alpha';
-        expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+            spyOn(component, 'goToGame');
+            const popularGameItem = fixture.debugElement.query(By.css('.popular-game-item'));
+            popularGameItem.triggerEventHandler('click', null);
 
-        component.filters.title = '';
-        component.filters.tags = { rpg: true };
-        expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+            expect(component.goToGame).toHaveBeenCalledWith(MOCK_POPULAR_GAMES[0].id);
+        });
 
-        component.filters.tags = {};
-        component.filters.releaseFrom = '2023-02-01';
-        expect(component.getfilteredGames().map((g) => g.id)).toEqual([2, 4]);
+        it('should call toggleTrackGame when track button is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        component.filters.releaseFrom = '';
-        component.filters.releaseTo = '2022-12-12';
-        expect(component.getfilteredGames().map((g) => g.id)).toEqual([3]);
-    });
+            spyOn(component, 'toggleTrackGame');
+            const trackButton = fixture.debugElement.query(By.css('.track-button'));
+            trackButton.triggerEventHandler('click', null);
 
-    it('should handle error during ngOnInit', async () => {
-        gameService.getGames.and.rejectWith(new Error('Network error'));
+            expect(component.toggleTrackGame).toHaveBeenCalled();
+        });
 
-        await component.ngOnInit();
+        it('should call goToGame with correct game id when game item is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        expect(toastService.showError).toHaveBeenCalledWith('Error: Network error');
-    });
+            spyOn(component, 'goToGame');
+            const gameItem = fixture.debugElement.query(By.css('.game-item'));
+            gameItem.triggerEventHandler('click', null);
 
-    it('should handle toggle game tracking failure', async () => {
-        gameService.toggleTrackGame.and.resolveTo(false);
-        const game = { ...MOCK_GAMES[0], isTracked: false };
-        component.games.set([game]);
-        const event = { stopPropagation: jasmine.createSpy() } as any;
+            expect(component.goToGame).toHaveBeenCalledWith(MOCK_GAMES[0].id);
+        });
 
-        await component.toggleTrackGame(game, event);
+        it('should bind search input to filters.title', async () => {
+            fixture.detectChanges();
 
-        expect(component.games()[0].isTracked).toBeFalse();
-    });
+            const searchInput = fixture.debugElement.query(By.css('#search-title'));
+            searchInput.nativeElement.value = 'Test Game';
+            searchInput.nativeElement.dispatchEvent(new Event('input'));
 
-    it('should return empty tags when no games', () => {
-        component.games.set([]);
+            expect(component.filters.title).toBe('Test Game');
+        });
 
-        const tags = component.getAllTags();
+        it('should bind date inputs to filters', async () => {
+            fixture.detectChanges();
 
-        expect(tags).toEqual([]);
-    });
+            const dateFromInput = fixture.debugElement.query(By.css('#release-from'));
+            const dateToInput = fixture.debugElement.query(By.css('#release-to'));
 
-    it('should handle games without tags', () => {
-        const gamesWithoutTags = [
-            { ...MOCK_GAMES[0], tags: undefined } as unknown as Game,
-            { ...MOCK_GAMES[1], tags: [] },
-        ];
-        component.games.set(gamesWithoutTags);
+            dateFromInput.nativeElement.value = '2023-01-01';
+            dateFromInput.nativeElement.dispatchEvent(new Event('input'));
 
-        const tags = component.getAllTags();
+            dateToInput.nativeElement.value = '2023-12-31';
+            dateToInput.nativeElement.dispatchEvent(new Event('input'));
 
-        expect(tags).toEqual([]);
-    });
+            expect(component.filters.releaseFrom).toBe('2023-01-01');
+            expect(component.filters.releaseTo).toBe('2023-12-31');
+        });
 
-    it('should filter games with case insensitive title', () => {
-        component.games.set(MOCK_GAMES);
+        it('should bind tag checkboxes to filters.tags', async () => {
+            component.games.set(MOCK_GAMES);
+            fixture.detectChanges();
 
-        component.filters.title = 'ALPHA';
-        expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
+            const tagCheckbox = fixture.debugElement.query(By.css('input[type="checkbox"]'));
+            tagCheckbox.nativeElement.checked = true;
+            tagCheckbox.nativeElement.dispatchEvent(new Event('change'));
 
-        component.filters.title = 'beta';
-        expect(component.getfilteredGames().map((g) => g.id)).toEqual([2]);
-    });
-
-    it('should filter games with multiple tags', () => {
-        component.games.set(MOCK_GAMES);
-
-        component.filters.tags = { rpg: true, adventure: true };
-        expect(component.getfilteredGames().map((g) => g.id)).toEqual([1]);
-    });
-
-    it('should handle empty filters', () => {
-        component.games.set(MOCK_GAMES);
-
-        component.filters.title = '';
-        component.filters.tags = {};
-        component.filters.releaseFrom = '';
-        component.filters.releaseTo = '';
-
-        const filtered = component.getfilteredGames();
-        expect(filtered.length).toBe(MOCK_GAMES.length);
-        expect(filtered).toEqual(MOCK_GAMES);
-    });
-
-    it('should handle games without release date', () => {
-        const gamesWithoutDate = [
-            { ...MOCK_GAMES[0], releaseDate: '' },
-            { ...MOCK_GAMES[1], releaseDate: undefined as any },
-        ];
-        component.games.set(gamesWithoutDate);
-
-        component.filters.releaseFrom = '2023-01-01';
-        component.filters.releaseTo = '2023-12-31';
-
-        const filtered = component.getfilteredGames();
-        expect(filtered.length).toBe(2);
-    });
-
-    it('should get game image path without parameter', () => {
-        component.getGameImagePath();
-
-        expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith(undefined);
+            expect(component.filters.tags['rpg']).toBeTrue();
+        });
     });
 });
