@@ -85,7 +85,7 @@ export class GameDbAccess {
         gameId: number,
     ) => {
         await this.db.executeSQL(
-            `INSERT INTO USER_ACHIEVEMENTS (userId, achievementId, gameId, completedAt) VALUES (?, ?, ?, datetime('now'))`,
+            `INSERT OR IGNORE INTO USER_ACHIEVEMENTS (userId, achievementId, gameId, completedAt) VALUES (?, ?, ?, datetime('now'))`,
             [userId, achievementId, gameId],
         );
     };

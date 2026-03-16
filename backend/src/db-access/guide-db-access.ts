@@ -1,6 +1,7 @@
 import { Db } from '../db.js';
 import type { Guide } from '../../../shared/models/guide.ts';
 import fs from 'fs';
+import path from 'path';
 
 export class GuideDbAccess {
     private db: Db = new Db();
@@ -206,9 +207,7 @@ export class GuideDbAccess {
             [guideId, filePath],
         );
 
-        const fs = await import('fs');
-
-        const fullPath = './uploads' + filePath;
+        const fullPath = path.join('uploads', filePath);
 
         if (fs.existsSync(fullPath)) {
             fs.unlinkSync(fullPath);
