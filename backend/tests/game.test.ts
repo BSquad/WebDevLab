@@ -78,10 +78,20 @@ describe('Games API – Modul D', () => {
         expect(response.body).toBe(true);
     });
 
-    it('should toggle game tracking for user', async () => {
+    it('should toggle ON game tracking for user', async () => {
         const response = await request(app)
             .post(`/games/${testGameId}/track`)
             .send({ isTracked: true })
+            .query({ userId: testUserId });
+
+        expect(response.status).toBe(200);
+        expect(response.body).toBe(true);
+    });
+
+    it('should toggle OFF game tracking for user', async () => {
+        const response = await request(app)
+            .post(`/games/${testGameId}/track`)
+            .send({ isTracked: false })
             .query({ userId: testUserId });
 
         expect(response.status).toBe(200);

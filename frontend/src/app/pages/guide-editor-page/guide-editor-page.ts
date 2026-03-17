@@ -84,6 +84,7 @@ export class GuideEditorPage {
 
                 this.loadExistingScreenshots();
                 this.cdr.detectChanges();
+
                 const gameData = await this.gameService.getGame(guideData.gameId);
                 this.game.set(gameData);
             } else {
@@ -107,14 +108,12 @@ export class GuideEditorPage {
 
     onFileSelected(event: Event) {
         const input = event.target as HTMLInputElement;
-
         if (!input.files) return;
 
         const files = Array.from(input.files);
 
         for (const file of files) {
             this.selectedFiles.push(file);
-
             const preview = URL.createObjectURL(file);
             this.previewUrls.push(preview);
         }
@@ -151,60 +150,31 @@ export class GuideEditorPage {
     }
 
     async onSubmit(form: NgForm) {
+        console.log('USER ID:', this.userId);
+        console.log('GUIDE BEFORE SAVE:', this.guide);
         if (!form.valid) return;
 
-        let guideId: number;
-
         try {
-            if (this.isEditMode && this.guideId) {
-                const success = await this.guideService.updateGuide(this.guideId, this.guide);
-
-                if (!success) {
-                    this.toastService.showError('Guide could not be updated.');
-                    return;
-                }
-
-                guideId = this.guideId;
-
-                for (const filePath of this.deletedScreenshots) {
-                    await this.guideService.deleteScreenshot(guideId, filePath);
-                }
-            } else {
-                guideId = await this.guideService.createGuide(this.guide);
-
-                if (!guideId) {
-                    this.toastService.showError('Guide could not be created.');
-                    return;
-                }
-            }
-
-            for (const file of this.selectedFiles) {
-                try {
-                    const success = await this.guideService.uploadScreenshot(guideId, file);
-
-                    if (!success) {
-                        throw new Error();
-                    }
-                } catch (err) {
-                    console.error('Screenshot upload failed', err);
-
-                    if (!this.isEditMode) {
-                        await this.guideService.deleteGuide(guideId, this.userId!);
-                    }
-
-                    this.toastService.showError('A screenshot could not be uploaded.');
-                    return;
-                }
-            }
+            const guideId = await this.guideService.saveGuideWithScreenshots(this.guide, {
+                isEditMode: this.isEditMode,
+                guideId: this.guideId ?? undefined,
+                userId: this.userId!,
+                newFiles: this.selectedFiles,
+                deletedScreenshots: this.deletedScreenshots,
+            });
 
             this.router.navigate(['/games', this.gameId]);
 
             this.toastService.showSuccess(
                 this.isEditMode ? 'Guide updated successfully!' : 'Guide created successfully!',
             );
-        } catch (err) {
-            console.error('Guide save failed', err);
-            this.toastService.showError('The guide could not be saved.');
+        } catch (err: any) {
+            console.error('SAVE ERROR:', err);
+            if (err.message === 'UPLOAD_FAILED') {
+                this.toastService.showError('A screenshot could not be uploaded.');
+            } else {
+                this.toastService.showError('The guide could not be saved.');
+            }
         }
     }
 
@@ -212,7 +182,6 @@ export class GuideEditorPage {
         if (!this.guideId || !this.userId) return;
 
         const confirmed = confirm('Are you sure you want to delete this guide?');
-
         if (!confirmed) return;
 
         try {
