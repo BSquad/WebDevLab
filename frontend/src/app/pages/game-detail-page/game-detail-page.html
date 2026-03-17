@@ -11,7 +11,10 @@
                 <ul class="guides-list top-guides-list">
                     @for (guide of topGuides(); track guide.id; let i = $index) {
 
-                    <app-guide-card [guide]="guide"></app-guide-card>
+                    <li class="top-guide-item">
+                        <span class="rank-badge">{{ i + 1 }}</span>
+                        <app-guide-card [guide]="guide"></app-guide-card>
+                    </li>
 
                     }
                 </ul>
