@@ -47,16 +47,10 @@ describe('CommentsComponent', () => {
         component = fixture.componentInstance;
     });
 
-    // =============================
-    // BASIC
-    // =============================
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
-    // =============================
-    // INPUT + LOAD
-    // =============================
     it('should load comments when guideId is set', async () => {
         commentsServiceSpy.getComments.and.resolveTo(mockComments);
 
@@ -78,9 +72,6 @@ describe('CommentsComponent', () => {
         expect(toastServiceSpy.showError).toHaveBeenCalled();
     });
 
-    // =============================
-    // SUBMIT COMMENT
-    // =============================
     describe('submit', () => {
         it('should submit comment successfully', async () => {
             commentsServiceSpy.getComments.and.resolveTo(mockComments);

@@ -1,16 +1,16 @@
 export interface Game {
-  id: number;
-  title: string;
-  description: string;
-  genre: string;
-  tags: string[];
-  platform: string[];
-  developer: string;
-  publisher: string;
-  releaseDate: string;
-  imageName: string;
-  popularityScore?: number;
-  isTracked: boolean; // for the current user
-  isFavorite: boolean; // for the current user
-  achievementCount: number; // total count
+    id: number;
+    title: string;
+    description: string;
+    genre: string;
+    tags: string[];
+    platform: string[];
+    developer: string;
+    publisher: string;
+    releaseDate: string;
+    imageName: string;
+    popularityScore?: number;
+    isTracked: boolean;
+    isFavorite: boolean;
+    achievementCount: number;
 }

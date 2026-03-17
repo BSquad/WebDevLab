@@ -7,7 +7,7 @@ export interface User {
     name: string;
     email: string;
     profilePicturePath?: string;
-    achievementCount?: number; // completed achievements for a selected game
+    achievementCount?: number;
 }
 
 export interface UserProfile extends User {

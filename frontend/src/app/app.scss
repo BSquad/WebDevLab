@@ -53,20 +53,18 @@
     }
 }
 
-// --- NAVIGATION BUTTONS ---
 .nav-links {
     display: flex;
     gap: 16px;
 }
 
-// THE FIX: Punching through Material's internal button layers
 .retro-btn {
     font-family: 'Courier New', Courier, monospace !important;
     font-weight: bold !important;
     font-size: 1rem !important;
     letter-spacing: 1px !important;
     border-radius: 0 !important;
-    border: 2px solid transparent !important; // Reserves space so layout doesn't jump
+    border: 2px solid transparent !important;
     background-color: transparent !important;
     color: $color-white !important;
     transition: all 0.1s ease;
@@ -84,7 +82,6 @@
     }
 }
 
-// --- PROFILE SECTION ---
 .auth-section {
     border-left: 2px solid rgba($color-white, 0.3);
     padding-left: 16px;
@@ -148,7 +145,6 @@
     }
 }
 
-// --- MATERIAL MENU OVERRIDES ---
 ::ng-deep .retro-menu {
     background: $color-background !important;
     border: 4px solid $color-white !important;
@@ -180,7 +176,6 @@
         }
     }
 
-    // THE FIX: Forcing menu hover states
     .retro-menu-btn {
         color: $color-white !important;
         font-family: 'Courier New', Courier, monospace !important;
@@ -196,7 +191,7 @@
         &:hover {
             background-color: rgba($color-black, 0.4) !important;
             color: $color-yellow !important;
-            padding-left: 24px !important; // Cool retro indent effect on hover
+            padding-left: 24px !important;
 
             mat-icon {
                 color: $color-yellow !important;

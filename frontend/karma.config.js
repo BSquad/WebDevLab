@@ -11,9 +11,9 @@ module.exports = function (config) {
         ],
         client: {
             jasmine: {
-                random: false, // Tests in Reihenfolge ausführen
+                random: false,
             },
-            clearContext: false, // Jasmine HTML Reporter anzeigen
+            clearContext: false,
         },
         coverageReporter: {
             dir: require('path').join(__dirname, './coverage'),
@@ -25,7 +25,7 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
-        browsers: ['ChromeHeadless'], // oder 'Chrome'
+        browsers: ['ChromeHeadless'],
         singleRun: false,
         restartOnFileChange: true,
     });

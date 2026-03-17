@@ -11,8 +11,8 @@ describe('CommentsApi', () => {
         id: 1,
         guideId: 1,
         userId: 1,
-        commentText: 'Test Comment', // ✅ richtiges Feld
-        createdAt: new Date().toISOString(), // ✅ string statt Date
+        commentText: 'Test Comment',
+        createdAt: new Date().toISOString(),
         author: 'Tester',
     };
 
@@ -46,7 +46,7 @@ describe('CommentsApi', () => {
 
         const result = await promise;
         expect(result.length).toBe(1);
-        expect(result[0].commentText).toBe('Test Comment'); // ✅ angepasst
+        expect(result[0].commentText).toBe('Test Comment');
     });
 
     it('should create a comment', async () => {
@@ -54,7 +54,7 @@ describe('CommentsApi', () => {
 
         const req = httpMock.expectOne('http://localhost:3000/comments');
         expect(req.request.method).toBe('POST');
-        expect(req.request.body.commentText).toBe('Test Comment'); // ✅ angepasst
+        expect(req.request.body.commentText).toBe('Test Comment');
 
         req.flush(true);
 

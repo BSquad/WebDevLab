@@ -65,7 +65,6 @@ export class GuideService {
         window.URL.revokeObjectURL(url);
     }
 
-    // ✅ NEU: ZENTRALE SAVE LOGIK
     async saveGuideWithScreenshots(
         guide: Guide,
         options: {
@@ -78,7 +77,6 @@ export class GuideService {
     ): Promise<number> {
         let guideId = options.guideId;
 
-        // 1. Guide speichern
         if (options.isEditMode && guideId) {
             const success = await this.guideApi.updateGuide(guideId, guide);
             if (!success) throw new Error('UPDATE_FAILED');
@@ -91,7 +89,6 @@ export class GuideService {
             if (!guideId) throw new Error('CREATE_FAILED');
         }
 
-        // 2. Screenshots hochladen
         for (const file of options.newFiles) {
             try {
                 const success = await this.guideApi.uploadScreenshot(guideId!, file);

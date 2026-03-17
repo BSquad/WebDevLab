@@ -42,10 +42,8 @@ export class UserPage {
     private toastService = inject(ToastService);
     private dialog = inject(MatDialog);
 
-    // Auth context
     currentUser = toSignal(this.authService.currentUser$);
 
-    // UI State Signals
     isAnalyzing = signal(false);
     analysisResult = signal<AnalysisData | null>(null);
     analysisProgress = signal(0);
@@ -58,7 +56,6 @@ export class UserPage {
         },
     });
 
-    // Derived signals for clean template access
     games = computed(() => this.userProfile.value()?.games ?? []);
     achievements = computed(() => this.userProfile.value()?.achievements ?? []);
     guides = computed(() => this.userProfile.value()?.guides ?? []);
@@ -71,7 +68,7 @@ export class UserPage {
             data: {
                 name: currentProfile.name,
                 email: currentProfile.email,
-                profilePic: this.getProfileImageUrl(currentProfile.profilePicturePath), // Pass current pic for preview
+                profilePic: this.getProfileImageUrl(currentProfile.profilePicturePath),
             },
             width: '450px',
             panelClass: 'bg-transparent',
@@ -86,7 +83,6 @@ export class UserPage {
                     formData.append('uploadType', 'user');
 
                     if (updatedData.file) {
-                        // must match the name in the backend routes
                         formData.append('profilePic', updatedData.file);
                     }
 
@@ -103,7 +99,7 @@ export class UserPage {
     }
 
     getProfileImageUrl(path: string | null | undefined): string {
-        if (!path) return 'assets/pictures/default-avatar.png'; // Fallback image
+        if (!path) return 'assets/pictures/default-avatar.png';
         return `${environment.apiUrl}${path}`;
     }
 

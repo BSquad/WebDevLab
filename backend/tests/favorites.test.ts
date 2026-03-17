@@ -5,9 +5,6 @@ describe('Favorites API – Modul B', () => {
     const testUserId = 1;
     const testGameId = 1;
 
-    // -----------------------------
-    // MH09 – ADD FAVORITE
-    // -----------------------------
     it('should add a game to favorites', async () => {
         const response = await request(app).post('/favorites').send({
             userId: testUserId,
@@ -18,9 +15,6 @@ describe('Favorites API – Modul B', () => {
         expect(response.body).toBe(true);
     });
 
-    // -----------------------------
-    // MH08 – GET FAVORITES
-    // -----------------------------
     it('should return user favorites', async () => {
         const response = await request(app).get(`/favorites/${testUserId}`);
 
@@ -29,9 +23,6 @@ describe('Favorites API – Modul B', () => {
         expect(response.body.length).toBeGreaterThanOrEqual(1);
     });
 
-    // -----------------------------
-    // MH09 – REMOVE FAVORITE
-    // -----------------------------
     it('should remove a favorite', async () => {
         const response = await request(app).delete(
             `/favorites/${testUserId}/${testGameId}`,
@@ -41,9 +32,6 @@ describe('Favorites API – Modul B', () => {
         expect(response.body).toBe(true);
     });
 
-    // -----------------------------
-    // VERIFY REMOVAL
-    // -----------------------------
     it('should return empty list after removal', async () => {
         const response = await request(app).get(`/favorites/${testUserId}`);
 
