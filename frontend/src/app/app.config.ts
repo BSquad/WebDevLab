@@ -11,6 +11,6 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideRouter(routes),
         provideClientHydration(withEventReplay()),
-        //provideHttpClient(withInterceptors([loadingInterceptor])), TODO: add for loading spinner
+        provideHttpClient(withInterceptors([loadingInterceptor])),
     ],
 };
