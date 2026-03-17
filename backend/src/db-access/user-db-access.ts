@@ -45,6 +45,12 @@ export class UserDbAccess {
             [name, email, profilePicturePath, id],
         );
 
+    updateLayout = async (id: number, order: string[]) =>
+        await this.db.executeSQL(
+            `UPDATE users SET dashboardLayout = ? WHERE id = ?`,
+            [order, id],
+        );
+
     deleteUser = async (id: number) =>
         await this.db.executeSQL(`DELETE FROM users WHERE id = ?`, [id]);
 

@@ -27,6 +27,8 @@ import { UserProfile } from '../../../../../shared/models/user';
 import { RouterLink, RouterModule } from '@angular/router';
 import { EditProfileDialog } from '../../ui-components/edit-profile-dialog/edit-profile-dialog';
 import { environment } from '../../../environments/environment';
+import { PathBuilder } from '../../services/path-builder';
+import { AchievementTier } from '../../../../../shared/models/achievement';
 
 @Component({
     selector: 'app-user-page',
@@ -52,6 +54,7 @@ export class UserPage {
     private userService = inject(UserService);
     private toastService = inject(ToastService);
     private dialog = inject(MatDialog);
+    private pathBuilder = inject(PathBuilder);
 
     gameListElement = viewChild<ElementRef<HTMLDivElement>>('gameList');
 
@@ -83,6 +86,22 @@ export class UserPage {
     games = computed(() => this.userProfile.value()?.games ?? []);
     achievements = computed(() => this.userProfile.value()?.achievements ?? []);
     guides = computed(() => this.userProfile.value()?.guides ?? []);
+
+    groupedAchievements = computed(() => {
+        const achievementList = this.achievements();
+
+        return [
+            { difficulty: AchievementTier.Platinum, title: 'Platinum' },
+            { difficulty: AchievementTier.Gold, title: 'Gold' },
+            { difficulty: AchievementTier.Silver, title: 'Silver' },
+            { difficulty: AchievementTier.Bronze, title: 'Bronze' },
+        ]
+            .map((group) => ({
+                ...group,
+                count: achievementList.filter((a) => a.difficulty === group.difficulty).length,
+            }))
+            .filter((tier) => tier.count > 0);
+    });
 
     toggleEditMode() {
         const currentProfile = this.userProfile.value();
@@ -171,5 +190,9 @@ export class UserPage {
         } finally {
             this.isAnalyzing.set(false);
         }
+    }
+
+    getGameImagePath(imageName?: string): string {
+        return this.pathBuilder.getGameImagePath(imageName);
     }
 }

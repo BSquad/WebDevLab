@@ -34,6 +34,10 @@ export class UserService {
         );
     };
 
+    updateLayout = async (id: number, order: string[]) => {
+        return await this.userDbAccess.updateLayout(id, order);
+    };
+
     deleteUser = async (id: number) => {
         return await this.userDbAccess.deleteUser(id);
     };
