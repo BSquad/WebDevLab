@@ -44,10 +44,6 @@ export class GuideService {
         return this.guideApi.deleteScreenshot(guideId, filePath);
     }
 
-    async downloadPdf(guideId: number): Promise<Blob> {
-        return this.guideApi.downloadPdf(guideId);
-    }
-
     async rateGuideAndRefresh(guideId: number, rating: number, userId: number): Promise<Guide> {
         await this.guideApi.rateGuide(guideId, rating, userId);
         return this.guideApi.getGuideById(guideId);

@@ -24,6 +24,8 @@ describe('GuideService', () => {
             'deleteScreenshot',
             'rateGuide',
             'getGuideById',
+            'getGuidesByGameId',
+            'getTopGuides',
             'downloadPdf',
         ]);
 
@@ -36,6 +38,88 @@ describe('GuideService', () => {
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+    });
+
+    it('should get guides by game id', async () => {
+        guideApiSpy.getGuidesByGameId.and.resolveTo([mockGuide]);
+
+        const result = await service.getGuidesByGameId(1);
+
+        expect(guideApiSpy.getGuidesByGameId).toHaveBeenCalledWith(1);
+        expect(result).toEqual([mockGuide]);
+    });
+
+    it('should get guide by id', async () => {
+        guideApiSpy.getGuideById.and.resolveTo(mockGuide);
+
+        const result = await service.getGuideById(1);
+
+        expect(guideApiSpy.getGuideById).toHaveBeenCalledWith(1);
+        expect(result).toEqual(mockGuide);
+    });
+
+    it('should get top guides', async () => {
+        guideApiSpy.getTopGuides.and.resolveTo([mockGuide]);
+
+        const result = await service.getTopGuides(1);
+
+        expect(guideApiSpy.getTopGuides).toHaveBeenCalledWith(1);
+        expect(result).toEqual([mockGuide]);
+    });
+
+    it('should create guide', async () => {
+        guideApiSpy.createGuide.and.resolveTo(123);
+
+        const result = await service.createGuide(mockGuide);
+
+        expect(guideApiSpy.createGuide).toHaveBeenCalledWith(mockGuide);
+        expect(result).toBe(123);
+    });
+
+    it('should update guide', async () => {
+        guideApiSpy.updateGuide.and.resolveTo(true);
+
+        const result = await service.updateGuide(1, mockGuide);
+
+        expect(guideApiSpy.updateGuide).toHaveBeenCalledWith(1, mockGuide);
+        expect(result).toBeTrue();
+    });
+
+    it('should delete guide', async () => {
+        guideApiSpy.deleteGuide.and.resolveTo(true);
+
+        const result = await service.deleteGuide(1, 1);
+
+        expect(guideApiSpy.deleteGuide).toHaveBeenCalledWith(1, 1);
+        expect(result).toBeTrue();
+    });
+
+    it('should rate guide', async () => {
+        guideApiSpy.rateGuide.and.resolveTo(true);
+
+        const result = await service.rateGuide(1, 5, 1);
+
+        expect(guideApiSpy.rateGuide).toHaveBeenCalledWith(1, 5, 1);
+        expect(result).toBeTrue();
+    });
+
+    it('should upload screenshot', async () => {
+        const file = new File(['data'], 'test.png');
+        guideApiSpy.uploadScreenshot.and.resolveTo(true);
+
+        const result = await service.uploadScreenshot(1, file);
+
+        expect(guideApiSpy.uploadScreenshot).toHaveBeenCalledWith(1, file);
+        expect(result).toBeTrue();
+    });
+
+    it('should delete screenshot', async () => {
+        guideApiSpy.deleteScreenshot.and.resolveTo(true);
+
+        const result = await service.deleteScreenshot(1, '/img.png');
+
+        expect(guideApiSpy.deleteScreenshot).toHaveBeenCalledWith(1, '/img.png');
+        expect(result).toBeTrue();
     });
 
     it('should create guide with screenshots', async () => {
@@ -79,7 +163,7 @@ describe('GuideService', () => {
             deletedScreenshots: ['/img.png'],
         });
 
-        expect(guideApiSpy.updateGuide).toHaveBeenCalled();
+        expect(guideApiSpy.updateGuide).toHaveBeenCalledWith(1, mockGuide);
         expect(guideApiSpy.deleteScreenshot).toHaveBeenCalledWith(1, '/img.png');
         expect(result).toBe(1);
     });
