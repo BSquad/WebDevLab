@@ -14,8 +14,8 @@ describe('Guide API – Modul A', () => {
 
         expect(response.status).toBe(200);
 
-        expect(response.body).toBeGreaterThan(0); // ✅ FIX
-        createdGuideId = response.body; // ✅ FIX
+        expect(response.body).toBeGreaterThan(0);
+        createdGuideId = response.body;
     });
 
     it('should reject invalid guide creation', async () => {
@@ -86,7 +86,7 @@ describe('Guide API – Modul A', () => {
             content: 'Fail',
         });
 
-        expect(response.status).toBeGreaterThanOrEqual(400); // ✅ FIX
+        expect(response.status).toBeGreaterThanOrEqual(400);
     });
 
     it('should reject update from wrong user', async () => {
@@ -98,7 +98,7 @@ describe('Guide API – Modul A', () => {
                 content: 'Hacked',
             });
 
-        expect(response.status).toBeGreaterThanOrEqual(400); // ✅ FIX
+        expect(response.status).toBeGreaterThanOrEqual(400);
     });
 
     it('should rate guide', async () => {
@@ -118,7 +118,7 @@ describe('Guide API – Modul A', () => {
             .post(`/guides/${createdGuideId}/rate`)
             .send({
                 userId: 1,
-                rating: 10, // ✅ FIX (war score)
+                rating: 10,
             });
 
         expect(response.status).toBeGreaterThanOrEqual(400);
@@ -155,7 +155,7 @@ describe('Guide API – Modul A', () => {
 
         expect(res.status).toBe(200);
 
-        const id = res.body; // ✅ FIX
+        const id = res.body;
 
         const pdf = await request(app).get(`/guides/${id}/pdf`);
 
@@ -173,7 +173,7 @@ describe('Guide API – Modul A', () => {
             });
 
         expect(res.status).toBe(200);
-        const id = res.body; // ✅ FIX
+        const id = res.body;
 
         await request(app)
             .post(`/guides/${id}/upload`)
