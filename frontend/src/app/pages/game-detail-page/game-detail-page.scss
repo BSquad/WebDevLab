@@ -158,6 +158,14 @@
     border-radius: g.$radius-small;
 }
 
+.game-info-container h2 {
+    margin: 0.2rem 0;
+    padding: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
 .game-info-container p {
     font-size: 0.92rem;
     line-height: 1.15;
