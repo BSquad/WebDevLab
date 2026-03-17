@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { UserApi } from '../api/user-api';
 import { AnalysisData } from '../../../../shared/models/analysisData';
 
-// Add Response type import
 interface Response {
     body: ReadableStream<Uint8Array> | null;
 }

@@ -92,7 +92,6 @@ export class GuideDbAccess {
             return undefined;
         }
 
-        // Screenshots laden
         const screenshotRows = await this.db.executeSQL(
             `
         SELECT filePath

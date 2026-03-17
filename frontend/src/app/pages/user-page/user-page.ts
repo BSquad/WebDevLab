@@ -58,7 +58,6 @@ export class UserPage {
 
     gameListElement = viewChild<ElementRef<HTMLDivElement>>('gameList');
 
-    // Auth context
     currentUser = toSignal(this.authService.currentUser$);
 
     // UI State Signals
@@ -163,7 +162,7 @@ export class UserPage {
     }
 
     getProfileImageUrl(path: string | null | undefined): string {
-        //if (!path) return this.defaultImagePath;
+        if (!path) return this.defaultImagePath;
         return `${environment.apiUrl}${path}`;
     }
 

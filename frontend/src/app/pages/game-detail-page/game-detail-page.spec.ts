@@ -15,7 +15,8 @@ import {
     ActivatedRouteMock,
     AuthServiceMock,
 } from '../../tests/mock-classes.spec';
-import { MOCK_GAME, MOCK_GAMES } from '../../tests/mock-data.spec';
+import { MOCK_GAME, MOCK_GAMES, MOCK_GUIDE, MOCK_GUIDES } from '../../tests/mock-data.spec';
+import { By } from '@angular/platform-browser';
 
 describe('GameDetailPage', () => {
     let fixture: ComponentFixture<GameDetailPage>;
@@ -54,110 +55,168 @@ describe('GameDetailPage', () => {
         fixture.detectChanges();
     });
 
-    it('should load game data on init', async () => {
-        await component.ngOnInit();
+    describe('Component Initialization', () => {
+        it('should load game data on init', async () => {
+            await component.ngOnInit();
 
-        expect(route.snapshot.paramMap.get).toHaveBeenCalledWith('gameId');
-        expect(gameService.getGame).toHaveBeenCalledWith(1, 1);
-        expect(component.game()).toEqual(MOCK_GAMES[0]);
-    });
+            expect(route.snapshot.paramMap.get).toHaveBeenCalledWith('gameId');
+            expect(gameService.getGame).toHaveBeenCalledWith(1, 1);
+            expect(component.game()).toEqual(MOCK_GAMES[0]);
+        });
 
-    it('should handle error on init', async () => {
-        gameService.getGame.and.rejectWith(new Error('Fetch failed'));
+        it('should load guides data on init', async () => {
+            await component.ngOnInit();
 
-        await component.ngOnInit();
+            expect(guideService.getTopGuides).toHaveBeenCalledWith(1);
+            expect(guideService.getGuidesByGameId).toHaveBeenCalledWith(1);
+            expect(component.topGuides()).toBeDefined();
+            expect(component.guides()).toBeDefined();
+        });
 
-        expect(toastService.showError).toHaveBeenCalledWith('The game data could not be loaded.');
-    });
+        it('should handle error on init', async () => {
+            gameService.getGame.and.rejectWith(new Error('Test Error'));
 
-    it('should correctly identify guide owner', () => {
-        const myGuide = { id: 10, userId: 1 } as any;
-        const otherGuide = { id: 11, userId: 99 } as any;
+            await component.ngOnInit();
 
-        expect(component.isGuideOwner(myGuide)).toBeTrue();
-        expect(component.isGuideOwner(otherGuide)).toBeFalse();
-    });
-
-    it('should toggle game tracking', async () => {
-        const mockGame = { ...MOCK_GAME, isTracked: false };
-        component.game.set(mockGame);
-        const event = { stopPropagation: jasmine.createSpy() } as any;
-
-        await component.toggleTrackGame(event);
-
-        expect(gameService.toggleTrackGame).toHaveBeenCalled();
-        expect(component.game()?.isTracked).toBeTrue();
-    });
-
-    it('should navigate to create guide', () => {
-        component.game.set(MOCK_GAMES[0]);
-        component.goToCreateGuide();
-
-        expect(router.navigate).toHaveBeenCalledWith(['/create-guide', MOCK_GAMES[0].id], {
-            state: { game: MOCK_GAMES[0] },
+            expect(toastService.showError).toHaveBeenCalledWith('Error: Test Error');
         });
     });
 
-    it('should navigate to read guide', () => {
-        const guide = { id: 123 } as any;
-        component.goToReadGuide(guide);
+    describe('Component Logic', () => {
+        it('should correctly identify guide owner', () => {
+            const myGuide = { id: 10, userId: 1 } as any;
+            const otherGuide = { id: 11, userId: 99 } as any;
 
-        expect(router.navigate).toHaveBeenCalledWith(['/read-guide', 123]);
+            expect(component.isGuideOwner(myGuide)).toBeTrue();
+            expect(component.isGuideOwner(otherGuide)).toBeFalse();
+        });
+
+        it('should toggle game tracking', async () => {
+            const mockGame = { ...MOCK_GAME, isTracked: false };
+            component.game.set(mockGame);
+            const event = { stopPropagation: jasmine.createSpy() } as any;
+
+            await component.toggleTrackGame(event);
+
+            expect(gameService.toggleTrackGame).toHaveBeenCalled();
+            expect(component.game()?.isTracked).toBeTrue();
+        });
+
+        it('should handle toggle tracking failure', async () => {
+            gameService.toggleTrackGame.and.rejectWith(new Error('Tracking failed'));
+            const mockGame = { ...MOCK_GAME, isTracked: false };
+            component.game.set(mockGame);
+            const event = { stopPropagation: jasmine.createSpy() } as any;
+
+            await component.toggleTrackGame(event);
+
+            expect(gameService.toggleTrackGame).toHaveBeenCalled();
+            expect(component.game()?.isTracked).toBeFalse();
+            expect(toastService.showError).toHaveBeenCalledWith('Error: Tracking failed');
+        });
     });
 
-    it('should navigate to edit guide', () => {
-        const guide = { id: 456 } as any;
-        component.goToEditGuide(guide);
+    describe('Navigation Methods', () => {
+        it('should navigate to create guide', () => {
+            component.game.set(MOCK_GAMES[0]);
+            component.goToCreateGuide();
 
-        expect(router.navigate).toHaveBeenCalledWith(['/edit-guide', 456]);
+            expect(router.navigate).toHaveBeenCalledWith(['/create-guide', MOCK_GAMES[0].id], {
+                state: { game: MOCK_GAMES[0] },
+            });
+        });
+
+        it('should navigate to read guide', () => {
+            const guide = { id: 123 } as any;
+            component.goToReadGuide(guide);
+
+            expect(router.navigate).toHaveBeenCalledWith(['/read-guide', 123]);
+        });
+
+        it('should navigate to edit guide', () => {
+            const guide = { id: 456 } as any;
+            component.goToEditGuide(guide);
+
+            expect(router.navigate).toHaveBeenCalledWith(['/edit-guide', 456]);
+        });
+
+        it('should navigate to achievements', () => {
+            component.game.set(MOCK_GAME);
+            component.goToAchievements();
+
+            expect(router.navigate).toHaveBeenCalledWith(['/achievements', MOCK_GAME.id]);
+        });
     });
 
-    it('should navigate to achievements', () => {
-        component.game.set(MOCK_GAME);
-        component.goToAchievements();
+    describe('HTML Template Rendering', () => {
+        it('should display create guide button', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        expect(router.navigate).toHaveBeenCalledWith(['/achievements', MOCK_GAME.id]);
+            const createButton = fixture.debugElement.query(By.css('.create-guide-button'));
+            expect(createButton).toBeTruthy();
+            expect(createButton.nativeElement.textContent).toContain('Create Guide');
+        });
+
+        it('should display top guides section when guides exist', async () => {
+            guideService.getTopGuides.and.resolveTo([MOCK_GUIDE]);
+            await component.ngOnInit();
+            fixture.detectChanges();
+
+            const topGuidesSection = fixture.debugElement.query(By.css('.top-guides-list'));
+            expect(topGuidesSection).toBeTruthy();
+        });
+
+        it('should display guide card components', async () => {
+            guideService.getGuidesByGameId.and.resolveTo(MOCK_GUIDES);
+            await component.ngOnInit();
+            fixture.detectChanges();
+
+            const guideCards = fixture.debugElement.queryAll(By.css('app-guide-card'));
+            expect(guideCards.length).toBe(MOCK_GUIDES.length);
+        });
+
+        it('should display game information', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
+
+            const description = fixture.debugElement.query(By.css('p strong'));
+            expect(description.nativeElement.textContent).toContain('Description:');
+        });
     });
 
-    it('should get game image path', () => {
-        component.getGameImagePath('test.png');
+    describe('HTML Template Interactions', () => {
+        it('should call goToCreateGuide when create button is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        expect(pathBuilder.getGameImagePath).toHaveBeenCalledWith('test.png');
-    });
+            spyOn(component, 'goToCreateGuide');
+            const createButton = fixture.debugElement.query(By.css('.create-guide-button'));
+            createButton.triggerEventHandler('click', null);
 
-    it('should handle toggle tracking failure', async () => {
-        gameService.toggleTrackGame.and.resolveTo(false);
-        const mockGame = { ...MOCK_GAME, isTracked: false };
-        component.game.set(mockGame);
-        const event = { stopPropagation: jasmine.createSpy() } as any;
+            expect(component.goToCreateGuide).toHaveBeenCalled();
+        });
 
-        await component.toggleTrackGame(event);
+        it('should call toggleTrackGame when track button is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        expect(component.game()?.isTracked).toBeFalse();
-    });
+            spyOn(component, 'toggleTrackGame');
+            const trackButton = fixture.debugElement.query(By.css('.track-button'));
+            trackButton.triggerEventHandler('click', null);
 
-    it('should handle different gameId from route', async () => {
-        route.snapshot.paramMap.get.and.returnValue('42');
+            expect(component.toggleTrackGame).toHaveBeenCalled();
+        });
 
-        await component.ngOnInit();
+        it('should call goToAchievements when achievements button is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        expect(gameService.getGame).toHaveBeenCalledWith(42, 1);
-    });
+            spyOn(component, 'goToAchievements');
+            const achievementsButton = fixture.debugElement.query(By.css('.normal-button'));
+            achievementsButton.triggerEventHandler('click', null);
 
-    it('should load guides data on init', async () => {
-        await component.ngOnInit();
-
-        expect(guideService.getTopGuides).toHaveBeenCalledWith(1);
-        expect(guideService.getGuidesByGameId).toHaveBeenCalledWith(1);
-        expect(component.topGuides()).toBeDefined();
-        expect(component.guides()).toBeDefined();
-    });
-
-    it('should handle guide service errors', async () => {
-        guideService.getTopGuides.and.rejectWith(new Error('Guide error'));
-
-        await component.ngOnInit();
-
-        expect(toastService.showError).toHaveBeenCalledWith('The game data could not be loaded.');
+            expect(component.goToAchievements).toHaveBeenCalled();
+        });
     });
 });

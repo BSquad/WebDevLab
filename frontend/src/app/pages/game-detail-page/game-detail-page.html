@@ -11,7 +11,10 @@
                 <ul class="guides-list top-guides-list">
                     @for (guide of topGuides(); track guide.id; let i = $index) {
 
-                    <app-guide-card [guide]="guide"></app-guide-card>
+                    <li class="top-guide-item">
+                        <span class="rank-badge">{{ i + 1 }}</span>
+                        <app-guide-card [guide]="guide"></app-guide-card>
+                    </li>
 
                     }
                 </ul>
@@ -49,6 +52,7 @@
                 <img class="game-image-big" [src]="getGameImagePath(game()?.imageName)" />
 
                 <div class="game-meta">
+                    <h2><strong>{{ game()?.title }}</strong></h2>
                     <p><strong>Description:</strong> {{ game()?.description }}</p>
                     <p><strong>Genre:</strong> {{ game()?.genre }}</p>
                     <p><strong>Publisher:</strong> {{ game()?.publisher }}</p>

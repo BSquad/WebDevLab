@@ -1,58 +1,132 @@
 Starting:
-  Use the start-project.sh to start the frontend and backend.
-  Open http://localhost:4200/ in your browser.
+Use the start-project.sh to start the frontend and backend.
+Open http://localhost:4200/
+ in your browser.
 
 Testing:
-  Use the start-test.sh to start the tests.
-  The Code Coverage will be displayed in the console windows separately for frontend and backend.
+Use the start-test.sh to start the tests.
+The Code Coverage will be displayed in the console windows separately for frontend and backend.
 
 Components:
-Games Page (start page):
-  You can see:
-    - a list of popular games
-    - a list of all games
-    - filters and search options
 
-  You can do:
-    - Click a game to open the game page.
-    - Click the star icon to add the game to your favorites.
-    - Use filters and search options to find games.
+Games Page (start page):
+You can see:
+- a list of popular games
+- a list of all games
+- filters and search options
+
+You can do:
+- Click a game to open the game page.
+- Click the star icon to add the game to your favorites.
+- Use filters and search options to find games.
 
 Game Page:
-  You can see:
-    - a list of top guides
-    - a list of all guides for this game
-    - general information about the game
+You can see:
+- a list of top guides
+- a list of all guides for this game
+- general information about the game (description, genre, publisher, developer, release date)
+- tags and platforms for the game
+- the game image
+- a list of top players showing users with the most completed achievements for this game
 
-  You can do:
-    - Click the read button of a guide to read the guide.
-    - Click the edit button of a guide to edit the guide. (Only if you are logged in and the author of the guide)
-    - Click the create Guide button to create a new guide for this game.
-    - Click the achievements button to view the achievements for this game.
-    - Click the star icon to add the game to your favorites.
+You can do:
+- Click the read button of a guide to read the guide.
+- Click the edit button of a guide to edit the guide. (Only if you are logged in and the author of the guide)
+- Click the create Guide button to create a new guide for this game.
+- Click the achievements button to view the achievements for this game.
+- Click the star icon to add the game to your favorites. (Only if you are logged in)
+- Click the star icon again to remove the game from your favorites.
 
 Achievement Page:
-  You can see:
-    - a list of achievements for the game
+You can see:
+- a list of achievements for the game
 
-  You can do:
-    - Click the complete button to mark an achievement as complete. (Only if you are logged in and have the achievement not completed yet)
+You can do:
+- Click the complete button to mark an achievement as complete. (Only if you are logged in and have the achievement not completed yet)
 
 Login Page:
-  You can login with a existing user (name and password).
+You can login with a existing user (name and password).
 
 Register Page:
-  You can register a new user (name, email, password).
+You can register a new user (name, email, password).
 
 Profile Page:
+You can see:
+- your user information
+- the games you have added to your favorites
+- your achievement progress
 
 Guide Creation Page:
+You can create a new guide for a game.
+
+You can see:
+- a form to create a guide
+- fields for guide title and guide content
+- a section to upload screenshots
+- previews of selected screenshots
+
+You can do:
+- Enter a title for the guide
+- Enter the guide content
+- Upload one or multiple screenshots
+- View screenshot previews before uploading
+- Remove screenshots before submitting the guide
+- Click on a screenshot preview to open it in a larger view
+- Submit the form to create the guide
+- Click the back button to return to the previous page
 
 Guide Edit Page:
+You can edit an existing guide.
+
+You can see:
+- the existing guide title and content
+- already uploaded screenshots
+- previews of the screenshots
+
+You can do:
+- Change the title or content of the guide
+- Upload additional screenshots
+- Remove existing screenshots
+- Remove newly selected screenshots before saving
+- Click on a screenshot preview to open it in a larger view
+- Save the changes to update the guide
+- Delete the guide completely (confirmation required)
+- Click the back button to return to the previous page
+
+Read Guide Page:
+You can see:
+- the guide title
+- the guide author
+- the guide creation date
+- the average guide rating
+- the guide content
+- screenshots belonging to the guide
+- comments from other users
+
+You can do:
+- Rate the guide from 1 to 5 stars (only if you are logged in)
+- Hover over stars to preview your rating before selecting it
+- Click a star to submit your rating
+- Download the guide as a PDF file
+- Click on a screenshot to open it in a larger view
+- Close the screenshot overlay again
+- Click the back button to return to the previous page
+
+Comments Section:
+You can see:
+- a list of all comments for the guide
+- the author of each comment
+- the creation date of the comment
+- the comment text
+
+You can do:
+- Write a new comment in the comment input field
+- Click "Post Comment" to publish the comment (only if you are logged in)
+- After posting, the comment list updates automatically
 
 Important Hints:
-  The Game "The Witcher 3" has a lot of test data (guides and achievements).
-  Use the reset-db.sh to reset the database. (If you used the website logout before you do this)
-  There are 2 default users, you can use for testing the website:
-    - Username: test, Password: test
-    - Username: sa, Password: sa
+The Game "The Witcher 3" has a lot of test data (guides and achievements).
+Use the reset-db.sh to reset the database. (If you used the website logout before you do this)
+There are 2 default users, you can use for testing the website:
+- Username: test, Password: test
+- Username: sa, Password: sa

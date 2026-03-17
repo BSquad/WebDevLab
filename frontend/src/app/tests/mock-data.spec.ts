@@ -1,6 +1,7 @@
 import { Game } from '../../../../shared/models/game';
 import { User } from '../../../../shared/models/user';
 import { Achievement, AchievementTier } from '../../../../shared/models/achievement';
+import { Guide } from '../../../../shared/models/guide';
 
 export const MOCK_GAMES: Game[] = [
     {
@@ -138,5 +139,54 @@ export const MOCK_ACHIEVEMENTS: Achievement[] = [
         description: 'Schalte alle anderen Achievements frei.',
         difficulty: AchievementTier.Platinum,
         isCompleted: false,
+    },
+];
+
+export const MOCK_GUIDE: Guide = {
+    id: 1,
+    userId: 1,
+    author: 'Test Author',
+    gameId: 1,
+    title: 'Complete Walkthrough Guide',
+    content: 'This is a comprehensive guide for completing the game...',
+    createdAt: '2023-01-15T10:00:00Z',
+    updatedAt: '2023-01-20T15:30:00Z',
+    avgRating: 4.5,
+    ratingCount: 12,
+};
+
+export const MOCK_GUIDES: Guide[] = [
+    {
+        id: 1,
+        userId: 1,
+        author: 'Test Author',
+        gameId: 1,
+        title: 'Complete Walkthrough Guide',
+        content: 'This is a comprehensive guide for completing the game...',
+        createdAt: '2023-01-15T10:00:00Z',
+        avgRating: 4.5,
+        ratingCount: 12,
+    },
+    {
+        id: 2,
+        userId: 2,
+        author: 'ProGamer123',
+        gameId: 1,
+        title: 'Speedrun Strategies',
+        content: 'Learn the fastest ways to complete each level...',
+        createdAt: '2023-02-10T14:20:00Z',
+        avgRating: 4.2,
+        ratingCount: 8,
+    },
+    {
+        id: 3,
+        userId: 1,
+        author: 'Test Author',
+        gameId: 1,
+        title: 'Hidden Secrets Guide',
+        content: 'Discover all the hidden secrets and easter eggs...',
+        createdAt: '2023-03-05T09:15:00Z',
+        avgRating: 4.8,
+        ratingCount: 25,
     },
 ];

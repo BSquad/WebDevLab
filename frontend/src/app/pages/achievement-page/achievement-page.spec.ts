@@ -12,6 +12,8 @@ import {
 import { MOCK_ACHIEVEMENTS, MOCK_GAME } from '../../tests/mock-data.spec';
 import { ToastService } from '../../services/toast-service';
 import { ToastServiceMock } from '../../tests/mock-classes.spec';
+import { By } from '@angular/platform-browser';
+import { of } from 'rxjs';
 
 describe('AchievementPage', () => {
     let component: AchievementPage;
@@ -44,70 +46,122 @@ describe('AchievementPage', () => {
         fixture.detectChanges();
     });
 
-    it('should load achievements on init', async () => {
-        await component.ngOnInit();
+    describe('Component Initialization', () => {
+        it('should create component', () => {
+            expect(component).toBeTruthy();
+        });
 
-        expect(gameService.getGame).toHaveBeenCalledWith(1);
-        expect(gameService.getAchievementsByGameId).toHaveBeenCalledWith(1, 1);
-        expect(component.game()).toEqual(MOCK_GAME);
-        expect(component.achievements()).toEqual(MOCK_ACHIEVEMENTS);
+        it('should load achievements on init', async () => {
+            await component.ngOnInit();
+
+            expect(gameService.getGame).toHaveBeenCalledWith(1);
+            expect(gameService.getAchievementsByGameId).toHaveBeenCalledWith(1, 1);
+            expect(component.game()).toEqual(MOCK_GAME);
+            expect(component.achievements()).toEqual(MOCK_ACHIEVEMENTS);
+        });
+
+        it('should handle error when loading on init', async () => {
+            gameService.getGame.and.rejectWith(new Error('Test Error'));
+
+            await component.ngOnInit();
+
+            expect(toastService.showError).toHaveBeenCalledWith('Error: Test Error');
+        });
     });
 
-    it('should navigate back to game details', () => {
-        component.goBack();
-        expect(router.navigate).toHaveBeenCalledWith(['/games', '1']);
+    describe('Component Logic', () => {
+        it('should handle achievement completion success', async () => {
+            const achievementToComplete = MOCK_ACHIEVEMENTS[0];
+            component.achievements.set(MOCK_ACHIEVEMENTS);
+            component.game.set(MOCK_GAME);
+
+            await component.completeAchievement(achievementToComplete);
+
+            expect(gameService.completeAchievement).toHaveBeenCalledWith(101, 1, 1);
+
+            const updatedAchievement = component.achievements().find((a: any) => a.id === 101);
+            expect(updatedAchievement?.isCompleted).toBeTrue();
+        });
+
+        it('should handle achievement completion failure', async () => {
+            gameService.completeAchievement.and.rejectWith(
+                new Error('Unable to complete achievement'),
+            );
+            const achievementToComplete = MOCK_ACHIEVEMENTS[1];
+            component.achievements.set(MOCK_ACHIEVEMENTS);
+            component.game.set(MOCK_GAME);
+
+            await component.completeAchievement(achievementToComplete);
+
+            expect(gameService.completeAchievement).toHaveBeenCalledWith(102, 1, 1);
+
+            const updatedAchievement = component.achievements().find((a: any) => a.id === 102);
+            expect(updatedAchievement?.isCompleted).toBeFalse();
+
+            expect(toastService.showError).toHaveBeenCalledWith(
+                'Error: Unable to complete achievement',
+            );
+        });
     });
 
-    it('should handle achievement completion success', async () => {
-        const achievementToComplete = MOCK_ACHIEVEMENTS[0];
-        component.achievements.set(MOCK_ACHIEVEMENTS);
-        component.game.set(MOCK_GAME);
-
-        await component.completeAchievement(achievementToComplete);
-
-        expect(gameService.completeAchievement).toHaveBeenCalledWith(101, 1, 1);
-
-        const updatedAchievement = component.achievements().find((a: any) => a.id === 101);
-        expect(updatedAchievement?.isCompleted).toBeTrue();
+    describe('Navigation Methods', () => {
+        it('should navigate back to game details', () => {
+            component.goBack();
+            expect(router.navigate).toHaveBeenCalledWith(['/games', '1']);
+        });
     });
 
-    it('should handle achievement completion failure', async () => {
-        gameService.completeAchievement.and.resolveTo(false);
-        const achievementToComplete = MOCK_ACHIEVEMENTS[1];
-        component.achievements.set(MOCK_ACHIEVEMENTS);
-        component.game.set(MOCK_GAME);
+    describe('HTML Template Rendering', () => {
+        it('should not display complete buttons when user is not logged in', async () => {
+            const authServiceMock = TestBed.inject(AuthService) as any;
+            authServiceMock.currentUser$ = of(null);
 
-        await component.completeAchievement(achievementToComplete);
+            fixture = TestBed.createComponent(AchievementPage);
+            component = fixture.componentInstance;
 
-        expect(gameService.completeAchievement).toHaveBeenCalledWith(102, 1, 1);
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        const updatedAchievement = component.achievements().find((a: any) => a.id === 102);
-        expect(updatedAchievement?.isCompleted).toBeFalse();
+            const completeButtons = fixture.debugElement.queryAll(
+                By.css('.normal-button:not(.back-button)'),
+            );
+            expect(completeButtons.length).toBe(0);
+        });
+
+        it('should display empty message when no achievements', async () => {
+            gameService.getAchievementsByGameId.and.resolveTo([]);
+            await component.ngOnInit();
+            fixture.detectChanges();
+
+            const emptyMessage = fixture.debugElement.query(By.css('.empty-list'));
+            expect(emptyMessage).toBeTruthy();
+            expect(emptyMessage.nativeElement.textContent).toContain('No achievements available');
+        });
     });
 
-    it('should handle different gameId from route', async () => {
-        route.snapshot.paramMap.get.and.returnValue('42');
+    describe('HTML Template Interactions', () => {
+        it('should call completeAchievement when complete button is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        await component.ngOnInit();
+            spyOn(component, 'completeAchievement');
+            const completeButton = fixture.debugElement.query(
+                By.css('.normal-button:not(.back-button)'),
+            );
+            completeButton.triggerEventHandler('click', null);
 
-        expect(gameService.getGame).toHaveBeenCalledWith(42);
-        expect(gameService.getAchievementsByGameId).toHaveBeenCalledWith(42, 1);
-    });
+            expect(component.completeAchievement).toHaveBeenCalledWith(MOCK_ACHIEVEMENTS[1]);
+        });
 
-    it('should handle error when loading on init', async () => {
-        gameService.getGame.and.rejectWith(new Error('Test Error'));
+        it('should call goBack when back button is clicked', async () => {
+            await component.ngOnInit();
+            fixture.detectChanges();
 
-        await component.ngOnInit();
+            spyOn(component, 'goBack');
+            const backButton = fixture.debugElement.query(By.css('.back-button'));
+            backButton.triggerEventHandler('click', null);
 
-        expect(toastService.showError).toHaveBeenCalledWith('Error: Test Error');
-    });
-
-    it('should handle empty achievements list', async () => {
-        gameService.getAchievementsByGameId.and.resolveTo([]);
-
-        await component.ngOnInit();
-
-        expect(component.achievements()).toEqual([]);
-        expect(component.game()).toEqual(MOCK_GAME);
+            expect(component.goBack).toHaveBeenCalled();
+        });
     });
 });

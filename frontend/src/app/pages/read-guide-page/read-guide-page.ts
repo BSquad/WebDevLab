@@ -50,22 +50,20 @@ export class ReadGuidePage {
         const guideId = this.guide()?.id;
         const user = this.authService.getCurrentUser();
 
-        if (!guideId || !user) {
-            console.error('Missing guide or user for rating');
-            return;
-        }
+        if (!guideId || !user) return;
 
         try {
-            await this.guideService.rateGuide(guideId, score, user.id);
+            const updatedGuide = await this.guideService.rateGuideAndRefresh(
+                guideId,
+                score,
+                user.id,
+            );
 
             this.rating.set(score);
-
-            const updatedGuide = await this.guideService.getGuideById(guideId);
             this.guide.set(updatedGuide);
 
             this.toastService.showSuccess('Rating saved');
-        } catch (err) {
-            console.error('Failed to rate guide', err);
+        } catch {
             this.toastService.showError('The rating could not be saved.');
         }
     }
@@ -81,27 +79,11 @@ export class ReadGuidePage {
     async downloadPDF() {
         const guideId = this.guide()?.id;
 
-        if (!guideId) {
-            console.error('Missing guideId for PDF download');
-            return;
-        }
+        if (!guideId) return;
 
         try {
-            const pdfBlob = await this.guideService.downloadPdf(guideId);
-
-            const url = window.URL.createObjectURL(pdfBlob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `guide-${guideId}.pdf`;
-
-            document.body.appendChild(a);
-            a.click();
-
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        } catch (err) {
-            console.error('Failed to download PDF', err);
+            await this.guideService.downloadPdfFile(guideId);
+        } catch {
             this.toastService.showError('The PDF could not be downloaded.');
         }
     }

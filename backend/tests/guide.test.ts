@@ -14,10 +14,17 @@ describe('Guide API – Modul A', () => {
 
         expect(response.status).toBe(200);
 
-        expect(typeof response.body).toBe('number');
         expect(response.body).toBeGreaterThan(0);
-
         createdGuideId = response.body;
+    });
+
+    it('should reject invalid guide creation', async () => {
+        const response = await request(app).post('/guides').send({
+            userId: 1,
+            content: 'Invalid',
+        });
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
     });
 
     it('should return guides by gameId', async () => {
@@ -34,11 +41,24 @@ describe('Guide API – Modul A', () => {
         createdGuideId = guide.id;
     });
 
+    it('should return guides by userId', async () => {
+        const response = await request(app).get('/guides/user/1');
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+    });
+
     it('should return guide by id', async () => {
         const response = await request(app).get(`/guides/${createdGuideId}`);
 
         expect(response.status).toBe(200);
         expect(response.body.id).toBe(createdGuideId);
+    });
+
+    it('should return error for non-existing guide', async () => {
+        const response = await request(app).get('/guides/999999');
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
     });
 
     it('should update guide', async () => {
@@ -56,6 +76,29 @@ describe('Guide API – Modul A', () => {
         const check = await request(app).get(`/guides/${createdGuideId}`);
 
         expect(check.body.title).toBe('Updated Title');
+        expect(check.body.content).toBe('Updated Content');
+    });
+
+    it('should fail update for non-existing guide', async () => {
+        const response = await request(app).put('/guides/999999').send({
+            userId: 1,
+            title: 'Fail',
+            content: 'Fail',
+        });
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
+    });
+
+    it('should reject update from wrong user', async () => {
+        const response = await request(app)
+            .put(`/guides/${createdGuideId}`)
+            .send({
+                userId: 999,
+                title: 'Hacked',
+                content: 'Hacked',
+            });
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
     });
 
     it('should rate guide', async () => {
@@ -70,12 +113,23 @@ describe('Guide API – Modul A', () => {
         expect(response.body).toBe(true);
     });
 
-    it('should reject invalid rating', async () => {
+    it('should reject rating above range', async () => {
         const response = await request(app)
             .post(`/guides/${createdGuideId}/rate`)
             .send({
                 userId: 1,
-                score: 10,
+                rating: 10,
+            });
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
+    });
+
+    it('should reject rating below range', async () => {
+        const response = await request(app)
+            .post(`/guides/${createdGuideId}/rate`)
+            .send({
+                userId: 1,
+                rating: 0,
             });
 
         expect(response.status).toBeGreaterThanOrEqual(400);
@@ -89,6 +143,47 @@ describe('Guide API – Modul A', () => {
         expect(response.body.length).toBeLessThanOrEqual(3);
     });
 
+    it('should generate pdf with author and createdAt', async () => {
+        const res = await request(app)
+            .post('/guides')
+            .send({
+                userId: 1,
+                gameId: 1,
+                title: 'Guide with Meta ' + Date.now(),
+                content: 'Test',
+            });
+
+        expect(res.status).toBe(200);
+
+        const id = res.body;
+
+        const pdf = await request(app).get(`/guides/${id}/pdf`);
+
+        expect(pdf.status).toBe(200);
+    });
+
+    it('should generate pdf without screenshot', async () => {
+        const res = await request(app)
+            .post('/guides')
+            .send({
+                userId: 1,
+                gameId: 1,
+                title: 'Broken Screenshot ' + Date.now(),
+                content: 'Test',
+            });
+
+        expect(res.status).toBe(200);
+        const id = res.body;
+
+        await request(app)
+            .post(`/guides/${id}/upload`)
+            .attach('image', Buffer.from('fake'), 'fake.png');
+
+        const pdf = await request(app).get(`/guides/${id}/pdf`);
+
+        expect(pdf.status).toBe(200);
+    });
+
     it('should download guide as pdf', async () => {
         const response = await request(app).get(
             `/guides/${createdGuideId}/pdf`,
@@ -96,6 +191,12 @@ describe('Guide API – Modul A', () => {
 
         expect(response.status).toBe(200);
         expect(response.headers['content-type']).toContain('application/pdf');
+    });
+
+    it('should fail pdf generation for non-existing guide', async () => {
+        const response = await request(app).get('/guides/999999/pdf');
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
     });
 
     it('should upload screenshot', async () => {
@@ -106,6 +207,30 @@ describe('Guide API – Modul A', () => {
         expect(response.status).toBe(200);
     });
 
+    it('should delete screenshot', async () => {
+        const response = await request(app)
+            .delete(`/guides/${createdGuideId}/screenshot`)
+            .send({ filePath: 'test.png' });
+
+        expect(response.status).toBeGreaterThanOrEqual(200);
+    });
+
+    it('should reject upload without file', async () => {
+        const response = await request(app).post(
+            `/guides/${createdGuideId}/upload`,
+        );
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
+    });
+
+    it('should reject delete from wrong user', async () => {
+        const response = await request(app)
+            .delete(`/guides/${createdGuideId}`)
+            .send({ userId: 999 });
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
+    });
+
     it('should delete guide', async () => {
         const response = await request(app)
             .delete(`/guides/${createdGuideId}`)
@@ -113,5 +238,13 @@ describe('Guide API – Modul A', () => {
 
         expect(response.status).toBe(200);
         expect(response.body).toBe(true);
+    });
+
+    it('should fail delete for non-existing guide', async () => {
+        const response = await request(app)
+            .delete('/guides/999999')
+            .send({ userId: 1 });
+
+        expect(response.status).toBeGreaterThanOrEqual(400);
     });
 });

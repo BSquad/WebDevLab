@@ -37,14 +37,9 @@ export class GameDetailPage implements OnInit {
     }
 
     async ngOnInit() {
-        const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
-
-        if (!gameId) {
-            console.error('Invalid gameId in route');
-            return;
-        }
-
         try {
+            const gameId = Number(this.route.snapshot.paramMap.get('gameId'));
+
             const [topGuidesData, gameData, guidesData, bestUsersData] = await Promise.all([
                 this.guideService.getTopGuides(gameId),
                 this.gameService.getGame(gameId, this.user()?.id),
@@ -56,11 +51,8 @@ export class GameDetailPage implements OnInit {
             this.game.set(gameData);
             this.guides.set(guidesData);
             this.bestUsers.set(bestUsersData);
-        } catch (err) {
-            console.error('Failed to load game detail page', err);
-
-            // Nur generische Meldung für User
-            this.toastService.showError('The game data could not be loaded.');
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
         }
     }
 
@@ -89,28 +81,18 @@ export class GameDetailPage implements OnInit {
 
     async toggleTrackGame(event: Event) {
         event.stopPropagation();
-
-        const game = this.game();
-        const user = this.user();
-
-        if (!game || !user) {
-            console.error('Missing user or game for toggleTrackGame');
-            return;
-        }
-
         try {
             const success = await this.gameService.toggleTrackGame(
-                game.id,
-                user.id,
-                game.isTracked,
+                this.game()!.id,
+                this.user()!.id,
+                this.game()!.isTracked,
             );
 
             if (success) {
                 this.game.update((g) => (g ? { ...g, isTracked: !g.isTracked } : null));
             }
-        } catch (err) {
-            console.error('Toggle track game failed', err);
-            this.toastService.showError('Tracking status could not be updated.');
+        } catch (err: any) {
+            this.toastService.showError('Error: ' + err.message);
         }
     }
 
