@@ -32,7 +32,6 @@ export class UserTooltip {
                 this.isLoading.set(true);
 
                 try {
-                    await new Promise((resolve) => setTimeout(resolve, 2000));
                     const data = await this.userService.getUserSummary(this.userId);
                     console.log(data);
                     this.userSummary.set(data);
