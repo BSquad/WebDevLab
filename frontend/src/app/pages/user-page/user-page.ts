@@ -1,4 +1,13 @@
-import { Component, signal, resource, inject, computed, ResourceRef } from '@angular/core';
+import {
+    Component,
+    signal,
+    resource,
+    inject,
+    computed,
+    ResourceRef,
+    viewChild,
+    ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +17,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { GuideCardComponent } from '../../ui-components/guide-card/guide-card';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { ToastService } from '../../services/toast-service';
 import { AuthService } from '../../services/auth-service';
@@ -17,6 +27,8 @@ import { UserProfile } from '../../../../../shared/models/user';
 import { RouterLink, RouterModule } from '@angular/router';
 import { EditProfileDialog } from '../../ui-components/edit-profile-dialog/edit-profile-dialog';
 import { environment } from '../../../environments/environment';
+import { PathBuilder } from '../../services/path-builder';
+import { AchievementTier } from '../../../../../shared/models/achievement';
 
 @Component({
     selector: 'app-user-page',
@@ -26,12 +38,13 @@ import { environment } from '../../../environments/environment';
         MatCardModule,
         MatIconModule,
         MatButtonModule,
-        MatProgressBarModule,
         MatListModule,
         RouterModule,
         RouterLink,
         MatDialogModule,
         GuideCardComponent,
+        MatProgressBarModule,
+        DragDropModule,
     ],
     templateUrl: './user-page.html',
     styleUrl: './user-page.scss',
@@ -41,9 +54,14 @@ export class UserPage {
     private userService = inject(UserService);
     private toastService = inject(ToastService);
     private dialog = inject(MatDialog);
+    private pathBuilder = inject(PathBuilder);
+
+    gameListElement = viewChild<ElementRef<HTMLDivElement>>('gameList');
 
     currentUser = toSignal(this.authService.currentUser$);
 
+    // UI State Signals
+    layoutOrder = signal(['analysis', 'games', 'guides']);
     isAnalyzing = signal(false);
     analysisResult = signal<AnalysisData | null>(null);
     analysisProgress = signal(0);
@@ -52,13 +70,50 @@ export class UserPage {
         params: () => ({ id: this.currentUser()?.id }),
         loader: async ({ params }) => {
             if (!params.id) return null;
-            return await this.userService.getUserProfile(params.id);
+            try {
+                const profile = await this.userService.getUserProfile(params.id);
+                console.log(profile);
+                if (profile?.dashboardLayout) {
+                    // needs to be parsed as sqlite saves this as a string
+                    const parsedLayout =
+                        typeof profile.dashboardLayout === 'string'
+                            ? JSON.parse(profile.dashboardLayout)
+                            : profile.dashboardLayout;
+
+                    console.log(parsedLayout);
+                    this.layoutOrder.set(parsedLayout);
+                }
+
+                return profile;
+            } catch (error) {
+                console.error('Failed to load user profile:', error);
+                this.toastService.showError('Could not load profile data.');
+                return null;
+            }
         },
     });
+
+    defaultImagePath = 'assets/pictures/default-avatar.jpg';
 
     games = computed(() => this.userProfile.value()?.games ?? []);
     achievements = computed(() => this.userProfile.value()?.achievements ?? []);
     guides = computed(() => this.userProfile.value()?.guides ?? []);
+
+    groupedAchievements = computed(() => {
+        const achievementList = this.achievements();
+
+        return [
+            { difficulty: AchievementTier.Platinum, title: 'Platinum' },
+            { difficulty: AchievementTier.Gold, title: 'Gold' },
+            { difficulty: AchievementTier.Silver, title: 'Silver' },
+            { difficulty: AchievementTier.Bronze, title: 'Bronze' },
+        ]
+            .map((group) => ({
+                ...group,
+                count: achievementList.filter((a) => a.difficulty === group.difficulty).length,
+            }))
+            .filter((tier) => tier.count > 0);
+    });
 
     toggleEditMode() {
         const currentProfile = this.userProfile.value();
@@ -80,9 +135,10 @@ export class UserPage {
                     const formData = new FormData();
                     formData.append('name', updatedData.name);
                     formData.append('email', updatedData.email);
-                    formData.append('uploadType', 'user');
 
                     if (updatedData.file) {
+                        // must match the name in the backend routes
+                        formData.append('uploadType', 'user');
                         formData.append('profilePic', updatedData.file);
                     }
 
@@ -98,9 +154,45 @@ export class UserPage {
         });
     }
 
+    scrollGames(direction: 'left' | 'right') {
+        const list = this.gameListElement()?.nativeElement;
+        if (!list) return;
+
+        const scrollAmount = 300;
+
+        list.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
+            behavior: 'smooth',
+        });
+    }
+
+    async drop(event: CdkDragDrop<string[]>) {
+        const currentLayout = [...this.layoutOrder()];
+        moveItemInArray(currentLayout, event.previousIndex, event.currentIndex);
+        this.layoutOrder.set(currentLayout);
+
+        const userId = this.currentUser()?.id;
+
+        if (!userId) {
+            console.error('Cannot save layout: No user logged in.');
+            return;
+        }
+
+        try {
+            await this.userService.updateLayout(userId, currentLayout);
+        } catch (error) {
+            console.error('Failed to save layout to database:', error);
+            this.layoutOrder.set([...this.layoutOrder()]);
+        }
+    }
+
     getProfileImageUrl(path: string | null | undefined): string {
-        if (!path) return 'assets/pictures/default-avatar.png';
+        if (!path) return this.defaultImagePath;
         return `${environment.apiUrl}${path}`;
+    }
+
+    setDefaultProfileImage(event: Event) {
+        (event.target as HTMLImageElement).src = this.defaultImagePath;
     }
 
     async startAnalysis() {
@@ -122,5 +214,9 @@ export class UserPage {
         } finally {
             this.isAnalyzing.set(false);
         }
+    }
+
+    getGameImagePath(imageName?: string): string {
+        return this.pathBuilder.getGameImagePath(imageName);
     }
 }

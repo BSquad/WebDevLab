@@ -17,14 +17,11 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const folderMap: Record<string, string> = {
             user: 'user',
-            game: 'games',
-            guide: 'guides',
+            games: 'games',
+            guides: 'guides',
         };
 
-        const uploadType = req.body.uploadType || 'guide';
-
-        const subFolder = folderMap[uploadType] || 'guides';
-
+        const subFolder = folderMap[req.body.uploadType] || '';
         const finalPath = path.join(BASE_IMAGE_DIR, subFolder);
 
         if (!fs.existsSync(finalPath)) {

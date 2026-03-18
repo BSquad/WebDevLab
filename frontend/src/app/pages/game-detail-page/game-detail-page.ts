@@ -1,4 +1,4 @@
-import { Component, signal, Signal } from '@angular/core';
+import { Component, OnInit, signal, Signal } from '@angular/core';
 import { ToastService } from '../../services/toast-service';
 import { GameService } from '../../services/game-service';
 import { GuideService } from '../../services/guide-service';
@@ -17,7 +17,7 @@ import { GuideCardComponent } from '../../ui-components/guide-card/guide-card';
     templateUrl: './game-detail-page.html',
     styleUrl: './game-detail-page.scss',
 })
-export class GameDetailPage {
+export class GameDetailPage implements OnInit {
     game = signal<Game | null>(null);
     guides = signal<Guide[]>([]);
     user: Signal<User | null>;

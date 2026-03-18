@@ -54,7 +54,8 @@ export class Db {
           name TEXT NOT NULL UNIQUE,
           email TEXT NOT NULL UNIQUE,
           passwordHash TEXT NOT NULL,
-          profilePicturePath TEXT
+          profilePicturePath TEXT,
+          dashboardLayout TEXT DEFAULT '["analysis", "games", "guides"]'
         );
 
         CREATE TABLE IF NOT EXISTS games (

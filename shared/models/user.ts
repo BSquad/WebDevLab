@@ -8,6 +8,7 @@ export interface User {
     email: string;
     profilePicturePath?: string;
     achievementCount?: number;
+    dashboardLayout?: string | string[];
 }
 
 export interface UserProfile extends User {

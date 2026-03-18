@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from './services/auth-service';
@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { LoadingService } from './services/loading.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
     selector: 'app-root',
@@ -20,6 +22,7 @@ import { MatDividerModule } from '@angular/material/divider';
         MatIconModule,
         MatMenuModule,
         MatDividerModule,
+        MatProgressBarModule,
     ],
     templateUrl: './app.html',
     styleUrl: './app.scss',
@@ -35,6 +38,7 @@ export class App {
     constructor(
         private router: Router,
         private authService: AuthService,
+        public loadingService: LoadingService,
     ) {
         this.user = toSignal(this.authService.currentUser$);
         this.router.events

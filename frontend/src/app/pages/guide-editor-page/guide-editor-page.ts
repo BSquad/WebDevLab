@@ -9,6 +9,11 @@ import { Guide } from '../../../../../shared/models/guide';
 import { AuthService } from '../../services/auth-service';
 import { Location } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
+import { User } from '../../../../../shared/models/user';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
+import { ConfirmDialog } from '../../components/confirm-dialog/confirm-dialog';
 
 @Component({
     selector: 'app-guide-editor-page',
@@ -49,6 +54,7 @@ export class GuideEditorPage {
         private toastService: ToastService,
         private location: Location,
         private cdr: ChangeDetectorRef,
+        private dialog: MatDialog,
     ) {
         const currentUser = this.authService.getCurrentUser();
 
@@ -181,7 +187,16 @@ export class GuideEditorPage {
     async deleteGuide() {
         if (!this.guideId || !this.userId) return;
 
-        const confirmed = confirm('Are you sure you want to delete this guide?');
+        const dialogRef = this.dialog.open(ConfirmDialog, {
+            width: 'auto',
+            data: {
+                title: 'WARNING',
+                message: 'THIS ACTION WILL DELETE YOUR GUIDE. CONTINUE?',
+            },
+        });
+
+        const confirmed = await firstValueFrom(dialogRef.afterClosed());
+
         if (!confirmed) return;
 
         try {
@@ -189,7 +204,7 @@ export class GuideEditorPage {
 
             if (success) {
                 this.toastService.showSuccess('Guide deleted');
-                this.router.navigate(['/games', this.gameId]);
+                this.router.navigate(['/games', this.game()?.id]);
             }
         } catch (err) {
             console.error('Guide deletion failed', err);

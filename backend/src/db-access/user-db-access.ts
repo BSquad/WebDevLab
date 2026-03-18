@@ -13,7 +13,7 @@ export class UserDbAccess {
 
     getUserById = async (id: number) =>
         await this.db.executeSQL(
-            `SELECT id, name, email, profilePicturePath FROM users WHERE id = ?`,
+            `SELECT id, name, email, profilePicturePath, dashboardLayout FROM users WHERE id = ?`,
             [id],
             true,
         );
@@ -44,6 +44,15 @@ export class UserDbAccess {
             `UPDATE users SET name = ?, email = ?,  profilePicturePath = ? WHERE id = ?`,
             [name, email, profilePicturePath, id],
         );
+
+    updateLayout = async (id: number, order: string[]) => {
+        const orderString = JSON.stringify(order);
+
+        await this.db.executeSQL(
+            `UPDATE users SET dashboardLayout = ? WHERE id = ?`,
+            [orderString, id],
+        );
+    };
 
     deleteUser = async (id: number) =>
         await this.db.executeSQL(`DELETE FROM users WHERE id = ?`, [id]);

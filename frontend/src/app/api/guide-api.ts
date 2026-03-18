@@ -46,6 +46,7 @@ export class GuideApi extends BaseApi {
 
     async uploadScreenshot(guideId: number, file: File): Promise<boolean> {
         const formData = new FormData();
+        formData.append('uploadType', 'guides');
         formData.append('image', file);
 
         return await this.request(

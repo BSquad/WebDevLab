@@ -1,112 +1,109 @@
 <div class="dashboard-container">
-    @if (userProfile.isLoading()) {
-    <div class="loader-overlay">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <p>LOADING RETRO DATA...</p>
-    </div>
-    }
+    <aside class="sidebar">
+        <mat-card class="card-border" appearance="outlined">
+            <div class="avatar-wrapper">
+                <img
+                    [src]="getProfileImageUrl(userProfile.value()?.profilePicturePath)"
+                    (error)="setDefaultProfileImage($event)"
+                    alt="User Avatar"
+                    class="avatar"
+                />
+            </div>
+        </mat-card>
 
-    <div class="dashboard-layout">
-        <aside class="sidebar">
-            <mat-card class="pixel-border" appearance="outlined">
-                <div class="avatar-wrapper">
-                    <img
-                        [src]="getProfileImageUrl(userProfile.value()?.profilePicturePath)"
-                        alt="User Avatar"
-                        class="pixel-avatar"
-                    />
+        <mat-card class="info-card card-border" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>USER INFO</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="info-content">
+                <p><strong>NAME:</strong> {{ userProfile.value()?.name }}</p>
+                <p><strong>EMAIL:</strong> {{ userProfile.value()?.email }}</p>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-flat-button class="analyze-btn edit-btn" (click)="toggleEditMode()">
+                    EDIT PROFILE
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="achievements-card card-border" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>ACHIEVEMENTS</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="badge-grid">
+                @for (group of groupedAchievements(); track group.difficulty) {
+                <div class="badge-wrapper" [title]="group.title + ' Achievements'">
+                    <mat-icon [ngClass]="group.difficulty" fontIcon="military_tech"></mat-icon>
+                    <span class="badge-count">x{{ group.count }}</span>
                 </div>
-            </mat-card>
-
-            <mat-card class="info-card pixel-border" appearance="outlined">
-                <mat-card-header>
-                    <mat-card-title>USER INFO</mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="info-content">
-                    <p><strong>NAME:</strong> {{ userProfile.value()?.name }}</p>
-                    <p><strong>EMAIL:</strong> {{ userProfile.value()?.email }}</p>
-                </mat-card-content>
-
-                <mat-card-actions>
-                    <button mat-flat-button class="analyze-btn edit-btn" (click)="toggleEditMode()">
-                        EDIT PROFILE
-                    </button>
-                </mat-card-actions>
-            </mat-card>
-
-            <mat-card class="achievements-card pixel-border" appearance="outlined">
-                <mat-card-header>
-                    <mat-card-title>BADGES</mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="badge-grid">
-                    @for (item of achievements(); track item.title) {
-                    <mat-icon
-                        [title]="item.title"
-                        [ngClass]="item.difficulty"
-                        fontIcon="military_tech"
-                    ></mat-icon>
-                    } @empty {
-                    <p class="empty-msg">NO BADGES YET</p>
-                    }
-                </mat-card-content>
-                @if (isAnalyzing()) {
-                <div class="analysis-progress">
-                    <mat-progress-bar
-                        mode="determinate"
-                        [value]="analysisProgress()"
-                    ></mat-progress-bar>
-                    <p class="progress-text">{{ analysisProgress() }}%</p>
-                </div>
+                } @empty {
+                <p class="empty-msg">NO ACHIEVEMENTS YET</p>
                 }
-                <mat-card-actions>
-                    <button
-                        mat-flat-button
-                        class="analyze-btn"
-                        [disabled]="isAnalyzing()"
-                        (click)="startAnalysis()"
-                    >
-                        {{ isAnalyzing() ? 'ANALYZING...' : 'START ANALYSIS' }}
-                    </button>
-                </mat-card-actions>
-            </mat-card>
-        </aside>
+            </mat-card-content>
+        </mat-card>
+    </aside>
 
-        <main class="main-content">
+    <main class="main-content" cdkDropList (cdkDropListDropped)="drop($event)">
+        @for (block of layoutOrder(); track block) { @if (block === 'analysis') {
+        <mat-card cdkDrag class="analysis-panel card-border" appearance="outlined">
+            <mat-card-header class="card-header-flex">
+                <mat-card-title>PLAYER ANALYSIS</mat-card-title>
+                <mat-icon cdkDragHandle fontIcon="drag_indicator" class="drag-icon"></mat-icon>
+            </mat-card-header>
+
             @if (analysisResult(); as data) {
-            <mat-card class="analysis-panel pixel-border" appearance="outlined">
-                <mat-card-header>
-                    <mat-card-title>ANALYSIS RESULTS</mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="stats-grid">
-                    <div class="stat-box">
-                        <span>GAMES TRACKED</span><strong>{{ data.gameCount }}</strong>
-                    </div>
-                    <div class="stat-box">
-                        <span>FAVOURITE GENRE</span><strong>{{ data.mostPlayedGenre }}</strong>
-                    </div>
-                    <div class="stat-box">
-                        <span>COMPLETION RATE</span><strong>{{ data.completionRate }}%</strong>
-                    </div>
-                </mat-card-content>
-            </mat-card>
+            <mat-card-content class="stats-grid">
+                <div class="stat-box">
+                    <span>GAMES TRACKED</span><strong>{{ data.gameCount }}</strong>
+                </div>
+                <div class="stat-box">
+                    <span>FAVOURITE GENRE</span><strong>{{ data.mostPlayedGenre }}</strong>
+                </div>
+                <div class="stat-box">
+                    <span>COMPLETION RATE</span><strong>{{ data.completionRate }}%</strong>
+                </div>
+            </mat-card-content>
+            } @if (isAnalyzing()) {
+            <div class="analysis-progress">
+                <mat-progress-bar
+                    mode="determinate"
+                    [value]="analysisProgress()"
+                ></mat-progress-bar>
+                <p class="progress-text">{{ analysisProgress() }}%</p>
+            </div>
             }
 
-            <mat-card class="game-section pixel-border" appearance="outlined">
-                <mat-card-header>
-                    <mat-card-title>MY GAMES</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <div class="game-list">
+            <mat-card-actions>
+                <button
+                    mat-flat-button
+                    class="analyze-btn"
+                    [disabled]="isAnalyzing()"
+                    (click)="startAnalysis()"
+                >
+                    {{ isAnalyzing() ? 'ANALYZING...' : 'START ANALYSIS' }}
+                </button>
+            </mat-card-actions>
+        </mat-card>
+        } @if (block === 'games') {
+        <mat-card cdkDrag class="game-section card-border" appearance="outlined">
+            <mat-card-header class="card-header-flex">
+                <mat-card-title>MY GAMES</mat-card-title>
+                <mat-icon cdkDragHandle fontIcon="drag_indicator" class="drag-icon"></mat-icon>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="carousel-container">
+                    <button mat-icon-button class="scroll-btn" (click)="scrollGames('left')">
+                        <mat-icon fontIcon="chevron_left"></mat-icon>
+                    </button>
+                    <div class="game-list" #gameList>
                         @for (game of games(); track game.id) {
                         <a
                             class="game-item"
                             [class.favorite]="game.isFavorite"
                             [routerLink]="['/games', game.id]"
                         >
-                            <img
-                                [src]="'http://localhost:3000/uploads/images/games/' + game.imageName"
-                                [alt]="game.title"
-                            />
+                            <img [src]="getGameImagePath(game.imageName)" [alt]="game.title" />
                             <span>{{ game.title }}</span>
                             @if (game.isFavorite) {
                             <mat-icon class="fav-star" fontIcon="star"></mat-icon> }
@@ -115,29 +112,26 @@
                         <p class="empty-msg">NO GAMES YET</p>
                         }
                     </div>
-                </mat-card-content>
-            </mat-card>
-
-            <mat-card class="progress-section pixel-border" appearance="outlined">
-                <mat-card-header>
-                    <mat-card-title>MY GUIDES</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <ul class="guides-list">
-                        @for (guide of guides(); track guide.id) {
-
-                        <li>
-                            <app-guide-card [guide]="guide"></app-guide-card>
-                        </li>
-
-                        } @empty {
-
-                        <p class="empty-msg">NO GUIDES YET</p>
-
-                        }
-                    </ul>
-                </mat-card-content>
-            </mat-card>
-        </main>
-    </div>
+                    <button mat-icon-button class="scroll-btn" (click)="scrollGames('right')">
+                        <mat-icon fontIcon="chevron_right"></mat-icon>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        } @if (block === 'guides') {
+        <mat-card cdkDrag class="guide-section card-border" appearance="outlined">
+            <mat-card-header class="card-header-flex">
+                <mat-card-title>MY GUIDES</mat-card-title>
+                <mat-icon cdkDragHandle fontIcon="drag_indicator" class="drag-icon"></mat-icon>
+            </mat-card-header>
+            <mat-card-content class="guides-container">
+                @for (guide of guides(); track guide.id) {
+                <app-guide-card [guide]="guide"></app-guide-card>
+                } @empty {
+                <p class="empty-msg">NO GUIDES YET</p>
+                }
+            </mat-card-content>
+        </mat-card>
+        } }
+    </main>
 </div>
