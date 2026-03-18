@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { UserService } from '../services/user-service.js';
 import { GameService } from '../services/game-service.js';
 import { GuideService } from '../services/guide-service.js';
-import { HttpError } from '../utils/HttpError.js';
+import createError from 'http-errors'; // Replaced custom import
 
 export class UserController {
     private userService = new UserService();
@@ -11,24 +11,24 @@ export class UserController {
 
     getUser = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw new HttpError('Invalid User ID', 400);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
         const user = await this.userService.getUserById(userId);
-        if (!user) throw new HttpError('User not found', 404);
+        if (!user) throw createError(404, 'User not found');
 
         res.status(200).json(user);
     };
 
     updateUser = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw new HttpError('Invalid User ID', 400);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
         const { name, email } = req.body;
         if (!name || !email)
-            throw new HttpError('Name and email are required', 400);
+            throw createError(400, 'Name and email are required');
 
         const currentUser = await this.userService.getUserById(userId);
-        if (!currentUser) throw new HttpError('User not found', 404);
+        if (!currentUser) throw createError(404, 'User not found');
 
         let profilePath = currentUser.profilePicturePath;
         if (req.file) {
@@ -42,11 +42,11 @@ export class UserController {
 
     updateLayout = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw new HttpError('Invalid User ID', 400);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
         const { order } = req.body;
         if (!Array.isArray(order))
-            throw new HttpError('Layout order must be an array', 400);
+            throw createError(400, 'Layout order must be an array');
 
         await this.userService.updateLayout(userId, order);
 
@@ -55,11 +55,11 @@ export class UserController {
 
     deleteUser = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw new HttpError('Invalid User ID', 400);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
         // Optional: Check if user exists before deleting
         const user = await this.userService.getUserById(userId);
-        if (!user) throw new HttpError('User not found', 404);
+        if (!user) throw createError(404, 'User not found');
 
         await this.userService.deleteUser(userId);
         res.status(200).json({ message: 'User deleted successfully' });
@@ -67,17 +67,17 @@ export class UserController {
 
     getUserProfile = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw new HttpError('Invalid User ID', 400);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
         const profile = await this.userService.getFullProfile(userId);
-        if (!profile) throw new HttpError('User profile not found', 404);
+        if (!profile) throw createError(404, 'User profile not found');
 
         res.status(200).json(profile);
     };
 
     getGames = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw new HttpError('Invalid User ID', 400);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
         const data = await this.gameService.getGamesByUserId(userId);
         res.status(200).json(data);
@@ -85,7 +85,7 @@ export class UserController {
 
     getAchievements = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw new HttpError('Invalid User ID', 400);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
         const data = await this.gameService.getAchievementsByUserId(userId);
         res.status(200).json(data);
@@ -93,10 +93,10 @@ export class UserController {
 
     getGuides = async (req: Request, res: Response): Promise<void> => {
         const guideId = Number(req.params.id);
-        if (Number.isNaN(guideId)) throw new HttpError('Invalid Guide ID', 400);
+        if (Number.isNaN(guideId)) throw createError(400, 'Invalid Guide ID');
 
         const data = await this.guideService.getGuideById(guideId);
-        if (!data) throw new HttpError('Guide not found', 404);
+        if (!data) throw createError(404, 'Guide not found');
 
         res.status(200).json(data);
     };
@@ -104,7 +104,7 @@ export class UserController {
     startUserAnalysis = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.body?.userId);
         if (Number.isNaN(userId) || !userId)
-            throw new HttpError('Valid User ID required in body', 400);
+            throw createError(400, 'Valid User ID required in body');
 
         await this.streamAnalysisProgress(res);
         await this.sendFinalAnalysisData(res, userId);

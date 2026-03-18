@@ -40,8 +40,16 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
     const isDev = process.env.NODE_ENV === 'development';
 
-    res.status(err.status ?? 500).json({
-        message: err.message ?? 'Unknown server error',
+    // throw 500 if there is no status code
+    const statusCode = err.status || 500;
+
+    // only return the error message for non-500 error
+    const safeMessage = err.expose
+        ? err.message
+        : 'Internal Server Error. Please try again later.';
+
+    res.status(statusCode).json({
+        message: safeMessage,
         ...(isDev && { stack: err.stack }),
     });
 };
