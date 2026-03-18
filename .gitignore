@@ -8,11 +8,9 @@
 /backend/node_modules/
 /backend/database.sqlite
 /backend/coverage/
-/backend/images
 /backend/uploads/images/user/
 /backend/uploads/images/guides/
 /backend/dist
-/backend/uploads
 # Coverage
 
 
