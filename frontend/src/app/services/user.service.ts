@@ -20,6 +20,10 @@ export class UserService {
         return this.userApi.updateUser(userId, formData);
     }
 
+    async updateLayout(userId: number, order: string[]): Promise<void> {
+        return this.userApi.updateLayout(userId, order);
+    }
+
     async getGames(userId: number) {
         return this.userApi.getGames(userId);
     }

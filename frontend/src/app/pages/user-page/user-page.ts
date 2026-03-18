@@ -71,7 +71,20 @@ export class UserPage {
         loader: async ({ params }) => {
             if (!params.id) return null;
             try {
-                return await this.userService.getUserProfile(params.id);
+                const profile = await this.userService.getUserProfile(params.id);
+                console.log(profile);
+                if (profile?.dashboardLayout) {
+                    // needs to be parsed as sqlite saves this as a string
+                    const parsedLayout =
+                        typeof profile.dashboardLayout === 'string'
+                            ? JSON.parse(profile.dashboardLayout)
+                            : profile.dashboardLayout;
+
+                    console.log(parsedLayout);
+                    this.layoutOrder.set(parsedLayout);
+                }
+
+                return profile;
             } catch (error) {
                 console.error('Failed to load user profile:', error);
                 this.toastService.showError('Could not load profile data.');
@@ -153,12 +166,24 @@ export class UserPage {
         });
     }
 
-    drop(event: CdkDragDrop<string[]>) {
+    async drop(event: CdkDragDrop<string[]>) {
         const currentLayout = [...this.layoutOrder()];
         moveItemInArray(currentLayout, event.previousIndex, event.currentIndex);
         this.layoutOrder.set(currentLayout);
 
-        // TODO: save layout either in db or localstorage
+        const userId = this.currentUser()?.id;
+
+        if (!userId) {
+            console.error('Cannot save layout: No user logged in.');
+            return;
+        }
+
+        try {
+            await this.userService.updateLayout(userId, currentLayout);
+        } catch (error) {
+            console.error('Failed to save layout to database:', error);
+            this.layoutOrder.set([...this.layoutOrder()]);
+        }
     }
 
     getProfileImageUrl(path: string | null | undefined): string {
