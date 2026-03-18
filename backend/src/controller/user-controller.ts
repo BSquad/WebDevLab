@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { UserService } from '../services/user-service.js';
 import { GameService } from '../services/game-service.js';
 import { GuideService } from '../services/guide-service.js';
-import createError from 'http-errors'; // Replaced custom import
+import createError from 'http-errors';
 
 export class UserController {
     private userService = new UserService();
@@ -57,7 +57,6 @@ export class UserController {
         const userId = Number(req.params.id);
         if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
 
-        // Optional: Check if user exists before deleting
         const user = await this.userService.getUserById(userId);
         if (!user) throw createError(404, 'User not found');
 

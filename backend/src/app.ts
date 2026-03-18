@@ -6,6 +6,7 @@ import cors from 'cors';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import createError from 'http-errors';
 
 import { Db } from './db.js';
 import { authRouter } from './routes/auth-routes.js';
@@ -53,6 +54,12 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         ...(isDev && { stack: err.stack }),
     });
 };
+
+//catch if the route doesn't exist
+app.use((req, res, next) => {
+    next(createError(404, `Route not found: ${req.method} ${req.originalUrl}`));
+});
+
 app.use(errorHandler);
 
 export default app;
