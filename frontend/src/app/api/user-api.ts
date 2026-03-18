@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api';
-import { UserProfile } from '../../../../shared/models/user';
+import { UserProfile, UserSummary } from '../../../../shared/models/user';
 import { Game } from '../../../../shared/models/game';
 import { Achievement } from '../../../../shared/models/achievement';
 import { Guide } from '../../../../shared/models/guide';
+import { HttpContext } from '@angular/common/http';
+import { SKIP_LOADING } from '../interceptors/loading.interceptor';
 @Injectable({
     providedIn: 'root',
 })
@@ -13,6 +15,15 @@ export class UserApi extends BaseApi {
     async getUserProfile(userId: number): Promise<UserProfile> {
         const url = `${this.userUrl}/${userId}/profile`;
         return await this.request(this.http.get<UserProfile>(url));
+    }
+
+    async getUserSummary(userId: number): Promise<UserSummary> {
+        const url = `${this.userUrl}/${userId}/summary`;
+        return await this.request(
+            this.http.get<UserSummary>(url, {
+                context: new HttpContext().set(SKIP_LOADING, true),
+            }),
+        );
     }
 
     async updateUser(userId: number, formData: FormData): Promise<void> {

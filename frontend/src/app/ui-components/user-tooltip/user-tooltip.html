@@ -1,0 +1,37 @@
+<div class="tooltip-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+    <ng-content></ng-content>
+
+    @if (isHovering() && (isLoading() || userSummary())) {
+    <div class="tooltip-card">
+        @if (isLoading()) {
+        <div class="spinner">
+            <mat-spinner diameter="50"></mat-spinner>
+        </div>
+        } @else {
+        <div class="tooltip-body">
+            <img
+                [src]="getProfileImageUrl(userSummary().profilePicturePath)"
+                alt="Avatar"
+                class="avatar"
+            />
+
+            <div class="stats-column">
+                <h4>{{ userSummary().name }}</h4>
+                <div class="stat-row">
+                    <span class="label">Games:</span>
+                    <span class="value">{{ userSummary().gamesCount }}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Guides:</span>
+                    <span class="value">{{ userSummary().guidesCount }}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Achievements:</span>
+                    <span class="value">{{ userSummary().achievementsCount }}</span>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>

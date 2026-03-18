@@ -5,11 +5,12 @@ import { Guide } from '../../../../../shared/models/guide';
 import { AuthService } from '../../services/auth-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../../../shared/models/user';
+import { UserTooltip } from '../user-tooltip/user-tooltip';
 
 @Component({
     selector: 'app-guide-card',
     standalone: true,
-    imports: [RouterLink, DatePipe, DecimalPipe],
+    imports: [RouterLink, DatePipe, DecimalPipe, UserTooltip],
     templateUrl: './guide-card.html',
     styleUrl: './guide-card.scss',
 })

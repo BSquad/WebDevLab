@@ -16,6 +16,10 @@ export class UserService {
         return this.userApi.getUserProfile(userId);
     }
 
+    async getUserSummary(userId: number) {
+        return this.userApi.getUserSummary(userId);
+    }
+
     async updateUser(userId: number, formData: FormData): Promise<void> {
         return this.userApi.updateUser(userId, formData);
     }

@@ -6,6 +6,7 @@ const router = Router();
 const userController = new UserController();
 
 router.get('/:id/profile', userController.getUserProfile);
+router.get('/:id/summary', userController.getUserSummary);
 router.post('/analysis', userController.startUserAnalysis);
 
 router.get('/:id/games', userController.getGames);

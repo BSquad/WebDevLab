@@ -2,7 +2,7 @@ import { UserDbAccess } from '../db-access/user-db-access.js';
 import { AnalysisData } from '../../../shared/models/analysisData.js';
 import { GameDbAccess } from '../db-access/game-db-access.js';
 import { GuideDbAccess } from '../db-access/guide-db-access.js';
-import { UserProfile } from '../../../shared/models/user.js';
+import { UserProfile, UserSummary } from '../../../shared/models/user.js';
 
 export class UserService {
     private readonly gameDbAccess = new GameDbAccess();
@@ -50,6 +50,10 @@ export class UserService {
         if (!user) return null;
 
         return { ...user, games, guides, achievements };
+    };
+
+    getUserSummary = async (userId: number): Promise<UserSummary | null> => {
+        return await this.userDbAccess.getUserSummary(userId);
     };
 
     startUserAnalysis = async (userId: number): Promise<AnalysisData> => {

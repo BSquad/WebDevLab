@@ -1,5 +1,5 @@
 import type { AnalysisData } from '../../../shared/models/analysisData.js';
-import { User } from '../../../shared/models/user.js';
+import { User, UserSummary } from '../../../shared/models/user.js';
 import { Db } from '../db.js';
 
 export class UserDbAccess {
@@ -33,6 +33,24 @@ export class UserDbAccess {
         await this.db.executeSQL(
             `SELECT id, name, email, profilePicturePath FROM users`,
         );
+
+    getUserSummary = async (userId: number): Promise<UserSummary | null> => {
+        return (await this.db.executeSQL(
+            `
+            SELECT 
+                u.id, 
+                u.name, 
+                u.profilePicturePath,
+                (SELECT COUNT(*) FROM user_games WHERE userId = u.id) AS gamesCount,
+                (SELECT COUNT(*) FROM guides WHERE userId = u.id) AS guidesCount,
+                (SELECT COUNT(*) FROM user_achievements WHERE userId = u.id) AS achievementsCount
+            FROM users u
+            WHERE u.id = ?;
+            `,
+            [userId],
+            true,
+        )) as UserSummary | null;
+    };
 
     updateUser = async (
         id: number,

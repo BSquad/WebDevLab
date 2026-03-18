@@ -16,3 +16,12 @@ export interface UserProfile extends User {
     guides: Guide[];
     achievements: Achievement[];
 }
+
+export interface UserSummary {
+    id: number;
+    name: string;
+    profilePicturePath: string | null;
+    gamesCount: number;
+    guidesCount: number;
+    achievementsCount: number;
+}

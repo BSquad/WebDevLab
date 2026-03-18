@@ -74,6 +74,17 @@ export class UserController {
         res.status(200).json(profile);
     };
 
+    getUserSummary = async (req: Request, res: Response): Promise<void> => {
+        const userId = Number(req.params.id);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+
+        const summary = await this.userService.getUserSummary(userId);
+
+        if (!summary) throw createError(404, 'User summary not found');
+
+        res.status(200).json(summary);
+    };
+
     getGames = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
         if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');

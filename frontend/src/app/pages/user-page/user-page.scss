@@ -78,7 +78,6 @@ $text-shadow: 1px 1px 0px $color-black;
         overflow: hidden;
 
         &::before {
-            content: 'LOADING...';
             font-size: 10px;
             color: #555;
             position: absolute;
