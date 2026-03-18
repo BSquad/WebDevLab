@@ -27,7 +27,6 @@ export class GuideDbAccess {
         g.gameId,
         g.title,
         g.content,
-        g.pdfPath,
         g.createdAt,
         COALESCE(ROUND(AVG(r.score),1),0) AS avgRating
       FROM guides g
@@ -50,7 +49,6 @@ export class GuideDbAccess {
         g.gameId,
         g.title,
         g.content,
-        g.pdfPath,
         g.createdAt,
         g.updatedAt,
         COALESCE(ROUND(AVG(r.score),1),0) AS avgRating
@@ -73,7 +71,6 @@ export class GuideDbAccess {
         g.gameId,
         g.title,
         g.content,
-        g.pdfPath,
         g.createdAt,
         g.updatedAt,
         COALESCE(ROUND(AVG(r.score),1),0) AS avgRating
@@ -160,7 +157,6 @@ export class GuideDbAccess {
             g.gameId,
             g.title,
             g.content,
-            g.pdfPath,
             g.createdAt,
             COALESCE(AVG(r.score), 0) AS avgRating,
             COUNT(r.id) AS ratingCount

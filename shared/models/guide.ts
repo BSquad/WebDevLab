@@ -15,6 +15,5 @@ export interface Guide {
     avgRating?: number;
     ratingCount?: number;
 
-    pdfPath?: string;
     screenshots?: string[];
 }

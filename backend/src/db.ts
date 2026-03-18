@@ -88,7 +88,6 @@ export class Db {
           gameId INTEGER NOT NULL,
           title TEXT NOT NULL,
           content TEXT NOT NULL,
-          pdfPath TEXT,
           createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (userId) REFERENCES users(id),
@@ -411,30 +410,27 @@ export class Db {
             );
 
           INSERT OR IGNORE INTO users
-            (name, email, passwordHash, profilePicturePath)
+            (name, email, passwordHash)
           VALUES
             (
               'sa',
               'sa@test.de',
-              '4cf6829aa93728e8f3c97df913fb1bfa95fe5810e2933a05943f8312a98d9cf2', --sa
-              'TODO'
+              '4cf6829aa93728e8f3c97df913fb1bfa95fe5810e2933a05943f8312a98d9cf2' --sa
             ),
             (
               'test',
               'test@test.de',
-              '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', --test
-              'TODO'
+              '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08' --test
             );
 
           INSERT OR IGNORE INTO guides 
-            (userId, gameId, title, content, pdfPath, createdAt)
+            (userId, gameId, title, content, createdAt)
           VALUES
             (
               (SELECT id FROM users WHERE name = 'sa'), 
               (SELECT id FROM games WHERE title = 'Elden Ring'), 
               'Beginner Guide', 
               'Elden Ring is a massive open-world action RPG. This guide covers the basic game mechanics including movement, combat, and leveling. We also provide tips for the first areas, how to use resources efficiently, defeat early bosses, and avoid traps. Players will learn which classes are suitable for beginners, how to explore the map optimally, and which NPCs are helpful. The guide also covers weapons, magic, and buffs to prevent frustration for new players.', 
-              'TODO', 
               '2026-01-15 14:30:00'
             ),
             (
@@ -442,7 +438,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'Elden Ring'), 
               'Boss Guide', 
               'This guide focuses on the major boss fights in Elden Ring. We provide step-by-step instructions for tactics against the most important bosses in the early game regions. This includes attack patterns, weaknesses, and recommended equipment. Additionally, tips for summons, co-op mechanics, and how to reduce boss fight frustration to ensure smooth progress.', 
-              'TODO', 
               '2026-01-22 09:15:00'
             ),
             (
@@ -450,7 +445,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'Elden Ring'), 
               'Secrets & Easter Eggs', 
               'This guide uncovers secret locations, hidden bosses, and rare items in Elden Ring. We show how to discover hidden paths, which NPC quests lead to special rewards, and how to unlock secret skills and weapons. Also includes hints about Easter Eggs that reference other games. Players will receive valuable tips to fully explore the game.', 
-              'TODO', 
               '2026-02-03 16:45:00'
             ),
             (
@@ -458,7 +452,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Main Story Walkthrough', 
               'This guide covers the main quests of The Witcher 3: Wild Hunt. We guide players through all chapters and show how to make decisions that affect the game ending. Includes tips for combat, witcher signs, potions, and equipment. We also cover the most important story decisions to get the maximum experience and best possible rewards.', 
-              'TODO', 
               '2026-01-08 11:20:00'
             ),
             (
@@ -466,7 +459,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Gwent Strategy Guide', 
               'A comprehensive guide to the card game Gwent in The Witcher 3. Here you will learn how to build the best decks, analyze opponents, and collect cards efficiently. We explain the game mechanics, strategies against specific opponents, and provide tips for tournaments in Novigrad and Kaer Morhen.', 
-              'TODO', 
               '2026-01-31 13:10:00'
             ),
             (
@@ -474,7 +466,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'Hades'), 
               'Beginner Hades Guide', 
               'Hades is a roguelike dungeon crawler. In this guide, beginners will learn how to survive the first runs, which weapons are suitable for starting out, how to combine god boons effectively, and which upgrades help in the long term. Also includes tips for healing, enemy groups, and bosses in the early levels. The goal is to optimally prepare players for later, more difficult runs.', 
-              'TODO', 
               '2026-02-08 10:30:00'
             ),
             (
@@ -482,7 +473,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'Hades'), 
               'Advanced Hades Tactics', 
               'This guide is aimed at experienced Hades players. We analyze advanced builds, synergistic boons, optimal weapons, and the best strategies against the final bosses. Additionally, we provide hints for rare upgrades, chamber compositions, and secrets in the Underworld to achieve maximum high scores.', 
-              'TODO', 
               '2026-02-14 15:25:00'
             ),
             (
@@ -490,7 +480,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Romance Guide', 
               'This comprehensive guide covers all romance options in The Witcher 3: Wild Hunt. We detail the complete romance paths for Yennefer, Triss, and other secondary romance options like Keira Metz and Jutta an Dimun. Learn the specific dialogue choices, quest requirements, and timing needed to successfully pursue each romance. We also explain the consequences of your romantic choices on the story ending and character relationships. The guide includes tips for managing multiple romances, avoiding common mistakes, and achieving the best possible romantic outcomes. Special attention is given to the complex Yennefer-Triss dynamic and how to navigate this delicate situation without breaking hearts or missing out on meaningful content.', 
-              'TODO', 
               '2026-01-12 18:40:00'
             ),
             (
@@ -498,7 +487,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Crafting & Alchemy Masterclass', 
               'Master the art of crafting and alchemy in The Witcher 3 with this detailed guide. We cover everything from basic weapon and armor crafting to advanced alchemical preparations. Learn where to find the best crafting diagrams, how to locate rare ingredients, and which merchants sell the most valuable schematics. The guide explains the alchemy system in depth, including how to create powerful potions, oils, and bombs that will give you an edge in combat. We provide complete walkthroughs for major crafting quests like the Master Armorers and Master Swordsmiths questlines. Discover the locations of all Grandmaster diagrams in the Blood and Wine expansion and learn how to craft the most powerful gear sets in the game. Tips for ingredient farming, mutagen creation, and optimizing your alchemical build are also included.', 
-              'TODO', 
               '2026-02-01 12:55:00'
             ),
             (
@@ -506,7 +494,6 @@ export class Db {
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Complete Treasure Hunt Guide', 
               'Uncover every hidden treasure in The Witcher 3 with this exhaustive treasure hunting guide. We detail the locations of all witcher gear sets, including Griffin, Cat, Bear, Wolf, and Viper diagrams scattered throughout the main game and expansions. Each treasure hunt is covered with step-by-step instructions, maps, and tips for overcoming the challenges that guard these valuable rewards. Learn how to decode cryptic maps, solve environmental puzzles, and defeat the powerful guardians of ancient witcher artifacts. The guide also covers non-witcher treasure hunts, including hidden caches, smuggler''s treasures, and legendary weapon locations. We provide strategies for navigating dangerous dungeons, avoiding traps, and preparing for the tough battles that often precede major discoveries. Special sections dedicated to the Blood and Wine Grandmaster gear hunts and Hearts of Stone unique item locations.', 
-              'TODO', 
               '2026-01-25 20:15:00'
             ),
             (
@@ -514,15 +501,13 @@ export class Db {
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Character Build Guide', 
               'Create the perfect Geralt build with this comprehensive character development guide. We analyze all skill trees in detail: Combat, Alchemy, Signs, and General, providing recommendations for different playstyles from pure warrior to master mage. Learn which skills synergize best, how to allocate skill points efficiently, and which mutagens complement your chosen build. The guide covers popular builds like the Euphoria build, Signs build, Tank build, and Hybrid builds, complete with recommended equipment, decoctions, and playstyle strategies. We explain the mechanics behind attack power, sign intensity, and critical hit chance, helping you optimize Geralt''s stats for maximum effectiveness. Advanced topics include mutation systems, gear set bonuses, and how to adapt your build for different challenges like boss fights, contract monsters, or crowd control situations. Tips for respeccing and experimenting with different builds throughout your playthrough.', 
-              'TODO', 
               '2026-02-10 14:20:00'
             ),
             (
               (SELECT id FROM users WHERE name = 'sa'), 
               (SELECT id FROM games WHERE title = 'The Witcher 3'), 
               'Expansion Content Guide', 
-              'Master the additional content from Hearts of Stone and Blood and Wine expansions with this detailed guide. For Hearts of Stone, we provide complete walkthroughs for all main quests including the complex Heist missions, the mysterious Man of Glass questline, and the challenging encounters with Gaunter O''Dimm. Learn how to navigate the moral complexities of the expansion and achieve the best possible outcomes. For Blood and Wine, we cover the entire Toussaint experience from the initial investigation to the final confrontation with the Beast. The guide includes detailed maps of all new areas, complete walkthroughs for all main and secondary quests, and strategies for the unique tournament system. We also cover the new Grandmaster gear sets, the wine mechanics, and the estate management system. Special attention is given to the multiple endings and how your choices throughout both expansions affect the final outcomes. Tips for level-appropriate progression and optimal quest sequencing are included.', 
-              'TODO', 
+              'Master the additional content from Hearts of Stone and Blood and Wine expansions with this detailed guide. For Hearts of Stone, we provide complete walkthroughs for all main quests including the complex Heist missions, the mysterious Man of Glass questline, and the challenging encounters with Gaunter O''Dimm. Learn how to navigate the moral complexities of the expansion and achieve the best possible outcomes. For Blood and Wine, we cover the entire Toussaint experience from the initial investigation to the final confrontation with the Beast. The guide includes detailed maps of all new areas, complete walkthroughs for all main and secondary quests, and strategies for the unique tournament system. We also cover the new Grandmaster gear sets, the wine mechanics, and the estate management system. Special attention is given to the multiple endings and how your choices throughout both expansions affect the final outcomes. Tips for level-appropriate progression and optimal quest sequencing are included.',  
               '2026-01-18 17:35:00'
             );
         `);
