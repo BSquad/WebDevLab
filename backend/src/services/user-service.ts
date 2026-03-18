@@ -3,7 +3,6 @@ import { AnalysisData } from '../../../shared/models/analysisData.js';
 import { GameDbAccess } from '../db-access/game-db-access.js';
 import { GuideDbAccess } from '../db-access/guide-db-access.js';
 import { UserProfile } from '../../../shared/models/user.js';
-import type { Request, Response } from 'express';
 
 export class UserService {
     private readonly gameDbAccess = new GameDbAccess();
@@ -15,9 +14,7 @@ export class UserService {
     };
 
     getUserById = async (id: number) => {
-        const user = await this.userDbAccess.getUserById(id);
-        if (!user) throw new Error('User not found');
-        return user;
+        return await this.userDbAccess.getUserById(id);
     };
 
     updateUser = async (
@@ -42,7 +39,7 @@ export class UserService {
         return await this.userDbAccess.deleteUser(id);
     };
 
-    getFullProfile = async (userId: number): Promise<UserProfile> => {
+    getFullProfile = async (userId: number): Promise<UserProfile | null> => {
         const [user, games, guides, achievements] = await Promise.all([
             this.userDbAccess.getUserById(userId),
             this.gameDbAccess.getGamesByUserId(userId),
@@ -50,7 +47,7 @@ export class UserService {
             this.gameDbAccess.getAchievementsByUserId(userId),
         ]);
 
-        if (!user) throw new Error('User not found');
+        if (!user) return null;
 
         return { ...user, games, guides, achievements };
     };
