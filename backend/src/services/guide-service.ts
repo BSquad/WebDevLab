@@ -1,30 +1,43 @@
 import type { Guide } from '../../../shared/models/guide.ts';
 import { GuideDbAccess } from '../db-access/guide-db-access.js';
+import createError from 'http-errors';
 
 export class GuideService {
-    private guideDbAccess: GuideDbAccess = new GuideDbAccess();
+    private guideDbAccess = new GuideDbAccess();
 
     createGuide = async (guide: Guide): Promise<number> => {
-        return await this.guideDbAccess.addGuide(guide);
+        try {
+            return await this.guideDbAccess.addGuide(guide);
+        } catch (err: any) {
+            if (err.message?.includes('SQLITE_CONSTRAINT')) {
+                throw createError(
+                    400,
+                    'Guide with this title already exists for this game',
+                );
+            }
+            throw err;
+        }
     };
 
     getGuidesByGameId = async (gameId: number): Promise<Guide[]> => {
-        return await this.guideDbAccess.getGuidesByGameId(gameId);
+        return this.guideDbAccess.getGuidesByGameId(gameId);
     };
 
-    getGuideById = async (id: number): Promise<Guide | undefined> => {
-        return await this.guideDbAccess.getGuideById(id);
+    getGuideById = async (id: number): Promise<Guide> => {
+        const guide = await this.guideDbAccess.getGuideById(id);
+        if (!guide) throw createError(404, 'Guide not found');
+        return guide;
     };
 
-    async getGuidesByUserId(userId: number) {
-        return await this.guideDbAccess.getGuidesByUserId(userId);
-    }
+    getGuidesByUserId = async (userId: number): Promise<Guide[]> => {
+        return this.guideDbAccess.getGuidesByUserId(userId);
+    };
 
     updateGuide = async (id: number, userId: number, guide: Guide) => {
         const updated = await this.guideDbAccess.updateGuide(id, userId, guide);
 
         if (!updated) {
-            throw new Error('Guide not found or no permission');
+            throw createError(404, 'Guide not found or no permission');
         }
     };
 
@@ -32,20 +45,21 @@ export class GuideService {
         const deleted = await this.guideDbAccess.deleteGuide(id, userId);
 
         if (!deleted) {
-            throw new Error('Guide not found or no permission');
+            throw createError(404, 'Guide not found or no permission');
         }
     };
 
     rateGuide = async (guideId: number, userId: number, score: number) => {
-        if (score < 1 || score > 5) {
-            throw new Error('Rating must be between 1 and 5');
+        // optional doppelte Absicherung (Controller validiert schon)
+        if (!Number.isInteger(score) || score < 1 || score > 5) {
+            throw createError(400, 'Rating must be between 1 and 5');
         }
 
         await this.guideDbAccess.rateGuide(guideId, userId, score);
     };
 
     getTopGuidesByGameId = async (gameId: number) => {
-        return await this.guideDbAccess.getTopGuidesByGameId(gameId);
+        return this.guideDbAccess.getTopGuidesByGameId(gameId);
     };
 
     addScreenshot = async (guideId: number, filePath: string) => {
@@ -55,11 +69,12 @@ export class GuideService {
     deleteScreenshot = async (guideId: number, filePath: string) => {
         await this.guideDbAccess.deleteScreenshot(guideId, filePath);
     };
+
     generateGuidePdf = async (id: number): Promise<Buffer> => {
         const guide = await this.guideDbAccess.getGuideById(id);
 
         if (!guide) {
-            throw new Error('Guide not found');
+            throw createError(404, 'Guide not found'); // ✅ FIX
         }
 
         const screenshots =
@@ -116,12 +131,10 @@ export class GuideService {
                     lineGap: 4,
                 });
 
-            //screenshots
             if (screenshots.length > 0) {
                 doc.addPage();
 
                 doc.font('Helvetica-Bold').fontSize(20).text('Screenshots');
-
                 doc.moveDown(1.5);
 
                 const imageWidth = 240;
@@ -137,9 +150,7 @@ export class GuideService {
                         shot.filePath.replace(/^\/+/, ''),
                     );
 
-                    if (!fs.existsSync(imagePath)) {
-                        return;
-                    }
+                    if (!fs.existsSync(imagePath)) return;
 
                     try {
                         const buffer = fs.readFileSync(imagePath);

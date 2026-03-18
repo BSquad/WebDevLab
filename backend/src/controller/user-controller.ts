@@ -11,7 +11,7 @@ export class UserController {
 
     getUser = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
         const user = await this.userService.getUserById(userId);
         if (!user) throw createError(404, 'User not found');
@@ -21,7 +21,7 @@ export class UserController {
 
     updateUser = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
         const { name, email } = req.body;
         if (!name || !email)
@@ -42,7 +42,7 @@ export class UserController {
 
     updateLayout = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
         const { order } = req.body;
         if (!Array.isArray(order))
@@ -55,7 +55,7 @@ export class UserController {
 
     deleteUser = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
         const user = await this.userService.getUserById(userId);
         if (!user) throw createError(404, 'User not found');
@@ -66,7 +66,7 @@ export class UserController {
 
     getUserProfile = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
         const profile = await this.userService.getFullProfile(userId);
         if (!profile) throw createError(404, 'User profile not found');
@@ -76,7 +76,7 @@ export class UserController {
 
     getGames = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
         const data = await this.gameService.getGamesByUserId(userId);
         res.status(200).json(data);
@@ -84,18 +84,17 @@ export class UserController {
 
     getAchievements = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
         const data = await this.gameService.getAchievementsByUserId(userId);
         res.status(200).json(data);
     };
 
     getGuides = async (req: Request, res: Response): Promise<void> => {
-        const guideId = Number(req.params.id);
-        if (Number.isNaN(guideId)) throw createError(400, 'Invalid Guide ID');
+        const userId = Number(req.params.id);
+        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
 
-        const data = await this.guideService.getGuideById(guideId);
-        if (!data) throw createError(404, 'Guide not found');
+        const data = await this.guideService.getGuidesByUserId(userId);
 
         res.status(200).json(data);
     };
@@ -103,14 +102,25 @@ export class UserController {
     startUserAnalysis = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.body?.userId);
         if (Number.isNaN(userId) || !userId)
-            throw createError(400, 'Valid User ID required in body');
+            throw createError(400, 'Valid userId required in body');
 
-        await this.streamAnalysisProgress(res);
-        await this.sendFinalAnalysisData(res, userId);
+        try {
+            await this.streamAnalysisProgress(res);
+            await this.sendFinalAnalysisData(res, userId);
+        } catch (err) {
+            console.error(err);
+
+            if (!res.headersSent) {
+                throw err;
+            }
+
+            res.end();
+        }
     };
 
     private async streamAnalysisProgress(res: Response): Promise<void> {
         const totalSteps = 10;
+
         for (let step = 1; step <= totalSteps; step++) {
             const progress = Math.round((step / totalSteps) * 100);
             res.write(`${progress}\n`);
@@ -140,6 +150,7 @@ export class UserController {
         userId: number,
     ): Promise<void> {
         const analysisData = await this.userService.startUserAnalysis(userId);
+
         res.write(JSON.stringify(analysisData));
         res.end();
     }

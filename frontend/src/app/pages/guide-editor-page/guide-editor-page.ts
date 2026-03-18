@@ -104,9 +104,10 @@ export class GuideEditorPage {
                 this.guide.gameId = gameId;
                 this.guide.userId = this.userId!;
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error('Guide editor initialization failed', err);
-            this.toastService.showError('The guide could not be loaded.');
+            const message = err?.error?.message || 'The guide could not be loaded.';
+            this.toastService.showError(message);
         } finally {
             this.isLoaded = true;
         }
@@ -156,7 +157,7 @@ export class GuideEditorPage {
     }
 
     async onSubmit(form: NgForm) {
-        console.log('USER ID:', this.userId);
+        console.log('userId:', this.userId);
         console.log('GUIDE BEFORE SAVE:', this.guide);
         if (!form.valid) return;
 
@@ -176,10 +177,12 @@ export class GuideEditorPage {
             );
         } catch (err: any) {
             console.error('SAVE ERROR:', err);
+
             if (err.message === 'UPLOAD_FAILED') {
                 this.toastService.showError('A screenshot could not be uploaded.');
             } else {
-                this.toastService.showError('The guide could not be saved.');
+                const message = err?.error?.message || 'The guide could not be saved.';
+                this.toastService.showError(message);
             }
         }
     }
@@ -196,19 +199,17 @@ export class GuideEditorPage {
         });
 
         const confirmed = await firstValueFrom(dialogRef.afterClosed());
-
         if (!confirmed) return;
 
         try {
-            const success = await this.guideService.deleteGuide(this.guideId, this.userId);
+            await this.guideService.deleteGuide(this.guideId, this.userId);
 
-            if (success) {
-                this.toastService.showSuccess('Guide deleted');
-                this.router.navigate(['/games', this.game()?.id]);
-            }
-        } catch (err) {
+            this.toastService.showSuccess('Guide deleted');
+            this.router.navigate(['/games', this.game()?.id]);
+        } catch (err: any) {
             console.error('Guide deletion failed', err);
-            this.toastService.showError('The guide could not be deleted.');
+            const message = err?.error?.message || 'The guide could not be deleted.';
+            this.toastService.showError(message);
         }
     }
 

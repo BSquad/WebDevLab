@@ -12,10 +12,10 @@ describe('Guide API – Modul A', () => {
             content: 'This is a test guide',
         });
 
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(201);
+        expect(response.body.id).toBeGreaterThan(0);
 
-        expect(response.body).toBeGreaterThan(0);
-        createdGuideId = response.body;
+        createdGuideId = response.body.id;
     });
 
     it('should reject invalid guide creation', async () => {
@@ -71,7 +71,7 @@ describe('Guide API – Modul A', () => {
             });
 
         expect(response.status).toBe(200);
-        expect(response.body).toBe(true);
+        expect(response.body.message).toBeDefined();
 
         const check = await request(app).get(`/guides/${createdGuideId}`);
 
@@ -110,7 +110,7 @@ describe('Guide API – Modul A', () => {
             });
 
         expect(response.status).toBe(200);
-        expect(response.body).toBe(true);
+        expect(response.body.message).toBeDefined();
     });
 
     it('should reject rating above range', async () => {
@@ -153,9 +153,9 @@ describe('Guide API – Modul A', () => {
                 content: 'Test',
             });
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(201);
 
-        const id = res.body;
+        const id = res.body.id;
 
         const pdf = await request(app).get(`/guides/${id}/pdf`);
 
@@ -172,8 +172,9 @@ describe('Guide API – Modul A', () => {
                 content: 'Test',
             });
 
-        expect(res.status).toBe(200);
-        const id = res.body;
+        expect(res.status).toBe(201);
+
+        const id = res.body.id;
 
         await request(app)
             .post(`/guides/${id}/upload`)
@@ -205,6 +206,7 @@ describe('Guide API – Modul A', () => {
             .attach('image', Buffer.from('test'), 'test.png');
 
         expect(response.status).toBe(200);
+        expect(response.body.path).toBeDefined();
     });
 
     it('should delete screenshot', async () => {
@@ -237,7 +239,7 @@ describe('Guide API – Modul A', () => {
             .send({ userId: 1 });
 
         expect(response.status).toBe(200);
-        expect(response.body).toBe(true);
+        expect(response.body.message).toBeDefined();
     });
 
     it('should fail delete for non-existing guide', async () => {

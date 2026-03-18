@@ -1,62 +1,74 @@
 import { Injectable } from '@angular/core';
 import { Guide } from '../../../../shared/models/guide';
 import { BaseApi } from './base-api';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { ToastService } from '../services/toast-service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GuideApi extends BaseApi {
+    constructor(http: HttpClient, toast: ToastService) {
+        super(http, toast);
+    }
+
+    private guideUrl = `${this.apiUrl}/guides`;
+
     async getGuidesByGameId(gameId: number): Promise<Guide[]> {
-        return await this.request(this.http.get<Guide[]>(`${this.apiUrl}/guides/game/${gameId}`));
+        return await this.request(this.http.get<Guide[]>(`${this.guideUrl}/game/${gameId}`));
     }
 
     async getGuideById(id: number): Promise<Guide> {
-        return await this.request(this.http.get<Guide>(`${this.apiUrl}/guides/${id}`));
+        return await this.request(this.http.get<Guide>(`${this.guideUrl}/${id}`));
     }
 
-    async createGuide(guide: Guide): Promise<number> {
-        return await this.request(this.http.post<number>(`${this.apiUrl}/guides`, guide));
+    async getTopGuides(gameId: number): Promise<Guide[]> {
+        return await this.request(this.http.get<Guide[]>(`${this.guideUrl}/top/${gameId}`));
     }
 
-    async updateGuide(id: number, guide: Guide): Promise<boolean> {
-        return await this.request(this.http.put<boolean>(`${this.apiUrl}/guides/${id}`, guide));
+    async createGuide(guide: Guide): Promise<{ id: number }> {
+        return await this.request(this.http.post<{ id: number }>(this.guideUrl, guide));
     }
 
-    async deleteGuide(id: number, userId: number): Promise<boolean> {
+    async updateGuide(id: number, guide: Guide, userId: number): Promise<{ message: string }> {
         return await this.request(
-            this.http.delete<boolean>(`${this.apiUrl}/guides/${id}`, {
+            this.http.put<{ message: string }>(`${this.guideUrl}/${id}`, {
+                ...guide,
+                userId,
+            }),
+        );
+    }
+
+    async deleteGuide(id: number, userId: number): Promise<{ message: string }> {
+        return await this.request(
+            this.http.delete<{ message: string }>(`${this.guideUrl}/${id}`, {
                 body: { userId },
             }),
         );
     }
 
-    async rateGuide(guideId: number, rating: number, userId: number): Promise<boolean> {
+    async rateGuide(guideId: number, rating: number, userId: number): Promise<{ message: string }> {
         return await this.request(
-            this.http.post<boolean>(`${this.apiUrl}/guides/${guideId}/rate`, {
-                rating: rating,
-                userId: userId,
+            this.http.post<{ message: string }>(`${this.guideUrl}/${guideId}/rate`, {
+                rating,
+                userId,
             }),
         );
     }
 
-    async getTopGuides(gameId: number): Promise<Guide[]> {
-        return await this.request(this.http.get<Guide[]>(`${this.apiUrl}/guides/top/${gameId}`));
-    }
-
-    async uploadScreenshot(guideId: number, file: File): Promise<boolean> {
+    async uploadScreenshot(guideId: number, file: File): Promise<{ path: string }> {
         const formData = new FormData();
         formData.append('uploadType', 'guides');
         formData.append('image', file);
 
         return await this.request(
-            this.http.post<boolean>(`${this.apiUrl}/guides/${guideId}/upload`, formData),
+            this.http.post<{ path: string }>(`${this.guideUrl}/${guideId}/upload`, formData),
         );
     }
 
-    async deleteScreenshot(guideId: number, filePath: string): Promise<boolean> {
+    async deleteScreenshot(guideId: number, filePath: string): Promise<{ message: string }> {
         return await this.request(
-            this.http.delete<boolean>(`${this.apiUrl}/guides/${guideId}/screenshot`, {
+            this.http.delete<{ message: string }>(`${this.guideUrl}/${guideId}/screenshot`, {
                 body: { filePath },
             }),
         );
@@ -64,9 +76,9 @@ export class GuideApi extends BaseApi {
 
     async downloadPdf(guideId: number): Promise<Blob> {
         return await this.request(
-            this.http.get(`${this.apiUrl}/guides/${guideId}/pdf`, {
-                responseType: 'blob',
-            }) as Observable<Blob>,
+            this.http.get<Blob>(`${this.guideUrl}/${guideId}/pdf`, {
+                responseType: 'blob' as 'json',
+            }),
         );
     }
 }

@@ -3,6 +3,7 @@ import { AnalysisData } from '../../../shared/models/analysisData.js';
 import { GameDbAccess } from '../db-access/game-db-access.js';
 import { GuideDbAccess } from '../db-access/guide-db-access.js';
 import { UserProfile } from '../../../shared/models/user.js';
+import createError from 'http-errors';
 
 export class UserService {
     private readonly gameDbAccess = new GameDbAccess();
@@ -10,11 +11,13 @@ export class UserService {
     private readonly userDbAccess = new UserDbAccess();
 
     createUser = async (name: string, email: string, passwordHash: string) => {
-        return await this.userDbAccess.createUser(name, email, passwordHash);
+        return this.userDbAccess.createUser(name, email, passwordHash);
     };
 
     getUserById = async (id: number) => {
-        return await this.userDbAccess.getUserById(id);
+        const user = await this.userDbAccess.getUserById(id);
+        if (!user) throw createError(404, 'User not found');
+        return user;
     };
 
     updateUser = async (
@@ -23,23 +26,38 @@ export class UserService {
         email: string,
         profilePicturePath: string,
     ) => {
-        return await this.userDbAccess.updateUser(
-            id,
-            name,
-            email,
-            profilePicturePath,
-        );
+        // ❗ kein Truthiness-Check auf void
+        await this.userDbAccess.updateUser(id, name, email, profilePicturePath);
+
+        // optional: Existenz prüfen (wenn DB nichts zurückgibt)
+        const user = await this.userDbAccess.getUserById(id);
+        if (!user) throw createError(404, 'User not found');
+
+        return user;
     };
 
     updateLayout = async (id: number, order: string[]) => {
-        return await this.userDbAccess.updateLayout(id, order);
+        await this.userDbAccess.updateLayout(id, order);
+
+        const user = await this.userDbAccess.getUserById(id);
+        if (!user) throw createError(404, 'User not found');
+
+        return true;
     };
 
     deleteUser = async (id: number) => {
-        return await this.userDbAccess.deleteUser(id);
+        await this.userDbAccess.deleteUser(id);
+
+        // prüfen ob User noch existiert
+        const user = await this.userDbAccess.getUserById(id);
+        if (user) {
+            throw createError(500, 'Failed to delete user');
+        }
+
+        return true;
     };
 
-    getFullProfile = async (userId: number): Promise<UserProfile | null> => {
+    getFullProfile = async (userId: number): Promise<UserProfile> => {
         const [user, games, guides, achievements] = await Promise.all([
             this.userDbAccess.getUserById(userId),
             this.gameDbAccess.getGamesByUserId(userId),
@@ -47,12 +65,18 @@ export class UserService {
             this.gameDbAccess.getAchievementsByUserId(userId),
         ]);
 
-        if (!user) return null;
+        if (!user) throw createError(404, 'User not found');
 
         return { ...user, games, guides, achievements };
     };
 
     startUserAnalysis = async (userId: number): Promise<AnalysisData> => {
-        return await this.userDbAccess.startUserAnalysis(userId);
+        const result = await this.userDbAccess.startUserAnalysis(userId);
+
+        if (!result) {
+            throw createError(500, 'User analysis failed');
+        }
+
+        return result;
     };
 }

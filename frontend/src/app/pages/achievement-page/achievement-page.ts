@@ -51,19 +51,15 @@ export class AchievementPage {
 
     async completeAchievement(achievement: Achievement) {
         try {
-            const success = await this.gameService.completeAchievement(
+            await this.gameService.completeAchievement(
                 achievement.id,
                 this.user()!.id,
                 this.game()!.id,
             );
 
-            if (success) {
-                this.achievements.update((list: any) =>
-                    list.map((a: any) =>
-                        a.id === achievement.id ? { ...a, isCompleted: true } : a,
-                    ),
-                );
-            }
+            this.achievements.update((list: any) =>
+                list.map((a: any) => (a.id === achievement.id ? { ...a, isCompleted: true } : a)),
+            );
         } catch (err: any) {
             this.toastService.showError('Error: ' + err.message);
         }

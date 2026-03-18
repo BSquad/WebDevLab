@@ -27,11 +27,13 @@ export class GameService {
         userId: number,
         gameId: number,
     ): Promise<boolean> {
-        return this.gameApi.completeAchievement(achievementId, userId, gameId);
+        await this.gameApi.completeAchievement(achievementId, userId, gameId);
+        return true;
     }
 
     async toggleTrackGame(gameId: number, userId: number, isTracked: boolean): Promise<boolean> {
-        return this.gameApi.toggleTrackGame(gameId, userId, isTracked);
+        await this.gameApi.toggleTrackGame(gameId, userId, isTracked);
+        return true;
     }
 
     async getBestUsersByGameId(gameId: number): Promise<User[]> {

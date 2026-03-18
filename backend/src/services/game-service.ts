@@ -2,23 +2,30 @@ import type { Achievement } from '../../../shared/models/achievement.ts';
 import type { Game } from '../../../shared/models/game.ts';
 import { User } from '../../../shared/models/user.js';
 import { GameDbAccess } from '../db-access/game-db-access.js';
+import createError from 'http-errors';
 
 export class GameService {
     private gameDbAccess: GameDbAccess = new GameDbAccess();
 
     getAllGames = async (userId?: number): Promise<Game[]> => {
-        return await this.gameDbAccess.getGames(userId);
+        return this.gameDbAccess.getGames(userId);
     };
 
     getGameById = async (gameId: number, userId?: number): Promise<Game> => {
-        return await this.gameDbAccess.getGameById(gameId, userId);
+        const game = await this.gameDbAccess.getGameById(gameId, userId);
+
+        if (!game) {
+            throw createError(404, 'Game not found');
+        }
+
+        return game;
     };
 
     getAchievementsByGameId = async (
         gameId: number,
         userId?: number,
     ): Promise<Achievement[]> => {
-        return await this.gameDbAccess.getAchievementsByGameId(gameId, userId);
+        return this.gameDbAccess.getAchievementsByGameId(gameId, userId);
     };
 
     completeAchievement = async (
@@ -46,16 +53,18 @@ export class GameService {
     };
 
     getBestUsersByGameId = async (gameId: number): Promise<User[]> => {
-        return await this.gameDbAccess.getBestUsersByGameId(gameId);
+        return this.gameDbAccess.getBestUsersByGameId(gameId);
     };
 
     getPopularGames = async (): Promise<Game[]> => {
-        return await this.gameDbAccess.getPopularGames();
+        return this.gameDbAccess.getPopularGames();
     };
 
-    getGamesByUserId = async (id: number): Promise<Game[]> =>
-        this.gameDbAccess.getGamesByUserId(id);
+    getGamesByUserId = async (id: number): Promise<Game[]> => {
+        return this.gameDbAccess.getGamesByUserId(id);
+    };
 
-    getAchievementsByUserId = async (id: number): Promise<Achievement[]> =>
-        await this.gameDbAccess.getAchievementsByUserId(id);
+    getAchievementsByUserId = async (id: number): Promise<Achievement[]> => {
+        return this.gameDbAccess.getAchievementsByUserId(id);
+    };
 }

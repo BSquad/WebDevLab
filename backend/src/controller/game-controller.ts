@@ -1,90 +1,108 @@
 import type { Request, Response } from 'express';
 import { GameService } from '../services/game-service.js';
+import createError from 'http-errors';
 
 export class GameController {
-    private gameService: GameService = new GameService();
+    private gameService = new GameService();
 
-    getGames = async (req: Request, res: Response) => {
-        try {
-            const userId = req.query.userId
-                ? Number(req.query.userId)
-                : undefined;
-            const games = await this.gameService.getAllGames(userId);
-            res.json(games);
-        } catch (err: any) {
-            res.status(500).json({ message: err.message });
+    private parseId(value: any, name: string): number {
+        const id = Number(value);
+        if (Number.isNaN(id)) {
+            throw createError(400, `Invalid ${name}`);
         }
+        return id;
+    }
+
+    private parseOptionalId(value: any, name: string): number | undefined {
+        if (value === undefined) return undefined;
+
+        const id = Number(value);
+        if (Number.isNaN(id)) {
+            throw createError(400, `Invalid ${name}`);
+        }
+        return id;
+    }
+
+    getGames = async (req: Request, res: Response): Promise<void> => {
+        const userId = this.parseOptionalId(req.query.userId, 'userId');
+
+        const games = await this.gameService.getAllGames(userId);
+        res.status(200).json(games);
     };
 
-    getGameById = async (req: Request, res: Response) => {
-        try {
-            const gameId = Number(req.params.gameId);
-            const userId = req.query.userId
-                ? Number(req.query.userId)
-                : undefined;
-            const game = await this.gameService.getGameById(gameId, userId);
-            res.json(game);
-        } catch (err: any) {
-            res.status(404).json({ message: err.message });
-        }
+    getGameById = async (req: Request, res: Response): Promise<void> => {
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+        const userId = this.parseOptionalId(req.query.userId, 'userId');
+
+        const game = await this.gameService.getGameById(gameId, userId);
+        res.status(200).json(game);
     };
 
-    getPopularGames = async (req: Request, res: Response) => {
-        try {
-            const games = await this.gameService.getPopularGames();
-            res.json(games);
-        } catch (err: any) {
-            res.status(500).json({ message: err.message });
-        }
+    getPopularGames = async (_req: Request, res: Response): Promise<void> => {
+        const games = await this.gameService.getPopularGames();
+        res.status(200).json(games);
     };
 
-    getAchievementsByGameId = async (req: Request, res: Response) => {
-        const gameId = Number(req.params.gameId);
-        const userId = req.query.userId ? Number(req.query.userId) : undefined;
+    getAchievementsByGameId = async (
+        req: Request,
+        res: Response,
+    ): Promise<void> => {
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+        const userId = this.parseOptionalId(req.query.userId, 'userId');
+
         const achievements = await this.gameService.getAchievementsByGameId(
             gameId,
             userId,
         );
-        res.json(achievements);
+
+        res.status(200).json(achievements);
     };
 
-    completeAchievement = async (req: Request, res: Response) => {
-        const gameId = Number(req.params.gameId);
-        const achievementId = Number(req.params.achievementId);
-        const userId = req.query.userId ? Number(req.query.userId) : undefined;
-
-        if (!userId) {
-            return res
-                .status(400)
-                .json({ message: 'userId query parameter is required' });
-        }
+    completeAchievement = async (
+        req: Request,
+        res: Response,
+    ): Promise<void> => {
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+        const achievementId = this.parseId(
+            req.params.achievementId,
+            'achievementId',
+        );
+        const userId = this.parseId(req.query.userId, 'userId');
 
         await this.gameService.completeAchievement(
             achievementId,
             userId,
             gameId,
         );
-        res.json(true);
+
+        res.status(200).json({ message: 'Achievement completed' });
     };
 
-    toggleTrackGame = async (req: Request, res: Response) => {
-        const gameId = Number(req.params.gameId);
-        const userId = req.query.userId ? Number(req.query.userId) : undefined;
-        const isTracked = Boolean(req.body.isTracked);
+    toggleTrackGame = async (req: Request, res: Response): Promise<void> => {
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+        const userId = this.parseId(req.query.userId, 'userId');
 
-        if (!userId) {
-            return res
-                .status(400)
-                .json({ message: 'userId query parameter is required' });
+        if (typeof req.body.isTracked !== 'boolean') {
+            throw createError(400, 'isTracked must be a boolean');
         }
 
-        await this.gameService.toggleTrackGame(gameId, userId, isTracked);
-        res.json(true);
+        await this.gameService.toggleTrackGame(
+            gameId,
+            userId,
+            req.body.isTracked,
+        );
+
+        res.status(200).json({ message: 'Track status updated' });
     };
 
-    getBestUsersByGameId = async (req: Request, res: Response) => {
-        const gameId = Number(req.params.gameId);
+    getBestUsersByGameId = async (
+        req: Request,
+        res: Response,
+    ): Promise<void> => {
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+
         const bestUsers = await this.gameService.getBestUsersByGameId(gameId);
-        res.json(bestUsers);
+
+        res.status(200).json(bestUsers);
     };
 }

@@ -17,6 +17,9 @@ describe('GameApi', () => {
         });
         service = TestBed.inject(GameApi);
         httpMock = TestBed.inject(HttpTestingController);
+
+        // wichtig für URL
+        (service as any).apiUrl = 'http://localhost:3000';
     });
 
     afterEach(() => {
@@ -30,7 +33,9 @@ describe('GameApi', () => {
     describe('Game Methods', () => {
         it('should get games without userId', async () => {
             const promise = service.getGames();
+
             const req = httpMock.expectOne('http://localhost:3000/games');
+
             req.flush(MOCK_GAMES);
 
             const result = await promise;
@@ -40,7 +45,9 @@ describe('GameApi', () => {
 
         it('should get games with userId', async () => {
             const promise = service.getGames(123);
+
             const req = httpMock.expectOne('http://localhost:3000/games?userId=123');
+
             req.flush(MOCK_GAMES);
 
             const result = await promise;
@@ -52,7 +59,9 @@ describe('GameApi', () => {
             const mockGame = MOCK_GAMES[0];
 
             const promise = service.getGame(mockGame.id);
+
             const req = httpMock.expectOne(`http://localhost:3000/games/${mockGame.id}`);
+
             req.flush(mockGame);
 
             const result = await promise;
@@ -64,7 +73,9 @@ describe('GameApi', () => {
             const mockGame = MOCK_GAMES[0];
 
             const promise = service.getGame(mockGame.id, 123);
+
             const req = httpMock.expectOne(`http://localhost:3000/games/${mockGame.id}?userId=123`);
+
             req.flush(mockGame);
 
             const result = await promise;
@@ -74,7 +85,9 @@ describe('GameApi', () => {
 
         it('should get popular games', async () => {
             const promise = service.getPopularGames();
+
             const req = httpMock.expectOne('http://localhost:3000/games/popular');
+
             req.flush(MOCK_GAMES);
 
             const result = await promise;
@@ -90,7 +103,9 @@ describe('GameApi', () => {
             ];
 
             const promise = service.getAchievementsByGameId(123);
+
             const req = httpMock.expectOne('http://localhost:3000/games/123/achievements');
+
             req.flush(mockAchievements);
 
             const result = await promise;
@@ -104,9 +119,11 @@ describe('GameApi', () => {
             ];
 
             const promise = service.getAchievementsByGameId(123, 456);
+
             const req = httpMock.expectOne(
                 'http://localhost:3000/games/123/achievements?userId=456',
             );
+
             req.flush(mockAchievements);
 
             const result = await promise;
@@ -114,26 +131,32 @@ describe('GameApi', () => {
             expect(req.request.method).toBe('GET');
         });
 
+        // 🔥 FIXED
         it('should complete achievement', async () => {
             const promise = service.completeAchievement(789, 123, 456);
+
             const req = httpMock.expectOne(
                 'http://localhost:3000/games/456/achievements/789/complete?userId=123',
             );
-            req.flush(true);
+
+            req.flush({ message: 'Achievement completed' });
 
             const result = await promise;
-            expect(result).toBeTrue();
+            expect(result.message).toBe('Achievement completed');
             expect(req.request.method).toBe('POST');
             expect(req.request.body).toEqual({});
         });
 
+        // 🔥 FIXED
         it('should toggle track game', async () => {
             const promise = service.toggleTrackGame(123, 456, true);
+
             const req = httpMock.expectOne('http://localhost:3000/games/123/track?userId=456');
-            req.flush(true);
+
+            req.flush({ message: 'Track status updated' });
 
             const result = await promise;
-            expect(result).toBeTrue();
+            expect(result.message).toBe('Track status updated');
             expect(req.request.method).toBe('POST');
             expect(req.request.body).toEqual({ isTracked: true });
         });
@@ -142,7 +165,9 @@ describe('GameApi', () => {
             const mockUsers: User[] = [{ id: 1, name: 'User 1', email: 'user1@test.com' }];
 
             const promise = service.getBestUsersByGameId(123);
+
             const req = httpMock.expectOne('http://localhost:3000/games/123/best-users');
+
             req.flush(mockUsers);
 
             const result = await promise;
@@ -154,33 +179,50 @@ describe('GameApi', () => {
     describe('Error Handling', () => {
         it('should handle HTTP error in getGames', async () => {
             const promise = service.getGames();
+
             const req = httpMock.expectOne('http://localhost:3000/games');
-            req.flush('Server Error', { status: 500, statusText: 'Server Error' });
+
+            req.flush('Server Error', {
+                status: 500,
+                statusText: 'Server Error',
+            });
 
             await expectAsync(promise).toBeRejected();
         });
 
         it('should handle HTTP error in getGame', async () => {
             const promise = service.getGame(1);
+
             const req = httpMock.expectOne('http://localhost:3000/games/1');
-            req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+
+            req.flush('Not Found', {
+                status: 404,
+                statusText: 'Not Found',
+            });
 
             await expectAsync(promise).toBeRejected();
         });
 
         it('should handle HTTP error in completeAchievement', async () => {
             const promise = service.completeAchievement(789, 123, 456);
+
             const req = httpMock.expectOne(
                 'http://localhost:3000/games/456/achievements/789/complete?userId=123',
             );
-            req.flush('Unauthorized', { status: 401, statusText: 'Unauthorized' });
+
+            req.flush('Unauthorized', {
+                status: 401,
+                statusText: 'Unauthorized',
+            });
 
             await expectAsync(promise).toBeRejected();
         });
 
         it('should handle network error', async () => {
             const promise = service.getGames();
+
             const req = httpMock.expectOne('http://localhost:3000/games');
+
             req.error(new ErrorEvent('Network Error'));
 
             await expectAsync(promise).toBeRejected();

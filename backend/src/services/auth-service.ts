@@ -1,6 +1,7 @@
 import type { User } from '../../../shared/models/user.ts';
 import type { RegisterData } from '../../../shared/models/register-data.ts';
 import { UserDbAccess } from '../db-access/user-db-access.js';
+import createError from 'http-errors';
 
 export class AuthService {
     private userdbAccess: UserDbAccess = new UserDbAccess();
@@ -8,17 +9,24 @@ export class AuthService {
     getUserByCredentials = async (
         name: string,
         password: string,
-    ): Promise<User | null> => {
+    ): Promise<User> => {
         const passwordHash = await this.hashPassword(password);
-        return await this.userdbAccess.getUserByNameAndPWHash(
+
+        const user = await this.userdbAccess.getUserByNameAndPWHash(
             name,
             passwordHash,
         );
-    };
 
-    register = async (registerData: RegisterData) => {
+        if (!user) {
+            throw createError(401, 'Invalid credentials');
+        }
+
+        return user;
+    };
+    register = async (registerData: RegisterData): Promise<void> => {
         try {
             const passwordHash = await this.hashPassword(registerData.password);
+
             await this.userdbAccess.createUser(
                 registerData.name,
                 registerData.email,
@@ -26,12 +34,17 @@ export class AuthService {
             );
         } catch (err: any) {
             if (err.code === 'SQLITE_CONSTRAINT') {
-                if (err.message.includes('users.name'))
-                    throw new Error('the username is already taken..');
-                if (err.message.includes('users.email'))
-                    throw new Error('the email address is already taken.');
-                throw new Error('Name or email already taken.');
+                if (err.message.includes('users.name')) {
+                    throw createError(409, 'Username already taken');
+                }
+
+                if (err.message.includes('users.email')) {
+                    throw createError(409, 'Email already taken');
+                }
+
+                throw createError(409, 'Name or email already taken');
             }
+
             throw err;
         }
     };
@@ -41,6 +54,7 @@ export class AuthService {
         const data = encoder.encode(password);
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
+
         return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
     };
 }

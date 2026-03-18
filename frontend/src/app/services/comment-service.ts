@@ -12,7 +12,7 @@ export class CommentsService {
         return await this.commentsApi.getComments(guideId);
     }
 
-    async createComment(comment: GuideComment): Promise<boolean> {
-        return await this.commentsApi.createComment(comment);
+    async createComment(comment: GuideComment): Promise<void> {
+        await this.commentsApi.createComment(comment);
     }
 }

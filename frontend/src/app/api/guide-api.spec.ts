@@ -24,7 +24,6 @@ describe('GuideApi', () => {
         service = TestBed.inject(GuideApi);
         httpMock = TestBed.inject(HttpTestingController);
 
-        // optional: falls BaseApi apiUrl nutzt
         (service as any).apiUrl = 'http://localhost:3000';
     });
 
@@ -68,22 +67,25 @@ describe('GuideApi', () => {
         expect(req.request.method).toBe('POST');
         expect(req.request.body.title).toBe('Test Guide');
 
-        req.flush(123);
+        // 🔥 FIX: API gibt { id }
+        req.flush({ id: 123 });
 
         const result = await promise;
-        expect(result).toBe(123);
+        expect(result.id).toBe(123);
     });
 
     it('should update a guide', async () => {
-        const promise = service.updateGuide(1, mockGuide);
+        const promise = service.updateGuide(1, mockGuide, 1);
 
         const req = httpMock.expectOne('http://localhost:3000/guides/1');
         expect(req.request.method).toBe('PUT');
+        expect(req.request.body.userId).toBe(1);
 
-        req.flush(true);
+        // 🔥 FIX: API gibt { message }
+        req.flush({ message: 'Guide updated successfully' });
 
         const result = await promise;
-        expect(result).toBeTrue();
+        expect(result.message).toBeDefined();
     });
 
     it('should delete a guide', async () => {
@@ -93,10 +95,10 @@ describe('GuideApi', () => {
         expect(req.request.method).toBe('DELETE');
         expect(req.request.body.userId).toBe(1);
 
-        req.flush(true);
+        req.flush({ message: 'Guide deleted successfully' });
 
         const result = await promise;
-        expect(result).toBeTrue();
+        expect(result.message).toBeDefined();
     });
 
     it('should rate a guide', async () => {
@@ -106,10 +108,10 @@ describe('GuideApi', () => {
         expect(req.request.method).toBe('POST');
         expect(req.request.body.rating).toBe(5);
 
-        req.flush(true);
+        req.flush({ message: 'Rating submitted' });
 
         const result = await promise;
-        expect(result).toBeTrue();
+        expect(result.message).toBeDefined();
     });
 
     it('should get top guides', async () => {

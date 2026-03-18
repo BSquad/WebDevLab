@@ -1,123 +1,135 @@
 import type { Request, Response } from 'express';
 import { GuideService } from '../services/guide-service.js';
 import type { Guide } from '../../../shared/models/guide.ts';
+import createError from 'http-errors';
 
 export class GuideController {
-    private guideService: GuideService = new GuideService();
+    private guideService = new GuideService();
 
-    createGuide = async (req: Request, res: Response) => {
-        try {
-            const guide = req.body as Guide;
-
-            const id = await this.guideService.createGuide(guide);
-
-            res.json(id);
-        } catch (err: any) {
-            if (err.message.includes('SQLITE_CONSTRAINT')) {
-                return res.status(400).json({
-                    message:
-                        'You already created a guide with this title for this game.',
-                });
-            }
-
-            res.status(500).json({ message: err.message });
+    private parseId(value: any, name: string): number {
+        const id = Number(value);
+        if (Number.isNaN(id)) {
+            throw createError(400, `Invalid ${name}`);
         }
+        return id;
+    }
+
+    createGuide = async (req: Request, res: Response): Promise<void> => {
+        const guide = req.body as Guide;
+
+        if (
+            !guide ||
+            !guide.title ||
+            !guide.content ||
+            !guide.gameId ||
+            !guide.userId
+        ) {
+            throw createError(400, 'Missing required guide fields');
+        }
+
+        const id = await this.guideService.createGuide(guide);
+
+        res.status(201).json({ id });
     };
 
-    getGuidesByGameId = async (req: Request, res: Response) => {
-        const gameId = Number(req.params.gameId);
+    getGuidesByGameId = async (req: Request, res: Response): Promise<void> => {
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+
         const guides = await this.guideService.getGuidesByGameId(gameId);
-        res.json(guides);
+        res.status(200).json(guides);
     };
 
-    getGuideById = async (req: Request, res: Response) => {
-        const id = Number(req.params.id);
+    getGuideById = async (req: Request, res: Response): Promise<void> => {
+        const id = this.parseId(req.params.id, 'guideId');
+
         const guide = await this.guideService.getGuideById(id);
-
-        if (!guide) {
-            return res.status(404).json({ message: 'Guide not found' });
-        }
-
-        res.json(guide);
+        res.status(200).json(guide);
     };
 
-    getGuidesByUserId = async (req: Request, res: Response) => {
-        const userId = Number(req.params.userId);
+    getGuidesByUserId = async (req: Request, res: Response): Promise<void> => {
+        const userId = this.parseId(req.params.userId, 'userId');
 
         const guides = await this.guideService.getGuidesByUserId(userId);
-
-        res.json(guides);
+        res.status(200).json(guides);
     };
 
-    updateGuide = async (req: Request, res: Response) => {
-        const id = Number(req.params.id);
-        const { userId, title, content } = req.body;
+    getTopGuidesByGameId = async (
+        req: Request,
+        res: Response,
+    ): Promise<void> => {
+        const gameId = this.parseId(req.params.gameId, 'gameId');
 
-        await this.guideService.updateGuide(id, Number(userId), {
+        const guides = await this.guideService.getTopGuidesByGameId(gameId);
+        res.status(200).json(guides);
+    };
+
+    updateGuide = async (req: Request, res: Response): Promise<void> => {
+        const id = this.parseId(req.params.id, 'guideId');
+        const userId = Number(req.body.userId);
+        const { title, content } = req.body;
+
+        if (!userId) throw createError(400, 'userId required');
+
+        await this.guideService.updateGuide(id, userId, {
             title,
             content,
         } as Guide);
 
-        res.json(true);
+        res.status(200).json({ message: 'Guide updated successfully' });
     };
 
-    deleteGuide = async (req: Request, res: Response) => {
-        const id = Number(req.params.id);
-        const { userId } = req.body;
-
-        await this.guideService.deleteGuide(id, Number(userId));
-
-        res.json(true);
-    };
-
-    rateGuide = async (req: Request, res: Response) => {
-        const guideId = Number(req.params.id);
-        const rating = Number(req.body.rating);
+    deleteGuide = async (req: Request, res: Response): Promise<void> => {
+        const id = this.parseId(req.params.id, 'guideId');
         const userId = Number(req.body.userId);
 
-        if (!rating || rating < 1 || rating > 5) {
-            return res.status(400).json({ message: 'Invalid rating' });
+        if (!userId) throw createError(400, 'userId required');
+
+        await this.guideService.deleteGuide(id, userId);
+
+        res.status(200).json({ message: 'Guide deleted successfully' });
+    };
+
+    rateGuide = async (req: Request, res: Response): Promise<void> => {
+        const guideId = this.parseId(req.params.id, 'guideId');
+        const userId = Number(req.body.userId);
+        const rating = Number(req.body.rating);
+
+        if (!userId) throw createError(400, 'userId required');
+
+        if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+            throw createError(400, 'Rating must be between 1 and 5');
         }
+
         await this.guideService.rateGuide(guideId, userId, rating);
 
-        res.json(true);
+        res.status(200).json({ message: 'Rating submitted' });
     };
 
-    getTopGuidesByGameId = async (req: Request, res: Response) => {
-        const gameId = Number(req.params.gameId);
-        const guides = await this.guideService.getTopGuidesByGameId(gameId);
-        res.json(guides);
-    };
+    uploadScreenshot = async (req: Request, res: Response): Promise<void> => {
+        const guideId = this.parseId(req.params.id, 'guideId');
 
-    uploadScreenshot = async (req: Request, res: Response) => {
-        const guideId = Number(req.params.id);
-
-        if (!guideId) {
-            return res.status(400).json({ message: 'Invalid guide id' });
-        }
-
-        if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
-        }
+        if (!req.file) throw createError(400, 'No file uploaded');
 
         const filePath = `/uploads/images/guides/${req.file.filename}`;
 
         await this.guideService.addScreenshot(guideId, filePath);
 
-        res.json({ path: filePath });
+        res.status(200).json({ path: filePath });
     };
 
-    deleteScreenshot = async (req: Request, res: Response) => {
-        const guideId = Number(req.params.id);
+    deleteScreenshot = async (req: Request, res: Response): Promise<void> => {
+        const guideId = this.parseId(req.params.id, 'guideId');
         const { filePath } = req.body;
+
+        if (!filePath) throw createError(400, 'filePath required');
 
         await this.guideService.deleteScreenshot(guideId, filePath);
 
-        res.json(true);
+        res.status(200).json({ message: 'Screenshot deleted' });
     };
 
-    downloadGuidePdf = async (req: Request, res: Response) => {
-        const id = Number(req.params.id);
+    downloadGuidePdf = async (req: Request, res: Response): Promise<void> => {
+        const id = this.parseId(req.params.id, 'guideId');
 
         const pdfBuffer = await this.guideService.generateGuidePdf(id);
 

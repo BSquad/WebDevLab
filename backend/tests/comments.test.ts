@@ -12,8 +12,8 @@ describe('Comments API – Modul C', () => {
             commentText: 'Great guide!',
         });
 
-        expect(response.status).toBe(200);
-        expect(response.body).toBe(true);
+        expect(response.status).toBe(201);
+        expect(response.body.message).toBeDefined();
     });
 
     it('should return comments for a guide', async () => {
@@ -30,6 +30,7 @@ describe('Comments API – Modul C', () => {
             commentText: '',
         });
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBeDefined();
     });
 });

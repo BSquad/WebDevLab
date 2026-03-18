@@ -4,11 +4,18 @@ import { UserProfile } from '../../../../shared/models/user';
 import { Game } from '../../../../shared/models/game';
 import { Achievement } from '../../../../shared/models/achievement';
 import { Guide } from '../../../../shared/models/guide';
+import { HttpClient } from '@angular/common/http';
+import { ToastService } from '../services/toast-service';
+
 @Injectable({
     providedIn: 'root',
 })
 export class UserApi extends BaseApi {
     private userUrl = `${this.apiUrl}/users`;
+
+    constructor(http: HttpClient, toast: ToastService) {
+        super(http, toast);
+    }
 
     async getUserProfile(userId: number): Promise<UserProfile> {
         const url = `${this.userUrl}/${userId}/profile`;
@@ -36,15 +43,25 @@ export class UserApi extends BaseApi {
     }
 
     async getGuides(userId: number): Promise<Guide[]> {
-        const url = `${this.userUrl}/guides/user/${userId}`;
+        const url = `${this.userUrl}/${userId}/guides`;
         return await this.request(this.http.get<Guide[]>(url));
     }
 
     async startUserAnalysis(userId: number): Promise<Response> {
-        return await fetch(`${this.userUrl}/analysis`, {
+        const res = await fetch(`${this.userUrl}/analysis`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId }),
         });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            throw {
+                status: res.status,
+                message: errorText || 'Fehler bei Analyse',
+            };
+        }
+
+        return res;
     }
 }

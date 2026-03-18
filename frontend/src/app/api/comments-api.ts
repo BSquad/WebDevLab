@@ -12,7 +12,10 @@ export class CommentsApi extends BaseApi {
         );
     }
 
-    async createComment(comment: GuideComment): Promise<boolean> {
-        return await this.request(this.http.post<boolean>(`${this.apiUrl}/comments`, comment));
+    // 🔥 FIXED
+    async createComment(comment: GuideComment): Promise<{ message: string }> {
+        return await this.request(
+            this.http.post<{ message: string }>(`${this.apiUrl}/comments`, comment),
+        );
     }
 }

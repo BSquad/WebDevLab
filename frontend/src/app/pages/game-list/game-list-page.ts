@@ -61,11 +61,9 @@ export class GameListPage {
                 game.isTracked,
             );
 
-            if (success) {
-                this.games.update((list) =>
-                    list.map((g) => (g.id === game.id ? { ...g, isTracked: !g.isTracked } : g)),
-                );
-            }
+            this.games.update((list) =>
+                list.map((g) => (g.id === game.id ? { ...g, isTracked: !g.isTracked } : g)),
+            );
         } catch (err: any) {
             this.toastService.showError('Error: ' + err.message);
         }
