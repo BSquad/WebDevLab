@@ -424,9 +424,64 @@ export class Db {
             );
 
           
-                    -- =========================
+            -- =========================
             -- GUIDES
             -- =========================
+            
+
+        -- Elden Ring (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'Elden Ring'),
+            'Elden Ring Rune Farming Guide',
+            'In diesem Guide zeigen wir dir die effizientesten Methoden zum Runen farmen. Du lernst Spots für Early-, Mid- und Late-Game kennen sowie Builds, die besonders gut zum Farmen geeignet sind. Zusätzlich erklären wir, wie du Risiko minimierst und trotzdem schnell Fortschritt machst.'
+            );
+
+            -- Elden Ring (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'Elden Ring'),
+            'Elden Ring Build Guide Strength vs Dexterity',
+            'Dieser Guide vergleicht Strength- und Dexterity-Builds. Du lernst die Vor- und Nachteile beider Spielstile kennen und bekommst konkrete Empfehlungen für Waffen, Talismane und Stats.'
+            );
+
+            -- Witcher 3 (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'The Witcher 3'),
+            'Witcher 3 Money Farming Guide',
+            'In diesem Guide zeigen wir dir die besten Methoden, um schnell Geld zu verdienen. Von Verträgen über Loot-Routen bis hin zu Crafting-Tricks – du lernst, wie du effizient Crowns farmst.'
+            );
+
+            -- Witcher 3 (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'The Witcher 3'),
+            'Witcher 3 Best Armor Sets Guide',
+            'Dieser Guide stellt dir die besten Rüstungssets im Spiel vor. Du erfährst, wo du sie findest und für welche Builds sie sich am besten eignen.'
+            );
+
+            -- Hades (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'Hades'),
+            'Hades Weapon Tier List Guide',
+            'In diesem Guide vergleichen wir alle Waffen in Hades und ordnen sie nach Effektivität ein. Du lernst, welche Waffen sich für Anfänger und welche für erfahrene Spieler eignen.'
+            );
+
+            -- Hades (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'Hades'),
+            'Hades Boss Strategy Guide',
+            'Dieser Guide erklärt dir alle Bosskämpfe in Hades im Detail. Du lernst Angriffsmuster, sichere Positionierung und effektive Counter-Strategien.'
+            );
 
             -- Elden Ring (sa)
             INSERT OR IGNORE INTO guides (userId, gameId, title, content)
@@ -486,31 +541,41 @@ export class Db {
             -- RATINGS
             -- =========================
 
+
             -- test bewertet Guides von sa
             INSERT OR IGNORE INTO guide_rating (userId, guideId, score)
-            SELECT 
+            SELECT
             (SELECT id FROM users WHERE name = 'test'),
             g.id,
-            CASE 
+            CASE
                 WHEN g.title LIKE '%Beginner%' THEN 5
-                WHEN g.title LIKE '%Story%' THEN 4
-                ELSE 5
+                WHEN g.title LIKE '%Farming%' THEN 4
+                WHEN g.title LIKE '%Story%' THEN 5
+                ELSE 4
             END
             FROM guides g
-            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa');
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
 
             -- sa bewertet Guides von test
             INSERT OR IGNORE INTO guide_rating (userId, guideId, score)
-            SELECT 
+            SELECT
             (SELECT id FROM users WHERE name = 'sa'),
             g.id,
-            CASE 
+            CASE
                 WHEN g.title LIKE '%Boss%' THEN 5
+                WHEN g.title LIKE '%Build%' THEN 4
+                WHEN g.title LIKE '%Armor%' THEN 5
                 WHEN g.title LIKE '%Advanced%' THEN 4
-                ELSE 5
+                ELSE 4
             END
             FROM guides g
-            WHERE g.userId = (SELECT id FROM users WHERE name = 'test');
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
 
             -- =========================
             -- COMMENTS
@@ -547,6 +612,51 @@ export class Db {
             'Sehr detailliert geschrieben. Besonders die Tipps zu Builds und Synergien fand ich hilfreich.'
             FROM guides g
             WHERE g.userId = (SELECT id FROM users WHERE name = 'test');
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'test'),
+            g.id,
+            'Richtig guter Guide, hat mir direkt weitergeholfen. Besonders die Struktur ist top.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'test'),
+            g.id,
+            'Sehr solide erklärt. Ein paar mehr konkrete Beispiele wären noch nice.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            -- sa → test
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'sa'),
+            g.id,
+            'Mega hilfreich geschrieben. Vor allem die Tipps zu den Bossen sind stark.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'sa'),
+            g.id,
+            'Sehr detailliert und gut verständlich. Genau solche Guides braucht man.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
         `);
     };
 }
