@@ -70,8 +70,22 @@ export class GameDetailPage implements OnInit {
     }
 
     goToCreateGuide() {
+        if (!this.authService.isLoggedIn()) {
+            this.toastService.showError('You must be logged in to create a guide.');
+
+            this.router.navigate(['/login'], {
+                queryParams: {
+                    returnUrl: `/create-guide/${this.game()?.id}`,
+                },
+            });
+
+            return;
+        }
+
         const gameId = this.game()?.id;
-        this.router.navigate(['/create-guide', gameId], { state: { game: this.game() } });
+        this.router.navigate(['/create-guide', gameId], {
+            state: { game: this.game() },
+        });
     }
 
     goToAchievements() {
