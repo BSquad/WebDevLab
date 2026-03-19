@@ -1,37 +1,63 @@
-<div class="page">
-    <div class="page-title">
-        <h1>Register</h1>
-    </div>
+<div class="page flex-center">
+    <mat-card class="register-container">
+        <mat-card-header>
+            <mat-card-title>
+                <h1>Register</h1>
+            </mat-card-title>
+        </mat-card-header>
 
-    <div class="register-container">
-        <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
-            <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" [(ngModel)]="username" required />
-            </div>
+        <mat-card-content>
+            <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" class="register-form">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Username</mat-label>
+                    <input
+                        matInput
+                        type="text"
+                        id="username"
+                        name="username"
+                        [(ngModel)]="username"
+                        required
+                    />
+                </mat-form-field>
 
-            <div>
-                <label for="email">E-Mail:</label>
-                <input type="text" id="email" name="email" [(ngModel)]="email" required />
-            </div>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>E-Mail</mat-label>
+                    <input
+                        matInput
+                        type="email"
+                        id="email"
+                        name="email"
+                        [(ngModel)]="email"
+                        required
+                    />
+                </mat-form-field>
 
-            <div>
-                <label for="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    [(ngModel)]="password"
-                    required
-                />
-            </div>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Password</mat-label>
+                    <input
+                        matInput
+                        type="password"
+                        id="password"
+                        name="password"
+                        [(ngModel)]="password"
+                        required
+                    />
+                </mat-form-field>
 
-            <button type="submit" class="normal-button">Register</button>
-        </form>
+                <button
+                    mat-flat-button
+                    type="submit"
+                    [disabled]="!registerForm.valid"
+                    class="full-width normal-button"
+                >
+                    Register
+                </button>
+            </form>
 
-        <p class="link">
-            Bereits registriert?
-            <a routerLink="/login">Zum Login</a>
-        </p>
-    </div>
+            <p class="link text-center">
+                Bereits registriert?
+                <a routerLink="/login">Zum Login</a>
+            </p>
+        </mat-card-content>
+    </mat-card>
 </div>

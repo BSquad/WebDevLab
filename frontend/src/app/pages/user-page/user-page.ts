@@ -175,6 +175,7 @@ export class UserPage {
 
         if (!userId) {
             console.error('Cannot save layout: No user logged in.');
+            this.toastService.showError('No User logged in!');
             return;
         }
 
@@ -182,6 +183,7 @@ export class UserPage {
             await this.userService.updateLayout(userId, currentLayout);
         } catch (error) {
             console.error('Failed to save layout to database:', error);
+            this.toastService.showError('Failed to save layout!');
             this.layoutOrder.set([...this.layoutOrder()]);
         }
     }

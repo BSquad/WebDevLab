@@ -1,26 +1,37 @@
-import { Component } from '@angular/core';
-import { ToastService } from '../../services/toast-service';
-import { AuthService } from '../../services/auth-service';
+import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
+import { ToastService } from '../../services/toast-service';
+import { AuthService } from '../../services/auth-service';
 import { RegisterData } from '../../../../../shared/models/register-data';
 
 @Component({
     selector: 'app-register',
-    imports: [FormsModule, RouterModule],
+    standalone: true,
+    imports: [
+        FormsModule,
+        RouterModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatCardModule,
+    ],
     templateUrl: './register-page.html',
-    styleUrls: ['./register-page.scss', '../../../styles/_auth-pages.scss'],
+    styleUrl: './register-page.scss',
 })
 export class RegisterPage {
-    constructor(
-        private router: Router,
-        private authService: AuthService,
-        private toast: ToastService,
-    ) {}
+    private router = inject(Router);
+    private authService = inject(AuthService);
+    private toast = inject(ToastService);
 
-    username: string = '';
-    email: string = '';
-    password: string = '';
+    username = '';
+    email = '';
+    password = '';
 
     async onSubmit(form: NgForm) {
         try {
@@ -41,7 +52,6 @@ export class RegisterPage {
             }
         } catch (err: any) {
             this.toast.showError('Registration error: ' + err.message);
-            return;
         }
     }
 }
