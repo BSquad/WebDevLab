@@ -27,9 +27,18 @@ export class GuideController {
             throw createError(400, 'Missing required guide fields');
         }
 
-        const id = await this.guideService.createGuide(guide);
-
-        res.status(201).json({ id });
+        try {
+            const id = await this.guideService.createGuide(guide);
+            res.status(201).json({ id });
+        } catch (err: any) {
+            if (err.message === 'DUPLICATE_GUIDE') {
+                throw createError(
+                    409,
+                    'Guide with this title already exists for this game',
+                );
+            }
+            throw err;
+        }
     };
 
     getGuidesByGameId = async (req: Request, res: Response): Promise<void> => {
@@ -43,6 +52,12 @@ export class GuideController {
         const id = this.parseId(req.params.id, 'guideId');
 
         const guide = await this.guideService.getGuideById(id);
+
+        // HTTP Gatekeeper
+        if (!guide) {
+            throw createError(404, 'Guide not found');
+        }
+
         res.status(200).json(guide);
     };
 
@@ -70,12 +85,22 @@ export class GuideController {
 
         if (!userId) throw createError(400, 'userId required');
 
-        await this.guideService.updateGuide(id, userId, {
-            title,
-            content,
-        } as Guide);
-
-        res.status(200).json({ message: 'Guide updated successfully' });
+        try {
+            await this.guideService.updateGuide(id, userId, {
+                title,
+                content,
+            } as Guide);
+            res.status(200).json({ message: 'Guide updated successfully' });
+        } catch (err: any) {
+            if (err.message === 'NOT_FOUND_OR_NO_PERMISSION') {
+                // Using 403 Forbidden to indicate they might not own it
+                throw createError(
+                    403,
+                    'Guide not found or you do not have permission to edit it',
+                );
+            }
+            throw err;
+        }
     };
 
     deleteGuide = async (req: Request, res: Response): Promise<void> => {
@@ -84,9 +109,18 @@ export class GuideController {
 
         if (!userId) throw createError(400, 'userId required');
 
-        await this.guideService.deleteGuide(id, userId);
-
-        res.status(200).json({ message: 'Guide deleted successfully' });
+        try {
+            await this.guideService.deleteGuide(id, userId);
+            res.status(200).json({ message: 'Guide deleted successfully' });
+        } catch (err: any) {
+            if (err.message === 'NOT_FOUND_OR_NO_PERMISSION') {
+                throw createError(
+                    403,
+                    'Guide not found or you do not have permission to delete it',
+                );
+            }
+            throw err;
+        }
     };
 
     rateGuide = async (req: Request, res: Response): Promise<void> => {
@@ -100,9 +134,15 @@ export class GuideController {
             throw createError(400, 'Rating must be between 1 and 5');
         }
 
-        await this.guideService.rateGuide(guideId, userId, rating);
-
-        res.status(200).json({ message: 'Rating submitted' });
+        try {
+            await this.guideService.rateGuide(guideId, userId, rating);
+            res.status(200).json({ message: 'Rating submitted' });
+        } catch (err: any) {
+            if (err.message === 'INVALID_RATING') {
+                throw createError(400, 'Rating must be between 1 and 5');
+            }
+            throw err;
+        }
     };
 
     uploadScreenshot = async (req: Request, res: Response): Promise<void> => {
@@ -131,14 +171,21 @@ export class GuideController {
     downloadGuidePdf = async (req: Request, res: Response): Promise<void> => {
         const id = this.parseId(req.params.id, 'guideId');
 
-        const pdfBuffer = await this.guideService.generateGuidePdf(id);
+        try {
+            const pdfBuffer = await this.guideService.generateGuidePdf(id);
 
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader(
-            'Content-Disposition',
-            `attachment; filename=guide-${id}.pdf`,
-        );
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader(
+                'Content-Disposition',
+                `attachment; filename=guide-${id}.pdf`,
+            );
 
-        res.send(pdfBuffer);
+            res.send(pdfBuffer);
+        } catch (err: any) {
+            if (err.message === 'GUIDE_NOT_FOUND') {
+                throw createError(404, 'Guide not found');
+            }
+            throw err;
+        }
     };
 }

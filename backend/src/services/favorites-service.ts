@@ -1,5 +1,4 @@
 import { FavoritesDbAccess } from '../db-access/favorites-db-access.js';
-import createError from 'http-errors';
 
 export class FavoritesService {
     private favoritesDbAccess = new FavoritesDbAccess();
@@ -12,8 +11,14 @@ export class FavoritesService {
         try {
             await this.favoritesDbAccess.addFavorite(userId, gameId);
         } catch (err: any) {
-            if (err.message?.includes('SQLITE_CONSTRAINT')) {
-                throw createError(400, 'Favorite already exists');
+            if (
+                err.message?.includes('UNIQUE constraint failed') ||
+                err.message?.includes('SQLITE_CONSTRAINT')
+            ) {
+                throw new Error('ALREADY_FAVORITED');
+            }
+            if (err.message?.includes('FOREIGN KEY constraint failed')) {
+                throw new Error('REFERENCE_NOT_FOUND');
             }
             throw err;
         }

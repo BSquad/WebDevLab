@@ -1,6 +1,5 @@
 import type { Guide } from '../../../shared/models/guide.ts';
 import { GuideDbAccess } from '../db-access/guide-db-access.js';
-import createError from 'http-errors';
 
 export class GuideService {
     private guideDbAccess = new GuideDbAccess();
@@ -9,11 +8,11 @@ export class GuideService {
         try {
             return await this.guideDbAccess.addGuide(guide);
         } catch (err: any) {
-            if (err.message?.includes('SQLITE_CONSTRAINT')) {
-                throw createError(
-                    400,
-                    'Guide with this title already exists for this game',
-                );
+            if (
+                err.message?.includes('UNIQUE constraint failed') ||
+                err.message?.includes('SQLITE_CONSTRAINT')
+            ) {
+                throw new Error('DUPLICATE_GUIDE');
             }
             throw err;
         }
@@ -23,10 +22,9 @@ export class GuideService {
         return this.guideDbAccess.getGuidesByGameId(gameId);
     };
 
-    getGuideById = async (id: number): Promise<Guide> => {
+    getGuideById = async (id: number): Promise<Guide | null> => {
         const guide = await this.guideDbAccess.getGuideById(id);
-        if (!guide) throw createError(404, 'Guide not found');
-        return guide;
+        return guide || null;
     };
 
     getGuidesByUserId = async (userId: number): Promise<Guide[]> => {
@@ -37,7 +35,7 @@ export class GuideService {
         const updated = await this.guideDbAccess.updateGuide(id, userId, guide);
 
         if (!updated) {
-            throw createError(404, 'Guide not found or no permission');
+            throw new Error('NOT_FOUND_OR_NO_PERMISSION');
         }
     };
 
@@ -45,16 +43,14 @@ export class GuideService {
         const deleted = await this.guideDbAccess.deleteGuide(id, userId);
 
         if (!deleted) {
-            throw createError(404, 'Guide not found or no permission');
+            throw new Error('NOT_FOUND_OR_NO_PERMISSION');
         }
     };
 
     rateGuide = async (guideId: number, userId: number, score: number) => {
-        // optional doppelte Absicherung (Controller validiert schon)
         if (!Number.isInteger(score) || score < 1 || score > 5) {
-            throw createError(400, 'Rating must be between 1 and 5');
+            throw new Error('INVALID_RATING');
         }
-
         await this.guideDbAccess.rateGuide(guideId, userId, score);
     };
 
@@ -74,7 +70,7 @@ export class GuideService {
         const guide = await this.guideDbAccess.getGuideById(id);
 
         if (!guide) {
-            throw createError(404, 'Guide not found'); // ✅ FIX
+            throw new Error('GUIDE_NOT_FOUND');
         }
 
         const screenshots =

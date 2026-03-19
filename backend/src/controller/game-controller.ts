@@ -35,6 +35,11 @@ export class GameController {
         const userId = this.parseOptionalId(req.query.userId, 'userId');
 
         const game = await this.gameService.getGameById(gameId, userId);
+
+        if (!game) {
+            throw createError(404, 'Game not found');
+        }
+
         res.status(200).json(game);
     };
 
@@ -69,13 +74,22 @@ export class GameController {
         );
         const userId = this.parseId(req.query.userId, 'userId');
 
-        await this.gameService.completeAchievement(
-            achievementId,
-            userId,
-            gameId,
-        );
-
-        res.status(200).json({ message: 'Achievement completed' });
+        try {
+            await this.gameService.completeAchievement(
+                achievementId,
+                userId,
+                gameId,
+            );
+            res.status(200).json({ message: 'Achievement completed' });
+        } catch (err: any) {
+            if (err.message === 'ALREADY_COMPLETED') {
+                throw createError(409, 'Achievement already completed');
+            }
+            if (err.message === 'REFERENCE_NOT_FOUND') {
+                throw createError(404, 'Game, User, or Achievement not found');
+            }
+            throw err;
+        }
     };
 
     toggleTrackGame = async (req: Request, res: Response): Promise<void> => {
@@ -86,13 +100,19 @@ export class GameController {
             throw createError(400, 'isTracked must be a boolean');
         }
 
-        await this.gameService.toggleTrackGame(
-            gameId,
-            userId,
-            req.body.isTracked,
-        );
-
-        res.status(200).json({ message: 'Track status updated' });
+        try {
+            await this.gameService.toggleTrackGame(
+                gameId,
+                userId,
+                req.body.isTracked,
+            );
+            res.status(200).json({ message: 'Track status updated' });
+        } catch (err: any) {
+            if (err.message === 'REFERENCE_NOT_FOUND') {
+                throw createError(404, 'Game or User not found');
+            }
+            throw err;
+        }
     };
 
     getBestUsersByGameId = async (

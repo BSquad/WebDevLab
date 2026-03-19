@@ -2,7 +2,6 @@ import type { Achievement } from '../../../shared/models/achievement.ts';
 import type { Game } from '../../../shared/models/game.ts';
 import { User } from '../../../shared/models/user.js';
 import { GameDbAccess } from '../db-access/game-db-access.js';
-import createError from 'http-errors';
 
 export class GameService {
     private gameDbAccess: GameDbAccess = new GameDbAccess();
@@ -11,14 +10,13 @@ export class GameService {
         return this.gameDbAccess.getGames(userId);
     };
 
-    getGameById = async (gameId: number, userId?: number): Promise<Game> => {
+    getGameById = async (
+        gameId: number,
+        userId?: number,
+    ): Promise<Game | null> => {
         const game = await this.gameDbAccess.getGameById(gameId, userId);
 
-        if (!game) {
-            throw createError(404, 'Game not found');
-        }
-
-        return game;
+        return game || null;
     };
 
     getAchievementsByGameId = async (
@@ -33,11 +31,24 @@ export class GameService {
         userId: number,
         gameId: number,
     ) => {
-        await this.gameDbAccess.completeAchievement(
-            achievementId,
-            userId,
-            gameId,
-        );
+        try {
+            await this.gameDbAccess.completeAchievement(
+                achievementId,
+                userId,
+                gameId,
+            );
+        } catch (err: any) {
+            if (
+                err.message?.includes('UNIQUE constraint failed') ||
+                err.message?.includes('SQLITE_CONSTRAINT')
+            ) {
+                throw new Error('ALREADY_COMPLETED');
+            }
+            if (err.message?.includes('FOREIGN KEY constraint failed')) {
+                throw new Error('REFERENCE_NOT_FOUND');
+            }
+            throw err;
+        }
     };
 
     toggleTrackGame = async (
@@ -45,10 +56,17 @@ export class GameService {
         userId: number,
         isTracked: boolean,
     ) => {
-        if (isTracked) {
-            await this.gameDbAccess.unTrackGame(gameId, userId);
-        } else {
-            await this.gameDbAccess.trackGame(gameId, userId);
+        try {
+            if (isTracked) {
+                await this.gameDbAccess.unTrackGame(gameId, userId);
+            } else {
+                await this.gameDbAccess.trackGame(gameId, userId);
+            }
+        } catch (err: any) {
+            if (err.message?.includes('FOREIGN KEY constraint failed')) {
+                throw new Error('REFERENCE_NOT_FOUND');
+            }
+            throw err;
         }
     };
 

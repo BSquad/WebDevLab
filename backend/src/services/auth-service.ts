@@ -1,7 +1,6 @@
 import type { User } from '../../../shared/models/user.ts';
 import type { RegisterData } from '../../../shared/models/register-data.ts';
 import { UserDbAccess } from '../db-access/user-db-access.js';
-import createError from 'http-errors';
 
 export class AuthService {
     private userdbAccess: UserDbAccess = new UserDbAccess();
@@ -9,20 +8,15 @@ export class AuthService {
     getUserByCredentials = async (
         name: string,
         password: string,
-    ): Promise<User> => {
+    ): Promise<User | null> => {
         const passwordHash = await this.hashPassword(password);
 
-        const user = await this.userdbAccess.getUserByNameAndPWHash(
+        return await this.userdbAccess.getUserByNameAndPWHash(
             name,
             passwordHash,
         );
-
-        if (!user) {
-            throw createError(401, 'Invalid credentials');
-        }
-
-        return user;
     };
+
     register = async (registerData: RegisterData): Promise<void> => {
         try {
             const passwordHash = await this.hashPassword(registerData.password);
@@ -35,14 +29,12 @@ export class AuthService {
         } catch (err: any) {
             if (err.code === 'SQLITE_CONSTRAINT') {
                 if (err.message.includes('users.name')) {
-                    throw createError(409, 'Username already taken');
+                    throw new Error('USERNAME_TAKEN');
                 }
-
                 if (err.message.includes('users.email')) {
-                    throw createError(409, 'Email already taken');
+                    throw new Error('EMAIL_TAKEN');
                 }
-
-                throw createError(409, 'Name or email already taken');
+                throw new Error('CONFLICT');
             }
 
             throw err;

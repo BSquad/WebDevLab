@@ -151,6 +151,14 @@ export class UserController {
     ): Promise<void> {
         const analysisData = await this.userService.startUserAnalysis(userId);
 
+        if (!analysisData) {
+            res.write(
+                JSON.stringify({ error: 'User analysis failed to generate.' }),
+            );
+            res.end();
+            return;
+        }
+
         res.write(JSON.stringify(analysisData));
         res.end();
     }

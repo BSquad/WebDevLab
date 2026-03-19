@@ -25,9 +25,18 @@ export class FavoritesController {
         const userId = this.parseId(req.body.userId, 'userId');
         const gameId = this.parseId(req.body.gameId, 'gameId');
 
-        await this.favoritesService.addFavorite(userId, gameId);
-
-        res.status(201).json({ message: 'Favorite added successfully' });
+        try {
+            await this.favoritesService.addFavorite(userId, gameId);
+            res.status(201).json({ message: 'Favorite added successfully' });
+        } catch (err: any) {
+            if (err.message === 'ALREADY_FAVORITED') {
+                throw createError(409, 'Favorite already exists');
+            }
+            if (err.message === 'REFERENCE_NOT_FOUND') {
+                throw createError(404, 'User or Game not found');
+            }
+            throw err;
+        }
     };
 
     removeFavorite = async (req: Request, res: Response): Promise<void> => {
