@@ -3,12 +3,24 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 import { ToastService } from '../../services/toast-service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
     selector: 'app-login',
-    imports: [FormsModule, RouterModule],
+    standalone: true,
+    imports: [
+        FormsModule,
+        RouterModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatCardModule,
+    ],
     templateUrl: './login-page.html',
-    styleUrls: ['./login-page.scss', '../../../styles/_auth-pages.scss'],
+    styleUrls: ['./login-page.scss'],
 })
 export class LoginPage {
     constructor(

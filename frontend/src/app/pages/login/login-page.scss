@@ -1,0 +1,51 @@
+@use '../../../styles/global' as g;
+
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: g.$radius-medium;
+    background: g.$gradient;
+    box-shadow: g.$shadow-medium;
+    color: g.$color-white;
+
+    mat-card-title h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: g.$color-white;
+    }
+
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .full-width {
+        width: 100%;
+    }
+
+    p.link {
+        margin-top: 1.5rem;
+        text-align: center;
+        color: g.$color-white;
+
+        a {
+            color: g.$color-white;
+            font-weight: bold;
+            text-decoration: underline;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+}
