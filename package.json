@@ -1,0 +1,25 @@
+{
+    "name": "WebDevLab_GameTracker",
+    "version": "1.0.0",
+    "description": "This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.",
+    "main": "index.js",
+    "scripts": {
+        "reset-db": "cd backend && npm run reset-db",
+        "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,magenta\" \"cd backend && npm run start:dev\" \"cd frontend && ng serve\"",
+        "test": "npm run reset-db && concurrently -n \"BACKEND,FRONTEND\" -c \"blue,magenta\" \"cd backend && npm run test\" \"cd frontend && ng test\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/BSquad/WebDevLab.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/BSquad/WebDevLab/issues"
+    },
+    "homepage": "https://github.com/BSquad/WebDevLab#readme",
+    "devDependencies": {
+        "concurrently": "^9.2.1"
+    }
+}

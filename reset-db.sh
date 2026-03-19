@@ -1,1 +1,4 @@
-gnome-terminal -- bash -c "cd backend && npm run resrt-db; exec bash"
+#!/bin/bash
+echo "Datenbank wird zurückgesetzt..."
+
+cd backend && npm run reset-db
