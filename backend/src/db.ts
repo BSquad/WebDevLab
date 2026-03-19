@@ -223,6 +223,72 @@ export class Db {
               'platinum'
             ),
             (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Spellblade',
+              'Learn 20 different sorceries.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Incantation Master',
+              'Learn 15 different incantations.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Weapon Collector',
+              'Upgrade 15 different weapons to +10.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Dungeon Delver',
+              'Clear 20 different catacombs and caves.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Legacy Dungeon Conqueror',
+              'Complete all legacy dungeons.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Shardbearer',
+              'Collect all Great Runes.',
+              'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Talisman Hunter',
+              'Collect 50 different talismans.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Spirit Summoner',
+              'Upgrade 10 different spirit ashes.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Map Unveiler',
+              'Reveal the entire map of the Lands Between.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'NPC Friend',
+              'Complete 20 NPC questlines.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'PvP Champion',
+              'Win 10 invasion battles.',
+              'bronze'
+            ),
+            (
               (SELECT id FROM games WHERE title = 'The Witcher 3'),
               'The Witcher',
               'Complete all main story quests.',
@@ -389,6 +455,78 @@ export class Db {
               'olympian Favor',
               'Receive blessings from all Olympian gods.',
               'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Weapon Master',
+              'Unlock all aspects for every weapon.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Boon Collector',
+              'Collect 100 different boons.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Champion of the Underworld',
+              'Complete a run at Heat Level 20.',
+              'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Friend of the Gods',
+              'Max out affinity with all Olympian gods.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Treasure Hunter',
+              'Collect 1000 gems.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Secret Revealer',
+              'Discover all secret rooms.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Chaos Blessing',
+              'Receive 50 Chaos boons.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Legendary Duo',
+              'Complete a run using only duo boons.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Speed Demon',
+              'Escape the Underworld in under 10 minutes.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Bloodless Run',
+              'Complete a run without taking damage.',
+              'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Patricide',
+              'Defeat Hades 50 times.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Nectar Giver',
+              'Give 100 gifts of nectar.',
+              'bronze'
             ),
             (
               (SELECT id FROM games WHERE title = 'Minecraft'),
