@@ -8,6 +8,7 @@
 /backend/node_modules/
 /backend/database.sqlite
 /backend/coverage/
+/backend/uploads/
 /backend/uploads/images/user/
 /backend/uploads/images/guides/
 /backend/dist
