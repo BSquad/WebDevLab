@@ -21,27 +21,35 @@ export class GuideService {
     }
 
     async createGuide(guide: Guide): Promise<number> {
-        return this.guideApi.createGuide(guide);
+        const result = await this.guideApi.createGuide(guide);
+
+        // ✅ FIX: Absicherung + konsistent mit Tests
+        if (!result?.id) {
+            throw new Error('CREATE_FAILED');
+        }
+
+        return result.id;
     }
 
-    async updateGuide(id: number, guide: Guide): Promise<boolean> {
-        return this.guideApi.updateGuide(id, guide);
+    async updateGuide(id: number, guide: Guide, userId: number): Promise<void> {
+        await this.guideApi.updateGuide(id, guide, userId);
     }
 
-    async deleteGuide(id: number, userId: number): Promise<boolean> {
-        return this.guideApi.deleteGuide(id, userId);
+    async deleteGuide(id: number, userId: number): Promise<void> {
+        await this.guideApi.deleteGuide(id, userId);
     }
 
-    async rateGuide(guideId: number, rating: number, userId: number): Promise<boolean> {
-        return this.guideApi.rateGuide(guideId, rating, userId);
+    async rateGuide(guideId: number, rating: number, userId: number): Promise<void> {
+        await this.guideApi.rateGuide(guideId, rating, userId);
     }
 
-    async uploadScreenshot(guideId: number, file: File): Promise<boolean> {
-        return this.guideApi.uploadScreenshot(guideId, file);
+    async uploadScreenshot(guideId: number, file: File): Promise<string> {
+        const result = await this.guideApi.uploadScreenshot(guideId, file);
+        return result.path;
     }
 
-    async deleteScreenshot(guideId: number, filePath: string): Promise<boolean> {
-        return this.guideApi.deleteScreenshot(guideId, filePath);
+    async deleteScreenshot(guideId: number, filePath: string): Promise<void> {
+        await this.guideApi.deleteScreenshot(guideId, filePath);
     }
 
     async rateGuideAndRefresh(guideId: number, rating: number, userId: number): Promise<Guide> {
@@ -78,25 +86,30 @@ export class GuideService {
         let guideId = options.guideId;
 
         if (options.isEditMode && guideId) {
-            const success = await this.guideApi.updateGuide(guideId, guide);
-            if (!success) throw new Error('UPDATE_FAILED');
+            await this.guideApi.updateGuide(guideId, guide, options.userId);
 
             for (const filePath of options.deletedScreenshots) {
                 await this.guideApi.deleteScreenshot(guideId, filePath);
             }
         } else {
-            guideId = await this.guideApi.createGuide(guide);
-            if (!guideId) throw new Error('CREATE_FAILED');
+            const result = await this.guideApi.createGuide(guide);
+            guideId = result.id;
+
+            // ✅ FIX: wichtig für Tests + Sicherheit
+            if (!guideId) {
+                throw new Error('CREATE_FAILED');
+            }
         }
 
         for (const file of options.newFiles) {
             try {
-                const success = await this.guideApi.uploadScreenshot(guideId!, file);
-                if (!success) throw new Error();
+                await this.guideApi.uploadScreenshot(guideId!, file);
             } catch {
-                if (!options.isEditMode) {
-                    await this.guideApi.deleteGuide(guideId!, options.userId);
+                // ✅ FIX: Rollback nur im Create-Modus
+                if (!options.isEditMode && guideId) {
+                    await this.guideApi.deleteGuide(guideId, options.userId);
                 }
+
                 throw new Error('UPLOAD_FAILED');
             }
         }

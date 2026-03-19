@@ -14,7 +14,7 @@ export class UserService {
     };
 
     getUserById = async (id: number) => {
-        return await this.userDbAccess.getUserById(id);
+        return (await this.userDbAccess.getUserById(id)) || null;
     };
 
     updateUser = async (
@@ -23,20 +23,18 @@ export class UserService {
         email: string,
         profilePicturePath: string,
     ) => {
-        return await this.userDbAccess.updateUser(
-            id,
-            name,
-            email,
-            profilePicturePath,
-        );
+        await this.userDbAccess.updateUser(id, name, email, profilePicturePath);
+        return (await this.userDbAccess.getUserById(id)) || null;
     };
 
     updateLayout = async (id: number, order: string[]) => {
-        return await this.userDbAccess.updateLayout(id, order);
+        await this.userDbAccess.updateLayout(id, order);
+        return true;
     };
 
     deleteUser = async (id: number) => {
-        return await this.userDbAccess.deleteUser(id);
+        await this.userDbAccess.deleteUser(id);
+        return true;
     };
 
     getFullProfile = async (userId: number): Promise<UserProfile | null> => {
@@ -56,7 +54,10 @@ export class UserService {
         return await this.userDbAccess.getUserSummary(userId);
     };
 
-    startUserAnalysis = async (userId: number): Promise<AnalysisData> => {
-        return await this.userDbAccess.startUserAnalysis(userId);
+    startUserAnalysis = async (
+        userId: number,
+    ): Promise<AnalysisData | null> => {
+        const result = await this.userDbAccess.startUserAnalysis(userId);
+        return result || null;
     };
 }

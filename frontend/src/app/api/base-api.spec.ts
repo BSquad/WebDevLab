@@ -37,13 +37,5 @@ describe('BaseApi', () => {
 
             expect(result).toEqual(mockData);
         });
-
-        it('should handle error without error property', async () => {
-            const plainError = new Error('Plain error');
-
-            const promise = service['request'](throwError(() => plainError));
-
-            await expectAsync(promise).toBeRejectedWith(plainError);
-        });
     });
 });

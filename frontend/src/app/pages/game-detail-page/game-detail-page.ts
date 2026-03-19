@@ -88,9 +88,7 @@ export class GameDetailPage implements OnInit {
                 this.game()!.isTracked,
             );
 
-            if (success) {
-                this.game.update((g) => (g ? { ...g, isTracked: !g.isTracked } : null));
-            }
+            this.game.update((g) => (g ? { ...g, isTracked: !g.isTracked } : null));
         } catch (err: any) {
             this.toastService.showError('Error: ' + err.message);
         }

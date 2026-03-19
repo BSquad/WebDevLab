@@ -7,18 +7,23 @@ export class GameService {
     private gameDbAccess: GameDbAccess = new GameDbAccess();
 
     getAllGames = async (userId?: number): Promise<Game[]> => {
-        return await this.gameDbAccess.getGames(userId);
+        return this.gameDbAccess.getGames(userId);
     };
 
-    getGameById = async (gameId: number, userId?: number): Promise<Game> => {
-        return await this.gameDbAccess.getGameById(gameId, userId);
+    getGameById = async (
+        gameId: number,
+        userId?: number,
+    ): Promise<Game | null> => {
+        const game = await this.gameDbAccess.getGameById(gameId, userId);
+
+        return game || null;
     };
 
     getAchievementsByGameId = async (
         gameId: number,
         userId?: number,
     ): Promise<Achievement[]> => {
-        return await this.gameDbAccess.getAchievementsByGameId(gameId, userId);
+        return this.gameDbAccess.getAchievementsByGameId(gameId, userId);
     };
 
     completeAchievement = async (
@@ -26,11 +31,24 @@ export class GameService {
         userId: number,
         gameId: number,
     ) => {
-        await this.gameDbAccess.completeAchievement(
-            achievementId,
-            userId,
-            gameId,
-        );
+        try {
+            await this.gameDbAccess.completeAchievement(
+                achievementId,
+                userId,
+                gameId,
+            );
+        } catch (err: any) {
+            if (
+                err.message?.includes('UNIQUE constraint failed') ||
+                err.message?.includes('SQLITE_CONSTRAINT')
+            ) {
+                throw new Error('ALREADY_COMPLETED');
+            }
+            if (err.message?.includes('FOREIGN KEY constraint failed')) {
+                throw new Error('REFERENCE_NOT_FOUND');
+            }
+            throw err;
+        }
     };
 
     toggleTrackGame = async (
@@ -38,24 +56,33 @@ export class GameService {
         userId: number,
         isTracked: boolean,
     ) => {
-        if (isTracked) {
-            await this.gameDbAccess.unTrackGame(gameId, userId);
-        } else {
-            await this.gameDbAccess.trackGame(gameId, userId);
+        try {
+            if (isTracked) {
+                await this.gameDbAccess.unTrackGame(gameId, userId);
+            } else {
+                await this.gameDbAccess.trackGame(gameId, userId);
+            }
+        } catch (err: any) {
+            if (err.message?.includes('FOREIGN KEY constraint failed')) {
+                throw new Error('REFERENCE_NOT_FOUND');
+            }
+            throw err;
         }
     };
 
     getBestUsersByGameId = async (gameId: number): Promise<User[]> => {
-        return await this.gameDbAccess.getBestUsersByGameId(gameId);
+        return this.gameDbAccess.getBestUsersByGameId(gameId);
     };
 
     getPopularGames = async (): Promise<Game[]> => {
-        return await this.gameDbAccess.getPopularGames();
+        return this.gameDbAccess.getPopularGames();
     };
 
-    getGamesByUserId = async (id: number): Promise<Game[]> =>
-        this.gameDbAccess.getGamesByUserId(id);
+    getGamesByUserId = async (id: number): Promise<Game[]> => {
+        return this.gameDbAccess.getGamesByUserId(id);
+    };
 
-    getAchievementsByUserId = async (id: number): Promise<Achievement[]> =>
-        await this.gameDbAccess.getAchievementsByUserId(id);
+    getAchievementsByUserId = async (id: number): Promise<Achievement[]> => {
+        return this.gameDbAccess.getAchievementsByUserId(id);
+    };
 }

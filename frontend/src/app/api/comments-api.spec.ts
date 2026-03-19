@@ -49,6 +49,7 @@ describe('CommentsApi', () => {
         expect(result[0].commentText).toBe('Test Comment');
     });
 
+    // 🔥 FIXED
     it('should create a comment', async () => {
         const promise = service.createComment(mockComment);
 
@@ -56,10 +57,10 @@ describe('CommentsApi', () => {
         expect(req.request.method).toBe('POST');
         expect(req.request.body.commentText).toBe('Test Comment');
 
-        req.flush(true);
+        req.flush({ message: 'Comment added successfully' });
 
         const result = await promise;
-        expect(result).toBeTrue();
+        expect(result.message).toBe('Comment added successfully');
     });
 
     it('should handle error when creating comment', async () => {
@@ -67,7 +68,10 @@ describe('CommentsApi', () => {
 
         const req = httpMock.expectOne('http://localhost:3000/comments');
 
-        req.flush('Error', { status: 500, statusText: 'Server Error' });
+        req.flush('Error', {
+            status: 500,
+            statusText: 'Server Error',
+        });
 
         await expectAsync(promise).toBeRejected();
     });

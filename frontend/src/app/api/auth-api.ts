@@ -1,7 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api';
 import { User } from '../../../../shared/models/user';
 import { RegisterData } from '../../../../shared/models/register-data';
+import { ToastService } from '../services/toast-service';
 
 @Injectable({
     providedIn: 'root',
@@ -9,15 +11,19 @@ import { RegisterData } from '../../../../shared/models/register-data';
 export class AuthApi extends BaseApi {
     private authUrl = `${this.apiUrl}/auth`;
 
+    constructor(http: HttpClient, toast: ToastService) {
+        super(http, toast);
+    }
     async login(name: string, password: string): Promise<User | null> {
-        console.log('Login URL:', `${this.authUrl}/login`);
         return await this.request(
             this.http.post<User | null>(`${this.authUrl}/login`, { name, password }),
+            { showError: false },
         );
     }
 
     async register(data: RegisterData): Promise<boolean> {
-        console.log('Register URL:', `${this.authUrl}/register`);
-        return await this.request(this.http.post<boolean>(`${this.authUrl}/register`, data));
+        await this.request(this.http.post<{ message: string }>(`${this.authUrl}/register`, data));
+
+        return true;
     }
 }

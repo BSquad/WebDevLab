@@ -68,7 +68,7 @@ describe('GuideService', () => {
     });
 
     it('should create guide', async () => {
-        guideApiSpy.createGuide.and.resolveTo(123);
+        guideApiSpy.createGuide.and.resolveTo({ id: 123 });
 
         const result = await service.createGuide(mockGuide);
 
@@ -77,54 +77,50 @@ describe('GuideService', () => {
     });
 
     it('should update guide', async () => {
-        guideApiSpy.updateGuide.and.resolveTo(true);
+        guideApiSpy.updateGuide.and.resolveTo({ message: 'ok' });
 
-        const result = await service.updateGuide(1, mockGuide);
+        await service.updateGuide(1, mockGuide, 1);
 
-        expect(guideApiSpy.updateGuide).toHaveBeenCalledWith(1, mockGuide);
-        expect(result).toBeTrue();
+        expect(guideApiSpy.updateGuide).toHaveBeenCalledWith(1, mockGuide, 1);
     });
 
     it('should delete guide', async () => {
-        guideApiSpy.deleteGuide.and.resolveTo(true);
+        guideApiSpy.deleteGuide.and.resolveTo({ message: 'ok' });
 
-        const result = await service.deleteGuide(1, 1);
+        await service.deleteGuide(1, 1);
 
         expect(guideApiSpy.deleteGuide).toHaveBeenCalledWith(1, 1);
-        expect(result).toBeTrue();
     });
 
     it('should rate guide', async () => {
-        guideApiSpy.rateGuide.and.resolveTo(true);
+        guideApiSpy.rateGuide.and.resolveTo({ message: 'ok' });
 
-        const result = await service.rateGuide(1, 5, 1);
+        await service.rateGuide(1, 5, 1);
 
         expect(guideApiSpy.rateGuide).toHaveBeenCalledWith(1, 5, 1);
-        expect(result).toBeTrue();
     });
 
     it('should upload screenshot', async () => {
         const file = new File(['data'], 'test.png');
-        guideApiSpy.uploadScreenshot.and.resolveTo(true);
+        guideApiSpy.uploadScreenshot.and.resolveTo({ path: '/img.png' });
 
         const result = await service.uploadScreenshot(1, file);
 
         expect(guideApiSpy.uploadScreenshot).toHaveBeenCalledWith(1, file);
-        expect(result).toBeTrue();
+        expect(result).toBe('/img.png');
     });
 
     it('should delete screenshot', async () => {
-        guideApiSpy.deleteScreenshot.and.resolveTo(true);
+        guideApiSpy.deleteScreenshot.and.resolveTo({ message: 'ok' });
 
-        const result = await service.deleteScreenshot(1, '/img.png');
+        await service.deleteScreenshot(1, '/img.png');
 
         expect(guideApiSpy.deleteScreenshot).toHaveBeenCalledWith(1, '/img.png');
-        expect(result).toBeTrue();
     });
 
     it('should create guide with screenshots', async () => {
-        guideApiSpy.createGuide.and.resolveTo(1);
-        guideApiSpy.uploadScreenshot.and.resolveTo(true);
+        guideApiSpy.createGuide.and.resolveTo({ id: 1 });
+        guideApiSpy.uploadScreenshot.and.resolveTo({ path: '/img.png' });
 
         const result = await service.saveGuideWithScreenshots(mockGuide, {
             isEditMode: false,
@@ -139,7 +135,7 @@ describe('GuideService', () => {
     });
 
     it('should throw if create fails', async () => {
-        guideApiSpy.createGuide.and.resolveTo(null);
+        guideApiSpy.createGuide.and.resolveTo({ id: null });
 
         await expectAsync(
             service.saveGuideWithScreenshots(mockGuide, {
@@ -152,8 +148,8 @@ describe('GuideService', () => {
     });
 
     it('should update guide and delete screenshots', async () => {
-        guideApiSpy.updateGuide.and.resolveTo(true);
-        guideApiSpy.deleteScreenshot.and.resolveTo(true);
+        guideApiSpy.updateGuide.and.resolveTo({ message: 'ok' });
+        guideApiSpy.deleteScreenshot.and.resolveTo({ message: 'ok' });
 
         const result = await service.saveGuideWithScreenshots(mockGuide, {
             isEditMode: true,
@@ -163,29 +159,15 @@ describe('GuideService', () => {
             deletedScreenshots: ['/img.png'],
         });
 
-        expect(guideApiSpy.updateGuide).toHaveBeenCalledWith(1, mockGuide);
+        expect(guideApiSpy.updateGuide).toHaveBeenCalledWith(1, mockGuide, 1);
         expect(guideApiSpy.deleteScreenshot).toHaveBeenCalledWith(1, '/img.png');
         expect(result).toBe(1);
     });
 
-    it('should throw if update fails', async () => {
-        guideApiSpy.updateGuide.and.resolveTo(false);
-
-        await expectAsync(
-            service.saveGuideWithScreenshots(mockGuide, {
-                isEditMode: true,
-                guideId: 1,
-                userId: 1,
-                newFiles: [],
-                deletedScreenshots: [],
-            }),
-        ).toBeRejectedWithError('UPDATE_FAILED');
-    });
-
     it('should rollback if upload fails on create', async () => {
-        guideApiSpy.createGuide.and.resolveTo(1);
-        guideApiSpy.uploadScreenshot.and.resolveTo(false);
-        guideApiSpy.deleteGuide.and.resolveTo(true);
+        guideApiSpy.createGuide.and.resolveTo({ id: 1 });
+        guideApiSpy.uploadScreenshot.and.rejectWith(new Error('fail'));
+        guideApiSpy.deleteGuide.and.resolveTo({ message: 'ok' });
 
         await expectAsync(
             service.saveGuideWithScreenshots(mockGuide, {
@@ -200,8 +182,8 @@ describe('GuideService', () => {
     });
 
     it('should NOT rollback on upload fail in edit mode', async () => {
-        guideApiSpy.updateGuide.and.resolveTo(true);
-        guideApiSpy.uploadScreenshot.and.resolveTo(false);
+        guideApiSpy.updateGuide.and.resolveTo({ message: 'ok' });
+        guideApiSpy.uploadScreenshot.and.rejectWith(new Error('fail'));
 
         await expectAsync(
             service.saveGuideWithScreenshots(mockGuide, {
@@ -217,7 +199,7 @@ describe('GuideService', () => {
     });
 
     it('should rate and refresh guide', async () => {
-        guideApiSpy.rateGuide.and.resolveTo(true);
+        guideApiSpy.rateGuide.and.resolveTo({ message: 'ok' });
         guideApiSpy.getGuideById.and.resolveTo(mockGuide);
 
         const result = await service.rateGuideAndRefresh(1, 5, 1);

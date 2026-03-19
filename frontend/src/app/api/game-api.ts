@@ -12,11 +12,13 @@ export class GameApi extends BaseApi {
 
     async getGames(userId?: number): Promise<Game[]> {
         const url = userId ? `${this.gameUrl}?userId=${userId}` : this.gameUrl;
+
         return await this.request(this.http.get<Game[]>(url));
     }
 
     async getGame(id: number, userId?: number): Promise<Game> {
         const url = userId ? `${this.gameUrl}/${id}?userId=${userId}` : `${this.gameUrl}/${id}`;
+
         return await this.request(this.http.get<Game>(url));
     }
 
@@ -26,21 +28,30 @@ export class GameApi extends BaseApi {
 
     async getAchievementsByGameId(gameId: number, userId?: number): Promise<Achievement[]> {
         const url = `${this.gameUrl}/${gameId}/achievements${userId ? `?userId=${userId}` : ''}`;
+
         return await this.request(this.http.get<Achievement[]>(url));
     }
 
+    // 🔥 FIXED
     async completeAchievement(
         achievementId: number,
         userId: number,
         gameId: number,
-    ): Promise<boolean> {
+    ): Promise<{ message: string }> {
         const url = `${this.gameUrl}/${gameId}/achievements/${achievementId}/complete?userId=${userId}`;
-        return await this.request(this.http.post<boolean>(url, {}));
+
+        return await this.request(this.http.post<{ message: string }>(url, {}));
     }
 
-    async toggleTrackGame(gameId: number, userId: number, isTracked: boolean): Promise<boolean> {
+    // 🔥 FIXED
+    async toggleTrackGame(
+        gameId: number,
+        userId: number,
+        isTracked: boolean,
+    ): Promise<{ message: string }> {
         const url = `${this.gameUrl}/${gameId}/track?userId=${userId}`;
-        return await this.request(this.http.post<boolean>(url, { isTracked }));
+
+        return await this.request(this.http.post<{ message: string }>(url, { isTracked }));
     }
 
     async getBestUsersByGameId(gameId: number): Promise<User[]> {

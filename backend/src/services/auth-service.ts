@@ -10,15 +10,17 @@ export class AuthService {
         password: string,
     ): Promise<User | null> => {
         const passwordHash = await this.hashPassword(password);
+
         return await this.userdbAccess.getUserByNameAndPWHash(
             name,
             passwordHash,
         );
     };
 
-    register = async (registerData: RegisterData) => {
+    register = async (registerData: RegisterData): Promise<void> => {
         try {
             const passwordHash = await this.hashPassword(registerData.password);
+
             await this.userdbAccess.createUser(
                 registerData.name,
                 registerData.email,
@@ -26,12 +28,15 @@ export class AuthService {
             );
         } catch (err: any) {
             if (err.code === 'SQLITE_CONSTRAINT') {
-                if (err.message.includes('users.name'))
-                    throw new Error('the username is already taken..');
-                if (err.message.includes('users.email'))
-                    throw new Error('the email address is already taken.');
-                throw new Error('Name or email already taken.');
+                if (err.message.includes('users.name')) {
+                    throw new Error('USERNAME_TAKEN');
+                }
+                if (err.message.includes('users.email')) {
+                    throw new Error('EMAIL_TAKEN');
+                }
+                throw new Error('CONFLICT');
             }
+
             throw err;
         }
     };
@@ -41,6 +46,7 @@ export class AuthService {
         const data = encoder.encode(password);
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
+
         return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
     };
 }
