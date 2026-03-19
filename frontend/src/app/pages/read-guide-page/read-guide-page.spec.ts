@@ -39,7 +39,11 @@ describe('ReadGuidePage', () => {
         ]);
 
         toastServiceSpy = jasmine.createSpyObj('ToastService', ['showError', 'showSuccess']);
-        authServiceSpy = jasmine.createSpyObj('AuthService', ['getCurrentUser']);
+
+        authServiceSpy = jasmine.createSpyObj('AuthService', ['getCurrentUser', 'isLoggedIn']);
+
+        authServiceSpy.isLoggedIn.and.returnValue(true);
+
         locationSpy = jasmine.createSpyObj('Location', ['back']);
 
         await TestBed.configureTestingModule({

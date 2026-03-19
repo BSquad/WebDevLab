@@ -66,7 +66,6 @@ describe('Games API – Modul D', () => {
         expect(Array.isArray(response.body)).toBe(true);
     });
 
-    // 🔥 FIXED
     it('should complete achievement for user', async () => {
         const response = await request(app)
             .post(
@@ -78,7 +77,6 @@ describe('Games API – Modul D', () => {
         expect(response.body.message).toBeDefined();
     });
 
-    // 🔥 FIXED
     it('should toggle ON game tracking for user', async () => {
         const response = await request(app)
             .post(`/games/${testGameId}/track`)
@@ -89,7 +87,6 @@ describe('Games API – Modul D', () => {
         expect(response.body.message).toBeDefined();
     });
 
-    // 🔥 FIXED
     it('should toggle OFF game tracking for user', async () => {
         const response = await request(app)
             .post(`/games/${testGameId}/track`)

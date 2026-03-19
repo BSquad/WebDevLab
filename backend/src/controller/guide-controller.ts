@@ -172,12 +172,26 @@ export class GuideController {
         const id = this.parseId(req.params.id, 'guideId');
 
         try {
+            // 1️⃣ Guide holen (für Dateiname)
+            const guide = await this.guideService.getGuideById(id);
+
+            if (!guide) {
+                throw createError(404, 'Guide not found');
+            }
+
             const pdfBuffer = await this.guideService.generateGuidePdf(id);
+
+            // 3️⃣ Dateiname bauen
+            const safeTitle = guide.title
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-');
 
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader(
                 'Content-Disposition',
-                `attachment; filename=guide-${id}.pdf`,
+                `attachment; filename="${safeTitle}.pdf"`,
             );
 
             res.send(pdfBuffer);

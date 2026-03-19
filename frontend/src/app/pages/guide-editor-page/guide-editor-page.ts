@@ -157,8 +157,6 @@ export class GuideEditorPage {
     }
 
     async onSubmit(form: NgForm) {
-        console.log('userId:', this.userId);
-        console.log('GUIDE BEFORE SAVE:', this.guide);
         if (!form.valid) return;
 
         try {

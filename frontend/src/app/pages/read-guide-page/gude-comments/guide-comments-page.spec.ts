@@ -31,7 +31,9 @@ describe('CommentsComponent', () => {
             'createComment',
         ]);
 
-        authServiceSpy = jasmine.createSpyObj('AuthService', ['getCurrentUser']);
+        authServiceSpy = jasmine.createSpyObj('AuthService', ['getCurrentUser', 'isLoggedIn']);
+
+        authServiceSpy.isLoggedIn.and.returnValue(true); // default
         toastServiceSpy = jasmine.createSpyObj('ToastService', ['showError']);
 
         await TestBed.configureTestingModule({

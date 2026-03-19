@@ -17,6 +17,7 @@ import { GuideComment } from '../../../../../../shared/models/guide-comment';
 export class CommentsComponent {
     comments = signal<GuideComment[]>([]);
     newComment = '';
+    isLoggedInValue = false;
 
     private _guideId!: number;
 
@@ -32,6 +33,10 @@ export class CommentsComponent {
         private authService: AuthService,
         private toastService: ToastService,
     ) {}
+
+    ngOnInit() {
+        this.isLoggedInValue = this.authService.isLoggedIn();
+    }
 
     async loadComments() {
         try {
@@ -56,7 +61,6 @@ export class CommentsComponent {
             });
 
             this.newComment = '';
-
             await this.loadComments();
         } catch (err) {
             console.error('Failed to create comment', err);

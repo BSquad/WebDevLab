@@ -6,25 +6,33 @@
             placeholder="Write a comment..."
             name="commentText"
             [(ngModel)]="newComment"
+            [readonly]="!isLoggedInValue"
+            [ngModelOptions]="{ standalone: true }"
         ></textarea>
 
         <div class="comment-actions">
-            <button class="normal-button" (click)="submitComment()">Post Comment</button>
+            <button class="normal-button" (click)="submitComment()" [disabled]="!isLoggedInValue">
+                Post Comment
+            </button>
         </div>
-    </div>
 
-    <ul class="comments-list">
-        @for (comment of comments(); track comment.id) {
-
-        <li class="comment-item">
-            <div class="comment-meta">
-                <strong>{{ comment.author }}</strong>
-                • {{ comment.createdAt | date:'short' }}
-            </div>
-
-            <div class="comment-text">{{ comment.commentText }}</div>
-        </li>
-
+        @if (!isLoggedInValue) {
+        <div class="login-hint">Log in or register to write a comment.</div>
         }
-    </ul>
+
+        <ul class="comments-list">
+            @for (comment of comments(); track comment.id) {
+
+            <li class="comment-item">
+                <div class="comment-meta">
+                    <strong>{{ comment.author }}</strong>
+                    • {{ comment.createdAt | date:'short' }}
+                </div>
+
+                <div class="comment-text">{{ comment.commentText }}</div>
+            </li>
+
+            }
+        </ul>
+    </div>
 </div>

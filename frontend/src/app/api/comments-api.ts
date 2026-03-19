@@ -12,7 +12,6 @@ export class CommentsApi extends BaseApi {
         );
     }
 
-    // 🔥 FIXED
     async createComment(comment: GuideComment): Promise<{ message: string }> {
         return await this.request(
             this.http.post<{ message: string }>(`${this.apiUrl}/comments`, comment),

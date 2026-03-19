@@ -46,6 +46,10 @@ export class ReadGuidePage {
         }
     }
 
+    isLoggedIn(): boolean {
+        return this.authService.isLoggedIn();
+    }
+
     async rateGuide(score: number) {
         const guideId = this.guide()?.id;
         const user = this.authService.getCurrentUser();
