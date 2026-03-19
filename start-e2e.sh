@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=== Resetting database ==="
-cd backend && npm run reset-db && cd ..
+npm run reset-db
 
 echo "=== Starting backend ==="
 cd backend && npm run start:dev &
@@ -11,11 +11,8 @@ echo "=== Starting frontend ==="
 cd frontend && npm start &
 cd ..
 
-echo ""
 echo "__________________________________________"
-echo "Backend and Frontend are starting..."
-echo "Wait until both are ready."
-echo "Press ENTER to open Cypress."
+echo "Wait until Backend and Frontend are started"
 echo "__________________________________________"
 read -p "Press ENTER to continue..."
 
