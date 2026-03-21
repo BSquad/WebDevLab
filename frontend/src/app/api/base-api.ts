@@ -18,16 +18,15 @@ export class BaseApi {
         try {
             return await firstValueFrom(obs);
         } catch (err: any) {
-            const error = {
-                status: err?.status ?? 0,
-                message: err?.error?.message || err?.message || 'Unbekannter Fehler',
-            };
+            const message = err?.error?.message || err?.message || 'Unknown Error';
 
             if (options?.showError !== false) {
-                this.toast.showError(error.message);
+                this.toast.showError(message);
             }
 
-            throw error;
+            err.message = message;
+
+            throw err;
         }
     }
 }
