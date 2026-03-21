@@ -17,7 +17,12 @@ export class UserController {
 
     private checkIfSameUser(req: Request, userId: number): void {
         const currentUserId = Number(req.body?.userId);
-        if (!currentUserId || currentUserId !== userId) {
+
+        if (Number.isNaN(currentUserId)) {
+            throw createError(400, 'userId missing');
+        }
+
+        if (currentUserId !== userId) {
             throw createError(403, 'Unauthorized');
         }
     }
