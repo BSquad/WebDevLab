@@ -14,7 +14,7 @@ export class GameController {
     }
 
     private parseOptionalId(value: any, name: string): number | undefined {
-        if (value === undefined) return undefined;
+        if (value == null) return undefined;
 
         const id = Number(value);
         if (Number.isNaN(id)) {
@@ -67,50 +67,55 @@ export class GameController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
-        const achievementId = this.parseId(
-            req.params.achievementId,
-            'achievementId',
-        );
-        const userId = this.parseId(req.query.userId, 'userId');
-
         try {
+            const gameId = this.parseId(req.params.gameId, 'gameId');
+            const achievementId = this.parseId(
+                req.params.achievementId,
+                'achievementId',
+            );
+            const userId = this.parseId(req.query.userId, 'userId');
+
             await this.gameService.completeAchievement(
                 achievementId,
                 userId,
                 gameId,
             );
+
             res.status(200).json({ message: 'Achievement completed' });
         } catch (err: any) {
             if (err.message === 'ALREADY_COMPLETED') {
                 throw createError(409, 'Achievement already completed');
             }
+
             if (err.message === 'REFERENCE_NOT_FOUND') {
-                throw createError(404, 'Game, User, or Achievement not found');
+                throw createError(404, 'Resource not found');
             }
+
             throw err;
         }
     };
 
     toggleTrackGame = async (req: Request, res: Response): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
-        const userId = this.parseId(req.query.userId, 'userId');
-
-        if (typeof req.body.isTracked !== 'boolean') {
-            throw createError(400, 'isTracked must be a boolean');
-        }
-
         try {
+            const gameId = this.parseId(req.params.gameId, 'gameId');
+            const userId = this.parseId(req.query.userId, 'userId');
+
+            if (typeof req.body.isTracked !== 'boolean') {
+                throw createError(400, 'isTracked must be a boolean');
+            }
+
             await this.gameService.toggleTrackGame(
                 gameId,
                 userId,
                 req.body.isTracked,
             );
+
             res.status(200).json({ message: 'Track status updated' });
         } catch (err: any) {
             if (err.message === 'REFERENCE_NOT_FOUND') {
                 throw createError(404, 'Game or User not found');
             }
+
             throw err;
         }
     };

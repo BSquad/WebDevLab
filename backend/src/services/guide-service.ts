@@ -48,9 +48,6 @@ export class GuideService {
     };
 
     rateGuide = async (guideId: number, userId: number, score: number) => {
-        if (!Number.isInteger(score) || score < 1 || score > 5) {
-            throw new Error('INVALID_RATING');
-        }
         await this.guideDbAccess.rateGuide(guideId, userId, score);
     };
 

@@ -53,7 +53,6 @@ export class GuideController {
 
         const guide = await this.guideService.getGuideById(id);
 
-        // HTTP Gatekeeper
         if (!guide) {
             throw createError(404, 'Guide not found');
         }
@@ -83,7 +82,9 @@ export class GuideController {
         const userId = Number(req.body.userId);
         const { title, content } = req.body;
 
-        if (!userId) throw createError(400, 'userId required');
+        if (Number.isNaN(userId)) {
+            throw createError(400, 'Invalid userId');
+        }
 
         try {
             await this.guideService.updateGuide(id, userId, {
@@ -93,7 +94,6 @@ export class GuideController {
             res.status(200).json({ message: 'Guide updated successfully' });
         } catch (err: any) {
             if (err.message === 'NOT_FOUND_OR_NO_PERMISSION') {
-                // Using 403 Forbidden to indicate they might not own it
                 throw createError(
                     403,
                     'Guide not found or you do not have permission to edit it',
@@ -107,7 +107,9 @@ export class GuideController {
         const id = this.parseId(req.params.id, 'guideId');
         const userId = Number(req.body.userId);
 
-        if (!userId) throw createError(400, 'userId required');
+        if (Number.isNaN(userId)) {
+            throw createError(400, 'userId required');
+        }
 
         try {
             await this.guideService.deleteGuide(id, userId);
@@ -128,21 +130,17 @@ export class GuideController {
         const userId = Number(req.body.userId);
         const rating = Number(req.body.rating);
 
-        if (!userId) throw createError(400, 'userId required');
+        if (Number.isNaN(userId)) {
+            throw createError(400, 'userId required');
+        }
 
         if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
             throw createError(400, 'Rating must be between 1 and 5');
         }
 
-        try {
-            await this.guideService.rateGuide(guideId, userId, rating);
-            res.status(200).json({ message: 'Rating submitted' });
-        } catch (err: any) {
-            if (err.message === 'INVALID_RATING') {
-                throw createError(400, 'Rating must be between 1 and 5');
-            }
-            throw err;
-        }
+        await this.guideService.rateGuide(guideId, userId, rating);
+
+        res.status(200).json({ message: 'Rating submitted' });
     };
 
     uploadScreenshot = async (req: Request, res: Response): Promise<void> => {
@@ -172,7 +170,6 @@ export class GuideController {
         const id = this.parseId(req.params.id, 'guideId');
 
         try {
-            // 1️⃣ Guide holen (für Dateiname)
             const guide = await this.guideService.getGuideById(id);
 
             if (!guide) {
@@ -181,7 +178,6 @@ export class GuideController {
 
             const pdfBuffer = await this.guideService.generateGuidePdf(id);
 
-            // 3️⃣ Dateiname bauen
             const safeTitle = guide.title
                 .toLowerCase()
                 .replace(/[^\w\s-]/g, '')

@@ -11,19 +11,15 @@ export class FavoritesService {
         try {
             await this.favoritesDbAccess.addFavorite(userId, gameId);
         } catch (err: any) {
-            if (
-                err.message?.includes('UNIQUE constraint failed') ||
-                err.message?.includes('SQLITE_CONSTRAINT')
-            ) {
+            if (err.message?.includes('UNIQUE')) {
                 throw new Error('ALREADY_FAVORITED');
             }
-            if (err.message?.includes('FOREIGN KEY constraint failed')) {
+            if (err.message?.includes('FOREIGN KEY')) {
                 throw new Error('REFERENCE_NOT_FOUND');
             }
             throw err;
         }
     };
-
     removeFavorite = async (userId: number, gameId: number): Promise<void> => {
         await this.favoritesDbAccess.removeFavorite(userId, gameId);
     };
