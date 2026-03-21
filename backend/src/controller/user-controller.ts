@@ -9,28 +9,56 @@ export class UserController {
     private gameService = new GameService();
     private guideService = new GuideService();
 
-    getUser = async (req: Request, res: Response): Promise<void> => {
+    private getUserIdOrThrow(req: Request): number {
         const userId = Number(req.params.id);
         if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        return userId;
+    }
 
-        const user = await this.userService.getUserById(userId);
-        if (!user) throw createError(404, 'User not found');
+    private checkIfSameUser(req: Request, userId: number): void {
+        const currentUserId = Number(req.body?.userId);
+        if (!currentUserId || currentUserId !== userId) {
+            throw createError(403, 'Unauthorized');
+        }
+    }
+
+    private getOrThrowNotFound<T>(value: T | null, message: string): T {
+        if (!value) throw createError(404, message);
+        return value;
+    }
+
+    private checkUserUpdateInput(body: any): { name: string; email: string } {
+        const { name, email } = body;
+        if (!name || !email) {
+            throw createError(400, 'Name and email are required');
+        }
+        return { name, email };
+    }
+
+    getUser = async (req: Request, res: Response): Promise<void> => {
+        const userId = this.getUserIdOrThrow(req);
+
+        const user = this.getOrThrowNotFound(
+            await this.userService.getUserById(userId),
+            'User not found',
+        );
 
         res.status(200).json(user);
     };
 
     updateUser = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        const userId = this.getUserIdOrThrow(req);
+        this.checkIfSameUser(req, userId);
 
-        const { name, email } = req.body;
-        if (!name || !email)
-            throw createError(400, 'Name and email are required');
+        const { name, email } = this.checkUserUpdateInput(req.body);
 
-        const currentUser = await this.userService.getUserById(userId);
-        if (!currentUser) throw createError(404, 'User not found');
+        const currentUser = this.getOrThrowNotFound(
+            await this.userService.getUserById(userId),
+            'User not found',
+        );
 
         let profilePath = currentUser.profilePicturePath;
+
         if (req.file) {
             profilePath = `/uploads/images/user/${req.file.filename}`;
         }
@@ -41,12 +69,13 @@ export class UserController {
     };
 
     updateLayout = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        const userId = this.getUserIdOrThrow(req);
+        this.checkIfSameUser(req, userId);
 
         const { order } = req.body;
-        if (!Array.isArray(order))
+        if (!Array.isArray(order)) {
             throw createError(400, 'Layout order must be an array');
+        }
 
         await this.userService.updateLayout(userId, order);
 
@@ -54,59 +83,59 @@ export class UserController {
     };
 
     deleteUser = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        const userId = this.getUserIdOrThrow(req);
+        this.checkIfSameUser(req, userId);
 
-        const user = await this.userService.getUserById(userId);
-        if (!user) throw createError(404, 'User not found');
+        this.getOrThrowNotFound(
+            await this.userService.getUserById(userId),
+            'User not found',
+        );
 
         await this.userService.deleteUser(userId);
+
         res.status(200).json({ message: 'User deleted successfully' });
     };
 
     getUserProfile = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        const userId = this.getUserIdOrThrow(req);
 
-        const profile = await this.userService.getFullProfile(userId);
-        if (!profile) throw createError(404, 'User profile not found');
+        const profile = this.getOrThrowNotFound(
+            await this.userService.getFullProfile(userId),
+            'User profile not found',
+        );
 
         res.status(200).json(profile);
     };
 
     getUserSummary = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid User ID');
+        const userId = this.getUserIdOrThrow(req);
 
-        const summary = await this.userService.getUserSummary(userId);
-
-        if (!summary) throw createError(404, 'User summary not found');
+        const summary = this.getOrThrowNotFound(
+            await this.userService.getUserSummary(userId),
+            'User summary not found',
+        );
 
         res.status(200).json(summary);
     };
 
     getGames = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        const userId = this.getUserIdOrThrow(req);
 
         const data = await this.gameService.getGamesByUserId(userId);
         res.status(200).json(data);
     };
 
     getAchievements = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        const userId = this.getUserIdOrThrow(req);
 
         const data = await this.gameService.getAchievementsByUserId(userId);
         res.status(200).json(data);
     };
 
     getGuides = async (req: Request, res: Response): Promise<void> => {
-        const userId = Number(req.params.id);
-        if (Number.isNaN(userId)) throw createError(400, 'Invalid userId');
+        const userId = this.getUserIdOrThrow(req);
 
         const data = await this.guideService.getGuidesByUserId(userId);
-
         res.status(200).json(data);
     };
 
