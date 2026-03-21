@@ -63,6 +63,12 @@ export class GuideService {
         await this.guideDbAccess.deleteScreenshot(guideId, filePath);
     };
 
+    /**
+     * Creates a pdf file for a guide using PDFKit and starts the download.
+     *
+     * @param id guideID
+     * @returns
+     */
     generateGuidePdf = async (id: number): Promise<Buffer> => {
         const guide = await this.guideDbAccess.getGuideById(id);
 

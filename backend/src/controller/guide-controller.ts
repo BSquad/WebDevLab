@@ -178,16 +178,11 @@ export class GuideController {
 
             const pdfBuffer = await this.guideService.generateGuidePdf(id);
 
-            const safeTitle = guide.title
-                .toLowerCase()
-                .replace(/[^\w\s-]/g, '')
-                .trim()
-                .replace(/\s+/g, '-');
-
+            const fileName = `${guide.title}`;
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader(
                 'Content-Disposition',
-                `attachment; filename="${safeTitle}.pdf"`,
+                `attachment; filename="${fileName}.pdf"`,
             );
 
             res.send(pdfBuffer);
