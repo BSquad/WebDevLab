@@ -170,10 +170,6 @@ export class GuideEditorPage {
 
             this.toastService.showError(errors.join(' | '));
 
-            Object.values(form.controls).forEach((control) => {
-                control.markAsTouched();
-            });
-
             return;
         }
 
