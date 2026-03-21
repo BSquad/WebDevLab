@@ -1,15 +1,15 @@
 export interface Achievement {
-  id: number;
-  gameId: number;
-  title: string;
-  description: string;
-  difficulty: AchievementTier;
-  isCompleted: boolean; // for the current user
+    id: number;
+    gameId: number;
+    title: string;
+    description: string;
+    difficulty: AchievementTier;
+    isCompleted: boolean;
 }
 
 export enum AchievementTier {
-  Bronze = 'bronze',
-  Silver = 'silver',
-  Gold = 'gold',
-  Platinum = 'platinum'
+    Bronze = 'bronze',
+    Silver = 'silver',
+    Gold = 'gold',
+    Platinum = 'platinum',
 }

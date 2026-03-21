@@ -67,7 +67,6 @@ describe('GuideApi', () => {
         expect(req.request.method).toBe('POST');
         expect(req.request.body.title).toBe('Test Guide');
 
-        // 🔥 FIX: API gibt { id }
         req.flush({ id: 123 });
 
         const result = await promise;
@@ -81,7 +80,6 @@ describe('GuideApi', () => {
         expect(req.request.method).toBe('PUT');
         expect(req.request.body.userId).toBe(1);
 
-        // 🔥 FIX: API gibt { message }
         req.flush({ message: 'Guide updated successfully' });
 
         const result = await promise;

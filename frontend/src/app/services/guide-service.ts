@@ -23,7 +23,6 @@ export class GuideService {
     async createGuide(guide: Guide): Promise<number> {
         const result = await this.guideApi.createGuide(guide);
 
-        // ✅ FIX: Absicherung + konsistent mit Tests
         if (!result?.id) {
             throw new Error('CREATE_FAILED');
         }

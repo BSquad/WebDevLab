@@ -9,7 +9,6 @@ $header-gradient: linear-gradient(
 $card-bg: rgba($color-background, 0.7);
 $text-shadow: 1px 1px 0px $color-black;
 
-// --- BASE LAYOUT ---
 .dashboard-container {
     display: grid;
     grid-template-columns: 350px 1fr;
@@ -24,7 +23,6 @@ $text-shadow: 1px 1px 0px $color-black;
     overflow: hidden;
 }
 
-// --- MATERIAL CARD OVERRIDES & UTILITIES ---
 .card-border {
     border: 3px solid $color-white;
     background: $card-bg;
@@ -224,7 +222,7 @@ $text-shadow: 1px 1px 0px $color-black;
     .scroll-btn {
         background: rgba($color-black, 0.4);
         color: $color-white;
-        flex-shrink: 0; // Stops the buttons from squishing
+        flex-shrink: 0;
 
         &:hover {
             background: $color-accent;
@@ -240,10 +238,10 @@ $text-shadow: 1px 1px 0px $color-black;
     padding: 5px 0;
 
     // Hides the native scrollbar
-    scrollbar-width: none; // Firefox
+    scrollbar-width: none;
     &::-webkit-scrollbar {
         display: none;
-    } // Chrome/Safari
+    }
 
     .game-item {
         flex: 0 0 180px;

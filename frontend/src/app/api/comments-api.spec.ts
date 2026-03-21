@@ -49,7 +49,6 @@ describe('CommentsApi', () => {
         expect(result[0].commentText).toBe('Test Comment');
     });
 
-    // 🔥 FIXED
     it('should create a comment', async () => {
         const promise = service.createComment(mockComment);
 
