@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { LoadingService } from './services/loading.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -68,5 +69,10 @@ export class App {
 
     toggleProfileDropdown(): void {
         this.profileDropdownOpen = !this.profileDropdownOpen;
+    }
+
+    getProfileImageUrl(path: string | null | undefined): string {
+        if (!path) return 'assets/pictures/default-avatar.jpg';
+        return `${environment.apiUrl}${path}`;
     }
 }

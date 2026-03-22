@@ -1,13 +1,12 @@
 Starting:
-    Use the start-project.sh to start the frontend and backend.
-    Open http://localhost:4200/
-    in your browser.
+    Use the start-project.sh (opens separate terminals) or use "npm run dev" (one terminal) to start the frontend and backend.
+    Open http://localhost:4200/ in your browser.
 
 Testing:
-
-    Use the start-test.sh to start the tests.
-    The Code Coverage will be displayed in the console windows separately for frontend and backend.
-    The database will be reseted when using the test script. 
+    Use the start-test.sh (opens separate terminals) or use "npm run test" (one terminal) to start the tests.
+    For .sh script: The Code Coverage will be displayed in the console windows separately for frontend and backend.
+    For npm script: The Code Coverage will be displayed in the console windows combined for frontend and backend.
+    The database will be reseted when using the test scripts. 
 
     Use start-e2e.sh to start the end-to-end tests. This will reset the database, start the frontend
     and backend, and open the Cypress overlay. Click on “E2E Testing”, then select “Start E2E Testing 
@@ -67,7 +66,14 @@ Profile Page:
     You can see:
     - your user information
     - the games you have added to your favorites
-    - your achievement progress
+    - your achievements
+    - your created guides
+    - the number of tracked games, favorite genre and achievement completin rate after starting the analysis (need to stay on the page)
+
+    You can do:
+    - edit your user information (username, email & picture)
+    - you can start the achievement analysis
+    - you can change the order of the games, analysis and guides by dragging it at the marked area on the top right of each box
 
 Guide Creation Page:
     You can create a new guide for a game.
