@@ -32,6 +32,7 @@ export class AuthServiceMock {
     currentUser$ = of(MOCK_USER);
     loginWithCredentials = jasmine.createSpy('loginWithCredentials').and.resolveTo(true);
     isLoggedIn = jasmine.createSpy('isLoggedIn').and.returnValue(true);
+    register = jasmine.createSpy('register').and.resolveTo(true);
 }
 
 export class PathBuilderMock {
