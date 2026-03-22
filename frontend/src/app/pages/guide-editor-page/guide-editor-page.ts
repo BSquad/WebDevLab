@@ -13,7 +13,7 @@ import { User } from '../../../../../shared/models/user';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
-import { ConfirmDialog } from '../../components/confirm-dialog/confirm-dialog';
+import { ConfirmDialog } from '../../ui-components/confirm-dialog/confirm-dialog';
 
 @Component({
     selector: 'app-guide-editor-page',
