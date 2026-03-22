@@ -5,7 +5,7 @@ import createError from 'http-errors';
 export class GameController {
     private gameService = new GameService();
 
-    private parseId(value: any, name: string): number {
+    private checkId(value: any, name: string): number {
         const id = Number(value);
         if (Number.isNaN(id)) {
             throw createError(400, `Invalid ${name}`);
@@ -13,8 +13,8 @@ export class GameController {
         return id;
     }
 
-    private parseOptionalId(value: any, name: string): number | undefined {
-        if (value === undefined) return undefined;
+    private checkOptionalId(value: any, name: string): number | undefined {
+        if (value == null) return undefined;
 
         const id = Number(value);
         if (Number.isNaN(id)) {
@@ -24,15 +24,15 @@ export class GameController {
     }
 
     getGames = async (req: Request, res: Response): Promise<void> => {
-        const userId = this.parseOptionalId(req.query.userId, 'userId');
+        const userId = this.checkOptionalId(req.query.userId, 'userId');
 
         const games = await this.gameService.getAllGames(userId);
         res.status(200).json(games);
     };
 
     getGameById = async (req: Request, res: Response): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
-        const userId = this.parseOptionalId(req.query.userId, 'userId');
+        const gameId = this.checkId(req.params.gameId, 'gameId');
+        const userId = this.checkOptionalId(req.query.userId, 'userId');
 
         const game = await this.gameService.getGameById(gameId, userId);
 
@@ -52,8 +52,8 @@ export class GameController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
-        const userId = this.parseOptionalId(req.query.userId, 'userId');
+        const gameId = this.checkId(req.params.gameId, 'gameId');
+        const userId = this.checkOptionalId(req.query.userId, 'userId');
 
         const achievements = await this.gameService.getAchievementsByGameId(
             gameId,
@@ -67,50 +67,55 @@ export class GameController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
-        const achievementId = this.parseId(
-            req.params.achievementId,
-            'achievementId',
-        );
-        const userId = this.parseId(req.query.userId, 'userId');
-
         try {
+            const gameId = this.checkId(req.params.gameId, 'gameId');
+            const achievementId = this.checkId(
+                req.params.achievementId,
+                'achievementId',
+            );
+            const userId = this.checkId(req.query.userId, 'userId');
+
             await this.gameService.completeAchievement(
                 achievementId,
                 userId,
                 gameId,
             );
+
             res.status(200).json({ message: 'Achievement completed' });
         } catch (err: any) {
             if (err.message === 'ALREADY_COMPLETED') {
                 throw createError(409, 'Achievement already completed');
             }
+
             if (err.message === 'REFERENCE_NOT_FOUND') {
-                throw createError(404, 'Game, User, or Achievement not found');
+                throw createError(404, 'Resource not found');
             }
+
             throw err;
         }
     };
 
     toggleTrackGame = async (req: Request, res: Response): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
-        const userId = this.parseId(req.query.userId, 'userId');
-
-        if (typeof req.body.isTracked !== 'boolean') {
-            throw createError(400, 'isTracked must be a boolean');
-        }
-
         try {
+            const gameId = this.checkId(req.params.gameId, 'gameId');
+            const userId = this.checkId(req.query.userId, 'userId');
+
+            if (typeof req.body.isTracked !== 'boolean') {
+                throw createError(400, 'isTracked must be a boolean');
+            }
+
             await this.gameService.toggleTrackGame(
                 gameId,
                 userId,
                 req.body.isTracked,
             );
+
             res.status(200).json({ message: 'Track status updated' });
         } catch (err: any) {
             if (err.message === 'REFERENCE_NOT_FOUND') {
                 throw createError(404, 'Game or User not found');
             }
+
             throw err;
         }
     };
@@ -119,7 +124,7 @@ export class GameController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
+        const gameId = this.checkId(req.params.gameId, 'gameId');
 
         const bestUsers = await this.gameService.getBestUsersByGameId(gameId);
 

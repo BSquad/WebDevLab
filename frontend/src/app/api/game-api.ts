@@ -32,7 +32,6 @@ export class GameApi extends BaseApi {
         return await this.request(this.http.get<Achievement[]>(url));
     }
 
-    // 🔥 FIXED
     async completeAchievement(
         achievementId: number,
         userId: number,
@@ -43,7 +42,6 @@ export class GameApi extends BaseApi {
         return await this.request(this.http.post<{ message: string }>(url, {}));
     }
 
-    // 🔥 FIXED
     async toggleTrackGame(
         gameId: number,
         userId: number,

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -22,6 +21,18 @@ describe('GuideEditorPage', () => {
     let locationSpy: any;
     let activatedRouteMock: any;
     let routerSpy: any;
+
+    const mockGuide = {
+        title: 'Test title',
+        content: 'Test content',
+        gameId: 1,
+        userId: 1,
+    };
+
+    function createForm(valid: boolean, controls = {}) {
+        return { valid, controls } as any;
+    }
+
     beforeEach(async () => {
         guideServiceSpy = jasmine.createSpyObj('GuideService', [
             'getGuideById',
@@ -59,6 +70,8 @@ describe('GuideEditorPage', () => {
 
         fixture = TestBed.createComponent(GuideEditorPage);
         component = fixture.componentInstance;
+
+        component.guide = { ...mockGuide };
     });
 
     it('should create', () => {
@@ -135,9 +148,27 @@ describe('GuideEditorPage', () => {
 
     describe('submit', () => {
         it('should not submit invalid form', async () => {
-            await component.onSubmit({ valid: false } as NgForm);
+            const form = createForm(false, {
+                title: { invalid: true },
+                content: { invalid: true },
+            });
+
+            await component.onSubmit(form);
 
             expect(guideServiceSpy.saveGuideWithScreenshots).not.toHaveBeenCalled();
+        });
+
+        it('should show validation errors in toast', async () => {
+            const form = createForm(false, {
+                title: { invalid: true },
+                content: { invalid: true },
+            });
+
+            await component.onSubmit(form);
+
+            expect(toastServiceSpy.showError).toHaveBeenCalledWith(
+                'Title is required | Content is required',
+            );
         });
 
         it('should create guide successfully', async () => {
@@ -147,7 +178,7 @@ describe('GuideEditorPage', () => {
             component.userId = 1;
             component.isEditMode = false;
 
-            await component.onSubmit({ valid: true } as NgForm);
+            await component.onSubmit(createForm(true));
 
             expect(guideServiceSpy.saveGuideWithScreenshots).toHaveBeenCalledWith(
                 component.guide,
@@ -170,7 +201,7 @@ describe('GuideEditorPage', () => {
             component.userId = 1;
             component.gameId = 1;
 
-            await component.onSubmit({ valid: true } as NgForm);
+            await component.onSubmit(createForm(true));
 
             expect(guideServiceSpy.saveGuideWithScreenshots).toHaveBeenCalledWith(
                 component.guide,
@@ -192,7 +223,7 @@ describe('GuideEditorPage', () => {
             component.gameId = 1;
             component.userId = 1;
 
-            await component.onSubmit({ valid: true } as NgForm);
+            await component.onSubmit(createForm(true));
 
             expect(toastServiceSpy.showError).toHaveBeenCalled();
         });

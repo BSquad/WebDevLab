@@ -48,9 +48,6 @@ export class GuideService {
     };
 
     rateGuide = async (guideId: number, userId: number, score: number) => {
-        if (!Number.isInteger(score) || score < 1 || score > 5) {
-            throw new Error('INVALID_RATING');
-        }
         await this.guideDbAccess.rateGuide(guideId, userId, score);
     };
 
@@ -66,6 +63,12 @@ export class GuideService {
         await this.guideDbAccess.deleteScreenshot(guideId, filePath);
     };
 
+    /**
+     * Creates a pdf file for a guide using PDFKit and starts the download.
+     *
+     * @param id guideID
+     * @returns
+     */
     generateGuidePdf = async (id: number): Promise<Buffer> => {
         const guide = await this.guideDbAccess.getGuideById(id);
 

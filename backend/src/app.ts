@@ -36,8 +36,10 @@ app.use('/comments', commentsRouter);
 app.use('/favorites', favoritesRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-    console.error(`[Error] ${req.method} ${req.originalUrl}`);
-    console.error(err.stack ?? err);
+    if (process.env.NODE_ENV !== 'test') {
+        console.error(`[Error] ${req.method} ${req.originalUrl}`);
+        console.error(err.stack ?? err);
+    }
 
     const isDev = process.env.NODE_ENV === 'development';
 

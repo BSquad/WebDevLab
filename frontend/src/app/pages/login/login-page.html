@@ -8,7 +8,7 @@
 
         <mat-card-content>
             <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="login-form">
-                <mat-form-field appearance="outline" class="full-width">
+                <mat-form-field appearance="outline" color="accent" class="full-width">
                     <mat-label>Username</mat-label>
                     <input
                         matInput
@@ -43,8 +43,8 @@
             </form>
 
             <p class="link text-center">
-                Noch kein Account?
-                <a routerLink="/register">Jetzt registrieren</a>
+                Don't have an account?
+                <a routerLink="/register">Register now</a>
             </p>
         </mat-card-content>
     </mat-card>

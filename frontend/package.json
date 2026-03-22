@@ -8,7 +8,10 @@
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "test:ci": "ng test --watch=false --coverage",
-        "serve:ssr:WebDevLab": "node dist/WebDevLab/server/server.mjs"
+        "serve:ssr:WebDevLab": "node dist/WebDevLab/server/server.mjs",
+        "cy:open": "cypress open",
+        "cy:run": "cypress run",
+        "e2e": "start-server-and-test start http://localhost:4200 cy:run"
     },
     "private": true,
     "packageManager": "npm@11.6.1",
@@ -40,6 +43,7 @@
         "@types/node": "^20.17.19",
         "@vitest/coverage-v8": "^4.0.14",
         "baseline-browser-mapping": "^2.9.18",
+        "cypress": "^15.12.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.5",
         "jasmine-core": "^5.13.0",
@@ -50,6 +54,7 @@
         "karma-jasmine": "^5.1.0",
         "karma-jasmine-html-reporter": "^2.1.0",
         "prettier": "^3.8.1",
+        "start-server-and-test": "^2.1.5",
         "typescript": "~5.9.2"
     }
 }

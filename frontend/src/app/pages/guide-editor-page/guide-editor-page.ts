@@ -157,7 +157,21 @@ export class GuideEditorPage {
     }
 
     async onSubmit(form: NgForm) {
-        if (!form.valid) return;
+        if (!form.valid) {
+            let errors: string[] = [];
+
+            if (form.controls['title']?.invalid) {
+                errors.push('Title is required');
+            }
+
+            if (form.controls['content']?.invalid) {
+                errors.push('Content is required');
+            }
+
+            this.toastService.showError(errors.join(' | '));
+
+            return;
+        }
 
         try {
             const guideId = await this.guideService.saveGuideWithScreenshots(this.guide, {
@@ -174,8 +188,6 @@ export class GuideEditorPage {
                 this.isEditMode ? 'Guide updated successfully!' : 'Guide created successfully!',
             );
         } catch (err: any) {
-            console.error('SAVE ERROR:', err);
-
             if (err.message === 'UPLOAD_FAILED') {
                 this.toastService.showError('A screenshot could not be uploaded.');
             } else {

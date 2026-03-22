@@ -18,7 +18,6 @@ describe('GameApi', () => {
         service = TestBed.inject(GameApi);
         httpMock = TestBed.inject(HttpTestingController);
 
-        // wichtig für URL
         (service as any).apiUrl = 'http://localhost:3000';
     });
 
@@ -131,7 +130,6 @@ describe('GameApi', () => {
             expect(req.request.method).toBe('GET');
         });
 
-        // 🔥 FIXED
         it('should complete achievement', async () => {
             const promise = service.completeAchievement(789, 123, 456);
 
@@ -147,7 +145,6 @@ describe('GameApi', () => {
             expect(req.request.body).toEqual({});
         });
 
-        // 🔥 FIXED
         it('should toggle track game', async () => {
             const promise = service.toggleTrackGame(123, 456, true);
 

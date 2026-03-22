@@ -70,7 +70,6 @@
     transition: all 0.1s ease;
 
     &:hover:not(:disabled) {
-        // High-contrast retro hover state
         background-color: rgba($color-black, 0.4) !important;
         border: 2px solid $color-yellow !important;
         color: $color-yellow !important;
@@ -151,7 +150,7 @@
     border-radius: 0 !important;
     box-shadow: 8px 8px 0px rgba($color-black, 0.8) !important;
     font-family: 'Courier New', Courier, monospace !important;
-    margin-top: 10px !important; // Pushes it slightly away from the toolbar
+    margin-top: 10px !important;
 
     .menu-header {
         padding: 16px;

@@ -223,6 +223,72 @@ export class Db {
               'platinum'
             ),
             (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Spellblade',
+              'Learn 20 different sorceries.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Incantation Master',
+              'Learn 15 different incantations.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Weapon Collector',
+              'Upgrade 15 different weapons to +10.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Dungeon Delver',
+              'Clear 20 different catacombs and caves.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Legacy Dungeon Conqueror',
+              'Complete all legacy dungeons.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Shardbearer',
+              'Collect all Great Runes.',
+              'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Talisman Hunter',
+              'Collect 50 different talismans.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Spirit Summoner',
+              'Upgrade 10 different spirit ashes.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'Map Unveiler',
+              'Reveal the entire map of the Lands Between.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'NPC Friend',
+              'Complete 20 NPC questlines.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Elden Ring'),
+              'PvP Champion',
+              'Win 10 invasion battles.',
+              'bronze'
+            ),
+            (
               (SELECT id FROM games WHERE title = 'The Witcher 3'),
               'The Witcher',
               'Complete all main story quests.',
@@ -391,6 +457,78 @@ export class Db {
               'platinum'
             ),
             (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Weapon Master',
+              'Unlock all aspects for every weapon.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Boon Collector',
+              'Collect 100 different boons.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Champion of the Underworld',
+              'Complete a run at Heat Level 20.',
+              'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Friend of the Gods',
+              'Max out affinity with all Olympian gods.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Treasure Hunter',
+              'Collect 1000 gems.',
+              'bronze'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Secret Revealer',
+              'Discover all secret rooms.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Chaos Blessing',
+              'Receive 50 Chaos boons.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Legendary Duo',
+              'Complete a run using only duo boons.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Speed Demon',
+              'Escape the Underworld in under 10 minutes.',
+              'silver'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Bloodless Run',
+              'Complete a run without taking damage.',
+              'platinum'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Patricide',
+              'Defeat Hades 50 times.',
+              'gold'
+            ),
+            (
+              (SELECT id FROM games WHERE title = 'Hades'),
+              'Nectar Giver',
+              'Give 100 gifts of nectar.',
+              'bronze'
+            ),
+            (
               (SELECT id FROM games WHERE title = 'Minecraft'),
               'Woodworker',
               'Collect your first block of wood.',
@@ -423,92 +561,239 @@ export class Db {
               '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08' --test
             );
 
-          INSERT OR IGNORE INTO guides 
-            (userId, gameId, title, content, createdAt)
-          VALUES
-            (
-              (SELECT id FROM users WHERE name = 'sa'), 
-              (SELECT id FROM games WHERE title = 'Elden Ring'), 
-              'Beginner Guide', 
-              'Elden Ring is a massive open-world action RPG. This guide covers the basic game mechanics including movement, combat, and leveling. We also provide tips for the first areas, how to use resources efficiently, defeat early bosses, and avoid traps. Players will learn which classes are suitable for beginners, how to explore the map optimally, and which NPCs are helpful. The guide also covers weapons, magic, and buffs to prevent frustration for new players.', 
-              '2026-01-15 14:30:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'test'), 
-              (SELECT id FROM games WHERE title = 'Elden Ring'), 
-              'Boss Guide', 
-              'This guide focuses on the major boss fights in Elden Ring. We provide step-by-step instructions for tactics against the most important bosses in the early game regions. This includes attack patterns, weaknesses, and recommended equipment. Additionally, tips for summons, co-op mechanics, and how to reduce boss fight frustration to ensure smooth progress.', 
-              '2026-01-22 09:15:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'sa'), 
-              (SELECT id FROM games WHERE title = 'Elden Ring'), 
-              'Secrets & Easter Eggs', 
-              'This guide uncovers secret locations, hidden bosses, and rare items in Elden Ring. We show how to discover hidden paths, which NPC quests lead to special rewards, and how to unlock secret skills and weapons. Also includes hints about Easter Eggs that reference other games. Players will receive valuable tips to fully explore the game.', 
-              '2026-02-03 16:45:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'sa'), 
-              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
-              'Main Story Walkthrough', 
-              'This guide covers the main quests of The Witcher 3: Wild Hunt. We guide players through all chapters and show how to make decisions that affect the game ending. Includes tips for combat, witcher signs, potions, and equipment. We also cover the most important story decisions to get the maximum experience and best possible rewards.', 
-              '2026-01-08 11:20:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'sa'), 
-              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
-              'Gwent Strategy Guide', 
-              'A comprehensive guide to the card game Gwent in The Witcher 3. Here you will learn how to build the best decks, analyze opponents, and collect cards efficiently. We explain the game mechanics, strategies against specific opponents, and provide tips for tournaments in Novigrad and Kaer Morhen.', 
-              '2026-01-31 13:10:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'test'), 
-              (SELECT id FROM games WHERE title = 'Hades'), 
-              'Beginner Hades Guide', 
-              'Hades is a roguelike dungeon crawler. In this guide, beginners will learn how to survive the first runs, which weapons are suitable for starting out, how to combine god boons effectively, and which upgrades help in the long term. Also includes tips for healing, enemy groups, and bosses in the early levels. The goal is to optimally prepare players for later, more difficult runs.', 
-              '2026-02-08 10:30:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'test'), 
-              (SELECT id FROM games WHERE title = 'Hades'), 
-              'Advanced Hades Tactics', 
-              'This guide is aimed at experienced Hades players. We analyze advanced builds, synergistic boons, optimal weapons, and the best strategies against the final bosses. Additionally, we provide hints for rare upgrades, chamber compositions, and secrets in the Underworld to achieve maximum high scores.', 
-              '2026-02-14 15:25:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'sa'), 
-              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
-              'Romance Guide', 
-              'This comprehensive guide covers all romance options in The Witcher 3: Wild Hunt. We detail the complete romance paths for Yennefer, Triss, and other secondary romance options like Keira Metz and Jutta an Dimun. Learn the specific dialogue choices, quest requirements, and timing needed to successfully pursue each romance. We also explain the consequences of your romantic choices on the story ending and character relationships. The guide includes tips for managing multiple romances, avoiding common mistakes, and achieving the best possible romantic outcomes. Special attention is given to the complex Yennefer-Triss dynamic and how to navigate this delicate situation without breaking hearts or missing out on meaningful content.', 
-              '2026-01-12 18:40:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'test'), 
-              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
-              'Crafting & Alchemy Masterclass', 
-              'Master the art of crafting and alchemy in The Witcher 3 with this detailed guide. We cover everything from basic weapon and armor crafting to advanced alchemical preparations. Learn where to find the best crafting diagrams, how to locate rare ingredients, and which merchants sell the most valuable schematics. The guide explains the alchemy system in depth, including how to create powerful potions, oils, and bombs that will give you an edge in combat. We provide complete walkthroughs for major crafting quests like the Master Armorers and Master Swordsmiths questlines. Discover the locations of all Grandmaster diagrams in the Blood and Wine expansion and learn how to craft the most powerful gear sets in the game. Tips for ingredient farming, mutagen creation, and optimizing your alchemical build are also included.', 
-              '2026-02-01 12:55:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'sa'), 
-              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
-              'Complete Treasure Hunt Guide', 
-              'Uncover every hidden treasure in The Witcher 3 with this exhaustive treasure hunting guide. We detail the locations of all witcher gear sets, including Griffin, Cat, Bear, Wolf, and Viper diagrams scattered throughout the main game and expansions. Each treasure hunt is covered with step-by-step instructions, maps, and tips for overcoming the challenges that guard these valuable rewards. Learn how to decode cryptic maps, solve environmental puzzles, and defeat the powerful guardians of ancient witcher artifacts. The guide also covers non-witcher treasure hunts, including hidden caches, smuggler''s treasures, and legendary weapon locations. We provide strategies for navigating dangerous dungeons, avoiding traps, and preparing for the tough battles that often precede major discoveries. Special sections dedicated to the Blood and Wine Grandmaster gear hunts and Hearts of Stone unique item locations.', 
-              '2026-01-25 20:15:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'test'), 
-              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
-              'Character Build Guide', 
-              'Create the perfect Geralt build with this comprehensive character development guide. We analyze all skill trees in detail: Combat, Alchemy, Signs, and General, providing recommendations for different playstyles from pure warrior to master mage. Learn which skills synergize best, how to allocate skill points efficiently, and which mutagens complement your chosen build. The guide covers popular builds like the Euphoria build, Signs build, Tank build, and Hybrid builds, complete with recommended equipment, decoctions, and playstyle strategies. We explain the mechanics behind attack power, sign intensity, and critical hit chance, helping you optimize Geralt''s stats for maximum effectiveness. Advanced topics include mutation systems, gear set bonuses, and how to adapt your build for different challenges like boss fights, contract monsters, or crowd control situations. Tips for respeccing and experimenting with different builds throughout your playthrough.', 
-              '2026-02-10 14:20:00'
-            ),
-            (
-              (SELECT id FROM users WHERE name = 'sa'), 
-              (SELECT id FROM games WHERE title = 'The Witcher 3'), 
-              'Expansion Content Guide', 
-              'Master the additional content from Hearts of Stone and Blood and Wine expansions with this detailed guide. For Hearts of Stone, we provide complete walkthroughs for all main quests including the complex Heist missions, the mysterious Man of Glass questline, and the challenging encounters with Gaunter O''Dimm. Learn how to navigate the moral complexities of the expansion and achieve the best possible outcomes. For Blood and Wine, we cover the entire Toussaint experience from the initial investigation to the final confrontation with the Beast. The guide includes detailed maps of all new areas, complete walkthroughs for all main and secondary quests, and strategies for the unique tournament system. We also cover the new Grandmaster gear sets, the wine mechanics, and the estate management system. Special attention is given to the multiple endings and how your choices throughout both expansions affect the final outcomes. Tips for level-appropriate progression and optimal quest sequencing are included.',  
-              '2026-01-18 17:35:00'
+          
+            -- =========================
+            -- GUIDES
+            -- =========================
+            
+
+        -- Elden Ring (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'Elden Ring'),
+            'Elden Ring Rune Farming Guide',
+            'In diesem Guide zeigen wir dir die effizientesten Methoden zum Runen farmen. Du lernst Spots für Early-, Mid- und Late-Game kennen sowie Builds, die besonders gut zum Farmen geeignet sind. Zusätzlich erklären wir, wie du Risiko minimierst und trotzdem schnell Fortschritt machst.'
+            );
+
+            -- Elden Ring (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'Elden Ring'),
+            'Elden Ring Build Guide Strength vs Dexterity',
+            'Dieser Guide vergleicht Strength- und Dexterity-Builds. Du lernst die Vor- und Nachteile beider Spielstile kennen und bekommst konkrete Empfehlungen für Waffen, Talismane und Stats.'
+            );
+
+            -- Witcher 3 (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'The Witcher 3'),
+            'Witcher 3 Money Farming Guide',
+            'In diesem Guide zeigen wir dir die besten Methoden, um schnell Geld zu verdienen. Von Verträgen über Loot-Routen bis hin zu Crafting-Tricks – du lernst, wie du effizient Crowns farmst.'
+            );
+
+            -- Witcher 3 (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'The Witcher 3'),
+            'Witcher 3 Best Armor Sets Guide',
+            'Dieser Guide stellt dir die besten Rüstungssets im Spiel vor. Du erfährst, wo du sie findest und für welche Builds sie sich am besten eignen.'
+            );
+
+            -- Hades (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'Hades'),
+            'Hades Weapon Tier List Guide',
+            'In diesem Guide vergleichen wir alle Waffen in Hades und ordnen sie nach Effektivität ein. Du lernst, welche Waffen sich für Anfänger und welche für erfahrene Spieler eignen.'
+            );
+
+            -- Hades (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'Hades'),
+            'Hades Boss Strategy Guide',
+            'Dieser Guide erklärt dir alle Bosskämpfe in Hades im Detail. Du lernst Angriffsmuster, sichere Positionierung und effektive Counter-Strategien.'
+            );
+
+            -- Elden Ring (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'Elden Ring'),
+            'Elden Ring Beginner Guide',
+            'Dieser Guide richtet sich an Einsteiger in Elden Ring. Du lernst die wichtigsten Grundlagen wie Movement, Stamina-Management und den richtigen Umgang mit Waffen und Schilden. Besonders im Early Game ist es entscheidend, Kämpfe nicht zu überstürzen und Gegner zu beobachten. Außerdem geben wir Tipps zu sinnvollen Startklassen, ersten Bossen und wie du effizient Runen farmst, ohne unnötig zu sterben.'
+            );
+
+            -- Witcher 3 (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'The Witcher 3'),
+            'Witcher 3 Story & Decision Guide',
+            'In diesem Guide geht es um die wichtigsten Story-Entscheidungen in The Witcher 3 und deren Auswirkungen. Viele Quests haben langfristige Konsequenzen, die sich erst Stunden später zeigen. Du erfährst, wie du die besten Enden erreichst, welche Dialogoptionen kritisch sind und wie sich deine Entscheidungen auf Ciri und andere Charaktere auswirken. Zusätzlich geben wir Hinweise, wie du Nebenquests optimal in die Hauptstory integrierst.'
+            );
+
+            -- Hades (sa)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'sa'),
+            (SELECT id FROM games WHERE title = 'Hades'),
+            'Hades Build Guide',
+            'Dieser Guide erklärt dir, wie du starke Builds in Hades zusammenstellst. Der Fokus liegt auf der Kombination von Boons, Waffen-Aspekten und Spiegel-Upgrades. Du lernst, welche Götter besonders gut miteinander synergieren und wie du deine Runs gezielt planst. Zusätzlich zeigen wir dir, welche Builds für Anfänger geeignet sind und welche Strategien dir helfen, Bosse konsistent zu besiegen.'
+            );
+
+            -- Elden Ring (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'Elden Ring'),
+            'Elden Ring Boss Guide',
+            'Dieser Guide konzentriert sich auf die wichtigsten Bosskämpfe in Elden Ring. Du bekommst detaillierte Strategien zu Angriffsmustern, Ausweich-Timings und Schwachstellen der Bosse. Besonders wichtig ist es, Geduld zu bewahren und die Movesets zu lernen, statt aggressiv zu spielen. Zusätzlich geben wir Empfehlungen für Waffen, Beschwörungen und Builds, die dir den Kampf deutlich erleichtern.'
+            );
+
+            -- Witcher 3 (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'The Witcher 3'),
+            'Witcher 3 Alchemy & Crafting Guide',
+            'In diesem Guide lernst du die Alchemie- und Crafting-Systeme von The Witcher 3 im Detail kennen. Tränke, Öle und Bomben sind essenziell für schwierigere Kämpfe und geben dir enorme Vorteile. Wir erklären dir, welche Rezepte Priorität haben, wo du seltene Zutaten findest und wie du deine Ausrüstung optimal verbesserst. Außerdem zeigen wir dir, wie du dich gezielt auf Monsterjagden vorbereitest.'
+            );
+
+            -- Hades (test)
+            INSERT OR IGNORE INTO guides (userId, gameId, title, content)
+            VALUES (
+            (SELECT id FROM users WHERE name = 'test'),
+            (SELECT id FROM games WHERE title = 'Hades'),
+            'Hades Advanced Strategy Guide',
+            'Dieser Guide richtet sich an fortgeschrittene Spieler, die ihre Runs in Hades optimieren möchten. Wir analysieren komplexe Boon-Synergien, High-Damage-Builds und effiziente Raumwahl. Du lernst, wie du Risiken richtig einschätzt und deine Ressourcen über einen gesamten Run hinweg managst. Zusätzlich geben wir dir Tipps für Heat-Level und Endgame-Content.'
+            );
+
+            -- =========================
+            -- RATINGS
+            -- =========================
+
+
+            -- test bewertet Guides von sa
+            INSERT OR IGNORE INTO guide_rating (userId, guideId, score)
+            SELECT
+            (SELECT id FROM users WHERE name = 'test'),
+            g.id,
+            CASE
+                WHEN g.title LIKE '%Beginner%' THEN 5
+                WHEN g.title LIKE '%Farming%' THEN 4
+                WHEN g.title LIKE '%Story%' THEN 5
+                ELSE 4
+            END
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            -- sa bewertet Guides von test
+            INSERT OR IGNORE INTO guide_rating (userId, guideId, score)
+            SELECT
+            (SELECT id FROM users WHERE name = 'sa'),
+            g.id,
+            CASE
+                WHEN g.title LIKE '%Boss%' THEN 5
+                WHEN g.title LIKE '%Build%' THEN 4
+                WHEN g.title LIKE '%Armor%' THEN 5
+                WHEN g.title LIKE '%Advanced%' THEN 4
+                ELSE 4
+            END
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            -- =========================
+            -- COMMENTS
+            -- =========================
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'test'),
+            g.id,
+            'Sehr hilfreicher Guide! Besonders die Erklärungen zu den Grundlagen waren verständlich und gut strukturiert.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa');
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'test'),
+            g.id,
+            'Hat mir echt beim Einstieg geholfen. Vielleicht könntest du noch ein paar konkrete Beispiele oder Builds ergänzen.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa');
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'sa'),
+            g.id,
+            'Starker Guide! Die Strategien sind gut erklärt und direkt umsetzbar. Hat mir definitiv weitergeholfen.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test');
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'sa'),
+            g.id,
+            'Sehr detailliert geschrieben. Besonders die Tipps zu Builds und Synergien fand ich hilfreich.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test');
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'test'),
+            g.id,
+            'Richtig guter Guide, hat mir direkt weitergeholfen. Besonders die Struktur ist top.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'test'),
+            g.id,
+            'Sehr solide erklärt. Ein paar mehr konkrete Beispiele wären noch nice.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'sa')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            -- sa → test
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'sa'),
+            g.id,
+            'Mega hilfreich geschrieben. Vor allem die Tipps zu den Bossen sind stark.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
+            );
+
+            INSERT OR IGNORE INTO guide_comments (userId, guideId, commentText)
+            SELECT 
+            (SELECT id FROM users WHERE name = 'sa'),
+            g.id,
+            'Sehr detailliert und gut verständlich. Genau solche Guides braucht man.'
+            FROM guides g
+            WHERE g.userId = (SELECT id FROM users WHERE name = 'test')
+            AND g.gameId IN (
+            SELECT id FROM games WHERE title IN ('Elden Ring','The Witcher 3','Hades')
             );
         `);
     };

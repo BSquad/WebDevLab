@@ -23,7 +23,6 @@ export class GuideService {
     async createGuide(guide: Guide): Promise<number> {
         const result = await this.guideApi.createGuide(guide);
 
-        // ✅ FIX: Absicherung + konsistent mit Tests
         if (!result?.id) {
             throw new Error('CREATE_FAILED');
         }
@@ -95,7 +94,6 @@ export class GuideService {
             const result = await this.guideApi.createGuide(guide);
             guideId = result.id;
 
-            // ✅ FIX: wichtig für Tests + Sicherheit
             if (!guideId) {
                 throw new Error('CREATE_FAILED');
             }
@@ -105,7 +103,6 @@ export class GuideService {
             try {
                 await this.guideApi.uploadScreenshot(guideId!, file);
             } catch {
-                // ✅ FIX: Rollback nur im Create-Modus
                 if (!options.isEditMode && guideId) {
                     await this.guideApi.deleteGuide(guideId, options.userId);
                 }

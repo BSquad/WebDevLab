@@ -1,0 +1,38 @@
+describe('template spec', () => {
+    it('passes', () => {
+        cy.visit('http://localhost:4200/');
+        cy.get('button.mat-accent span.mdc-button__label').click();
+        cy.get('[name="username"]').click();
+        cy.get('[name="username"]').type('test');
+        cy.get('[name="password"]').click();
+        cy.get('[name="password"]').type('test');
+        cy.contains('button', 'Login').click();
+        cy.get('div:nth-child(1) > div.game-info > div.game-genre').click();
+        cy.get('app-guide-card').first().contains('button', 'Read').click();
+        cy.get('div.rating-container span:nth-child(2)').click();
+        cy.get('button.back-button').click();
+        cy.get('button.create-guide-button').click();
+        cy.get('[name="title"]').click();
+        cy.get('[name="title"]').click();
+        cy.get('[name="title"]').type('New Elden Ring Guide E2E');
+        cy.get('[name="content"]').click();
+        cy.get('[name="content"]').type('New Elden Ring E2E Guide');
+        cy.get('input[type="file"]').selectFile('cypress/fixtures/test.png', { force: true });
+        cy.get('button.submit-button').click();
+        cy.get('app-guide-card:nth-child(1) button:nth-child(1)').click();
+        cy.get('button.remove-preview').click();
+        cy.get('[name="content"]').click();
+        cy.get('[name="content"]').clear();
+        cy.get('[name="content"]').type('New Elden Ring');
+        cy.get('[name="title"]').click();
+        cy.get('[name="title"]').clear();
+        cy.get('[name="title"]').type('New Elden Ring');
+        cy.get('button.submit-button').click();
+        cy.get('app-guide-card:nth-child(1) div.guide-item').click();
+        cy.get('app-guide-card:nth-child(1) button:nth-child(2)').click();
+        cy.get('button.back-button').click();
+        cy.get('app-guide-card:nth-child(1) button:nth-child(1)').click();
+        cy.get('button.delete-button').click();
+        cy.contains('button', 'OK').click();
+    });
+});
