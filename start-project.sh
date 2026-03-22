@@ -1,10 +1,11 @@
 #!/bin/bash
-echo "Starte Backend und Frontend..."
 
-# Frontend starten
-gnome-terminal -- bash -c "cd frontend && echo 'Frontend wird gestartet...' && ng serve; exec bash"
+cd "$(dirname "$0")"
 
-# Backend starten
-gnome-terminal -- bash -c "cd backend && echo 'Backend wird gestartet...' && npm run start; exec bash"
+echo "Starting backend and frontend..."
 
-echo "Beide Prozesse gestartet."
+gnome-terminal -- bash -c "cd frontend && echo 'Starting frontend...' && ng serve; exec bash"
+
+gnome-terminal -- bash -c "cd backend && echo 'Starting backend...' && npm run start:dev; exec bash"
+
+echo "Backend and frontend started."
