@@ -6,7 +6,7 @@ import createError from 'http-errors';
 export class GuideController {
     private guideService = new GuideService();
 
-    private checkId(value: any, name: string): number {
+    private parseId(value: any, name: string): number {
         if (value == null || value === '') {
             throw createError(400, `Missing ${name}`);
         }
@@ -23,8 +23,8 @@ export class GuideController {
     createGuide = async (req: Request, res: Response): Promise<void> => {
         const guide = req.body as Guide;
 
-        const gameId = this.checkId(guide.gameId, 'gameId');
-        const userId = this.checkId(guide.userId, 'userId');
+        const gameId = this.parseId(guide.gameId, 'gameId');
+        const userId = this.parseId(guide.userId, 'userId');
 
         if (!guide.title || !guide.content) {
             throw createError(400, 'Missing title or content');
@@ -45,14 +45,14 @@ export class GuideController {
     };
 
     getGuidesByGameId = async (req: Request, res: Response): Promise<void> => {
-        const gameId = this.checkId(req.params.gameId, 'gameId');
+        const gameId = this.parseId(req.params.gameId, 'gameId');
 
         const guides = await this.guideService.getGuidesByGameId(gameId);
         res.status(200).json(guides);
     };
 
     getGuideById = async (req: Request, res: Response): Promise<void> => {
-        const id = this.checkId(req.params.id, 'guideId');
+        const id = this.parseId(req.params.id, 'guideId');
 
         const guide = await this.guideService.getGuideById(id);
 
@@ -64,7 +64,7 @@ export class GuideController {
     };
 
     getGuidesByUserId = async (req: Request, res: Response): Promise<void> => {
-        const userId = this.checkId(req.params.userId, 'userId');
+        const userId = this.parseId(req.params.userId, 'userId');
 
         const guides = await this.guideService.getGuidesByUserId(userId);
         res.status(200).json(guides);
@@ -74,15 +74,15 @@ export class GuideController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const gameId = this.checkId(req.params.gameId, 'gameId');
+        const gameId = this.parseId(req.params.gameId, 'gameId');
 
         const guides = await this.guideService.getTopGuidesByGameId(gameId);
         res.status(200).json(guides);
     };
 
     updateGuide = async (req: Request, res: Response): Promise<void> => {
-        const id = this.checkId(req.params.id, 'guideId');
-        const userId = this.checkId(Number(req.body.userId), 'userId');
+        const id = this.parseId(req.params.id, 'guideId');
+        const userId = this.parseId(Number(req.body.userId), 'userId');
         const { title, content } = req.body;
 
         try {
@@ -103,7 +103,7 @@ export class GuideController {
     };
 
     deleteGuide = async (req: Request, res: Response): Promise<void> => {
-        const id = this.checkId(req.params.id, 'guideId');
+        const id = this.parseId(req.params.id, 'guideId');
         const userId = Number(req.body.userId);
 
         if (Number.isNaN(userId)) {
@@ -125,7 +125,7 @@ export class GuideController {
     };
 
     rateGuide = async (req: Request, res: Response): Promise<void> => {
-        const guideId = this.checkId(req.params.id, 'guideId');
+        const guideId = this.parseId(req.params.id, 'guideId');
         const userId = Number(req.body.userId);
         const rating = Number(req.body.rating);
 
@@ -143,7 +143,7 @@ export class GuideController {
     };
 
     uploadScreenshot = async (req: Request, res: Response): Promise<void> => {
-        const guideId = this.checkId(req.params.id, 'guideId');
+        const guideId = this.parseId(req.params.id, 'guideId');
 
         if (!req.file) throw createError(400, 'No file uploaded');
 
@@ -155,7 +155,7 @@ export class GuideController {
     };
 
     deleteScreenshot = async (req: Request, res: Response): Promise<void> => {
-        const guideId = this.checkId(req.params.id, 'guideId');
+        const guideId = this.parseId(req.params.id, 'guideId');
         const { filePath } = req.body;
 
         if (!filePath) throw createError(400, 'filePath required');
@@ -166,7 +166,7 @@ export class GuideController {
     };
 
     downloadGuidePdf = async (req: Request, res: Response): Promise<void> => {
-        const id = this.checkId(req.params.id, 'guideId');
+        const id = this.parseId(req.params.id, 'guideId');
 
         try {
             const guide = await this.guideService.getGuideById(id);

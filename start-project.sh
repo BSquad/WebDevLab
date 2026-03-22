@@ -5,6 +5,6 @@ echo "Starte Backend und Frontend..."
 gnome-terminal -- bash -c "cd frontend && echo 'Frontend wird gestartet...' && ng serve; exec bash"
 
 # Backend starten
-gnome-terminal -- bash -c "cd backend && echo 'Backend wird gestartet...' && npm run start:dev; exec bash"
+gnome-terminal -- bash -c "cd backend && echo 'Backend wird gestartet...' && npm run start; exec bash"
 
 echo "Beide Prozesse gestartet."
