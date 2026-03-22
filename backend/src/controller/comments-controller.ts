@@ -18,10 +18,7 @@ export class CommentsController {
         const guideId = this.parseId(req.body.guideId, 'guideId');
         const { commentText } = req.body;
 
-        if (
-            typeof commentText !== 'string' ||
-            commentText.trim().length === 0
-        ) {
+        if (commentText.trim().length === 0) {
             throw createError(400, 'Comment text must not be empty');
         }
 

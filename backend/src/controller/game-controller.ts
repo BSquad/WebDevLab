@@ -5,15 +5,27 @@ import createError from 'http-errors';
 export class GameController {
     private gameService = new GameService();
 
-    private checkId(value: any, name: string): number {
+    /**parse mandatory id or throw error
+     *
+     * @param value
+     * @param name
+     * @returns id as number
+     */
+
+    private parseId(value: any, name: string): number {
         const id = Number(value);
         if (Number.isNaN(id)) {
             throw createError(400, `Invalid ${name}`);
         }
         return id;
     }
-
-    private checkOptionalId(value: any, name: string): number | undefined {
+    /**parse optional id or throw error
+     *
+     * @param value
+     * @param name
+     * @returns id as number
+     */
+    private parseOptionalId(value: any, name: string): number | undefined {
         if (value == null) return undefined;
 
         const id = Number(value);
@@ -24,15 +36,15 @@ export class GameController {
     }
 
     getGames = async (req: Request, res: Response): Promise<void> => {
-        const userId = this.checkOptionalId(req.query.userId, 'userId');
+        const userId = this.parseOptionalId(req.query.userId, 'userId');
 
         const games = await this.gameService.getAllGames(userId);
         res.status(200).json(games);
     };
 
     getGameById = async (req: Request, res: Response): Promise<void> => {
-        const gameId = this.checkId(req.params.gameId, 'gameId');
-        const userId = this.checkOptionalId(req.query.userId, 'userId');
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+        const userId = this.parseOptionalId(req.query.userId, 'userId');
 
         const game = await this.gameService.getGameById(gameId, userId);
 
@@ -52,8 +64,8 @@ export class GameController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const gameId = this.checkId(req.params.gameId, 'gameId');
-        const userId = this.checkOptionalId(req.query.userId, 'userId');
+        const gameId = this.parseId(req.params.gameId, 'gameId');
+        const userId = this.parseOptionalId(req.query.userId, 'userId');
 
         const achievements = await this.gameService.getAchievementsByGameId(
             gameId,
@@ -68,12 +80,12 @@ export class GameController {
         res: Response,
     ): Promise<void> => {
         try {
-            const gameId = this.checkId(req.params.gameId, 'gameId');
-            const achievementId = this.checkId(
+            const gameId = this.parseId(req.params.gameId, 'gameId');
+            const achievementId = this.parseId(
                 req.params.achievementId,
                 'achievementId',
             );
-            const userId = this.checkId(req.query.userId, 'userId');
+            const userId = this.parseId(req.query.userId, 'userId');
 
             await this.gameService.completeAchievement(
                 achievementId,
@@ -97,12 +109,8 @@ export class GameController {
 
     toggleTrackGame = async (req: Request, res: Response): Promise<void> => {
         try {
-            const gameId = this.checkId(req.params.gameId, 'gameId');
-            const userId = this.checkId(req.query.userId, 'userId');
-
-            if (typeof req.body.isTracked !== 'boolean') {
-                throw createError(400, 'isTracked must be a boolean');
-            }
+            const gameId = this.parseId(req.params.gameId, 'gameId');
+            const userId = this.parseId(req.query.userId, 'userId');
 
             await this.gameService.toggleTrackGame(
                 gameId,
@@ -124,7 +132,7 @@ export class GameController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const gameId = this.checkId(req.params.gameId, 'gameId');
+        const gameId = this.parseId(req.params.gameId, 'gameId');
 
         const bestUsers = await this.gameService.getBestUsersByGameId(gameId);
 
