@@ -149,7 +149,7 @@ describe('Guide API – Modul A', () => {
             .send({
                 userId: 1,
                 gameId: 1,
-                title: 'Guide with Meta ' + Date.now(),
+                title: 'Testguide ' + Date.now(),
                 content: 'Test',
             });
 
