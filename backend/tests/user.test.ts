@@ -5,7 +5,6 @@ describe('User API Integration Tests', () => {
     let testUserId: number;
     const uniqueSuffix = Date.now();
 
-    // 1. Setup: Create a user via the Auth route to test against
     beforeAll(async () => {
         const testUser = {
             name: `UserTest_${uniqueSuffix}`,
@@ -57,7 +56,7 @@ describe('User API Integration Tests', () => {
         it('should reject update if missing data', async () => {
             const response = await request(app)
                 .put(`/users/${testUserId}`)
-                .send({ name: 'OnlyName' }); // Missing email
+                .send({ name: 'OnlyName' });
 
             expect(response.status).toBe(400);
         });
@@ -76,7 +75,7 @@ describe('User API Integration Tests', () => {
         it('should reject layout update if order is not an array', async () => {
             const response = await request(app)
                 .put(`/users/${testUserId}/layout`)
-                .send({ order: 'guides, analysis' }); // String instead of array
+                .send({ order: 'guides, analysis' });
 
             expect(response.status).toBe(400);
         });
@@ -105,18 +104,36 @@ describe('User API Integration Tests', () => {
             expect(response.status).toBe(200);
             expect(Array.isArray(response.body)).toBe(true);
         });
+
+        it('should return achievements', async () => {
+            const res = await request(app).get(
+                `/users/${testUserId}/achievements`,
+            );
+            expect(res.status).toBe(200);
+        });
+
+        it('should return guides', async () => {
+            const res = await request(app).get(`/users/${testUserId}/guides`);
+            expect(res.status).toBe(200);
+        });
     });
 
-    describe('POST /users/analysis (Streaming)', () => {
-        // Increase timeout to 15 seconds because the controller streams data with 1-second delays (10 seconds total)
+    describe('POST /users/analysis', () => {
         it('should stream progress and complete the analysis', async () => {
             const response = await request(app)
                 .post('/users/analysis')
                 .send({ userId: testUserId });
 
             expect(response.status).toBe(200);
-            // Verify the stream completed and eventually appended JSON data
-            expect(response.text).toContain('100'); // Check if progress reached 100
+            expect(response.text).toContain('100');
+        }, 15000);
+
+        it('should handle analysis for non-existent user', async () => {
+            const res = await request(app)
+                .post('/users/analysis')
+                .send({ userId: 9999999 });
+            expect(res.status).toBe(200);
+            expect(res.text).toContain('error');
         }, 15000);
     });
 
