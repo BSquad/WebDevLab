@@ -3,8 +3,11 @@ import app from '../src/app.js';
 
 describe('Games API – Modul D', () => {
     const testUserId = 1;
+    const testUserId2 = 2;
     const testGameId = 1;
+    const testGameId2 = 2;
     const testAchievementId = 1;
+    const testAchievementId2 = 2;
 
     it('should return all games', async () => {
         const response = await request(app).get('/games');
@@ -87,6 +90,32 @@ describe('Games API – Modul D', () => {
         expect(response.body.message).toBeDefined();
     });
 
+    it('should handle already completed achievement', async () => {
+        await request(app)
+            .post(
+                `/games/${testGameId}/achievements/${testAchievementId2}/complete`,
+            )
+            .query({ userId: testUserId });
+
+        const response = await request(app)
+            .post(
+                `/games/${testGameId}/achievements/${testAchievementId2}/complete`,
+            )
+            .query({ userId: testUserId });
+
+        expect(response.status).toBe(409);
+        expect(response.body.message).toBe('Achievement already completed');
+    });
+
+    it('should handle invalid achievement references', async () => {
+        const response = await request(app)
+            .post('/games/999999/achievements/999999/complete')
+            .query({ userId: 999999 });
+
+        expect(response.status).toBe(404);
+        expect(response.body.message).toBe('Resource not found');
+    });
+
     it('should toggle ON game tracking for user', async () => {
         const response = await request(app)
             .post(`/games/${testGameId}/track`)
@@ -123,31 +152,5 @@ describe('Games API – Modul D', () => {
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
-    });
-
-    it('should add a game to favorites', async () => {
-        const response = await request(app).post('/favorites').send({
-            userId: testUserId,
-            gameId: testGameId,
-        });
-
-        expect(response.status).toBe(201);
-        expect(response.body.message).toBeDefined();
-    });
-
-    it('should return user favorites', async () => {
-        const response = await request(app).get(`/favorites/${testUserId}`);
-
-        expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-    });
-
-    it('should remove a favorite', async () => {
-        const response = await request(app).delete(
-            `/favorites/${testUserId}/${testGameId}`,
-        );
-
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBeDefined();
     });
 });

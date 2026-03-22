@@ -13,7 +13,6 @@ import { authRouter } from './routes/auth-routes.js';
 import { gameRouter } from './routes/game-routes.js';
 import { guideRouter } from './routes/guide-routes.js';
 import { userRouter } from './routes/user-routes.js';
-import { favoritesRouter } from './routes/favorites-routes.js';
 import { commentsRouter } from './routes/comments-routes.js';
 
 const app = express();
@@ -33,7 +32,6 @@ app.use('/games', gameRouter);
 app.use('/guides', guideRouter);
 app.use('/users', userRouter);
 app.use('/comments', commentsRouter);
-app.use('/favorites', favoritesRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     if (process.env.NODE_ENV !== 'test') {

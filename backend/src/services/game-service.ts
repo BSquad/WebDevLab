@@ -38,10 +38,7 @@ export class GameService {
                 gameId,
             );
         } catch (err: any) {
-            if (
-                err.message?.includes('UNIQUE constraint failed') ||
-                err.message?.includes('SQLITE_CONSTRAINT')
-            ) {
+            if (err.message?.includes('UNIQUE constraint failed')) {
                 throw new Error('ALREADY_COMPLETED');
             }
             if (err.message?.includes('FOREIGN KEY constraint failed')) {
