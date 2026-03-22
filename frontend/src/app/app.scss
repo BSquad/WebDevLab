@@ -58,7 +58,7 @@
     gap: 16px;
 }
 
-.retro-btn {
+.btn {
     font-family: 'Courier New', Courier, monospace !important;
     font-weight: bold !important;
     font-size: 1rem !important;
@@ -144,7 +144,7 @@
     }
 }
 
-::ng-deep .retro-menu {
+::ng-deep .menu {
     background: $color-background !important;
     border: 4px solid $color-white !important;
     border-radius: 0 !important;
@@ -175,7 +175,7 @@
         }
     }
 
-    .retro-menu-btn {
+    .menu-btn {
         color: $color-white !important;
         font-family: 'Courier New', Courier, monospace !important;
         font-weight: bold !important;

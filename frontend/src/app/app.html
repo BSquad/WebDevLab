@@ -8,8 +8,8 @@
 
         <div class="right-section">
             <nav class="nav-links">
-                <button mat-button class="retro-btn" (click)="goToGameList()">BROWSE</button>
-                <button mat-button class="retro-btn" (click)="goToUserPage()" [disabled]="!user()">
+                <button mat-button class="btn" (click)="goToGameList()">BROWSE</button>
+                <button mat-button class="btn" (click)="goToUserPage()" [disabled]="!user()">
                     MY PAGE
                 </button>
             </nav>
@@ -19,31 +19,31 @@
                 <div class="profile-trigger" [matMenuTriggerFor]="profileMenu">
                     <span class="username">{{ user()?.name }}</span>
                     <div class="avatar-wrapper">
-                        @if (user()?.profilePic) {
-                        <img [src]="user()?.profilePic" alt="Profile" />
+                        @if (user()?.profilePicturePath) {
+                        <img [src]="getProfileImageUrl(user()?.profilePicturePath)" alt="Profile" />
                         } @else {
                         <mat-icon fontIcon="account_circle"></mat-icon>
                         }
                     </div>
                 </div>
 
-                <mat-menu #profileMenu="matMenu" class="retro-menu">
+                <mat-menu #profileMenu="matMenu" class="menu">
                     <div class="menu-header">
                         <p class="menu-name">{{ user()?.name }}</p>
                         <p class="menu-email">{{ user()?.email || 'PLAYER_ONE' }}</p>
                     </div>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item (click)="goToUserPage()" class="retro-menu-btn">
+                    <button mat-menu-item (click)="goToUserPage()" class="menu-btn">
                         <mat-icon fontIcon="person"></mat-icon>
                         <span>PROFILE</span>
                     </button>
-                    <button mat-menu-item (click)="logout()" class="retro-menu-btn">
+                    <button mat-menu-item (click)="logout()" class="menu-btn">
                         <mat-icon fontIcon="logout"></mat-icon>
                         <span>LOGOUT</span>
                     </button>
                 </mat-menu>
                 } @else {
-                <button mat-flat-button color="accent" class="retro-btn" (click)="goToLogin()">
+                <button mat-flat-button color="accent" class="btn" (click)="goToLogin()">
                     LOGIN
                 </button>
                 }
