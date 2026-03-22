@@ -30,6 +30,16 @@ describe('Games API – Modul D', () => {
         expect(response.body.title).toBeDefined();
     });
 
+    it('should return 404 for non-existent game', async () => {
+        const response = await request(app).get('/games/999999');
+        expect(response.status).toBe(404);
+    });
+
+    it('should return 400 for invalid game ID format', async () => {
+        const response = await request(app).get('/games/abc');
+        expect(response.status).toBe(400);
+    });
+
     it('should return game by id with user tracking info', async () => {
         const response = await request(app).get(
             `/games/${testGameId}?userId=1`,
@@ -87,6 +97,15 @@ describe('Games API – Modul D', () => {
         expect(response.body.message).toBeDefined();
     });
 
+    it('should return 400 if isTracked is not a boolean', async () => {
+        const response = await request(app)
+            .post(`/games/${testGameId}/track`)
+            .send({ isTracked: 'yes' })
+            .query({ userId: testUserId });
+
+        expect(response.status).toBe(400);
+    });
+
     it('should toggle OFF game tracking for user', async () => {
         const response = await request(app)
             .post(`/games/${testGameId}/track`)
@@ -104,5 +123,31 @@ describe('Games API – Modul D', () => {
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
+    });
+
+    it('should add a game to favorites', async () => {
+        const response = await request(app).post('/favorites').send({
+            userId: testUserId,
+            gameId: testGameId,
+        });
+
+        expect(response.status).toBe(201);
+        expect(response.body.message).toBeDefined();
+    });
+
+    it('should return user favorites', async () => {
+        const response = await request(app).get(`/favorites/${testUserId}`);
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+    });
+
+    it('should remove a favorite', async () => {
+        const response = await request(app).delete(
+            `/favorites/${testUserId}/${testGameId}`,
+        );
+
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBeDefined();
     });
 });

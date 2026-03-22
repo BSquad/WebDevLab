@@ -7,7 +7,7 @@
         "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
         "reset-db": "cd backend && npm run reset-db",
         "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,magenta\" \"cd backend && npm run start:dev\" \"cd frontend && ng serve\"",
-        "test": "npm run reset-db && concurrently -n \"BACKEND,FRONTEND\" -c \"blue,magenta\" \"cd backend && npm run test\" \"cd frontend && ng test --coverage\""
+        "test": "npm run reset-db && concurrently -n \"BACKEND,FRONTEND\" -c \"blue,magenta\" \"cd backend && npm run test -- --coverage --coverageReporters=text-summary\" \"cd frontend && ng test --coverage\""
     },
     "repository": {
         "type": "git",
