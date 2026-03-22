@@ -688,7 +688,7 @@ export class Db {
             CASE
                 WHEN g.title LIKE '%Beginner%' THEN 5
                 WHEN g.title LIKE '%Farming%' THEN 4
-                WHEN g.title LIKE '%Story%' THEN 5
+                WHEN g.title LIKE '%Story%' THEN 3
                 ELSE 4
             END
             FROM guides g
@@ -703,8 +703,8 @@ export class Db {
             (SELECT id FROM users WHERE name = 'sa'),
             g.id,
             CASE
-                WHEN g.title LIKE '%Boss%' THEN 5
-                WHEN g.title LIKE '%Build%' THEN 4
+                WHEN g.title LIKE '%Boss%' THEN 4
+                WHEN g.title LIKE '%Build%' THEN 3
                 WHEN g.title LIKE '%Armor%' THEN 5
                 WHEN g.title LIKE '%Advanced%' THEN 4
                 ELSE 4

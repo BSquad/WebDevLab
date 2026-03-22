@@ -1,23 +1,23 @@
 Starting:
-    Use the start-project.sh (opens separate terminals) or use "npm run dev" (one terminal) to start the frontend and backend.
+    Use the start-project.sh (opens separate terminals) to start the frontend and backend.
+    Run reset-db.sh after testing. 
     Open http://localhost:4200/ in your browser.
 
+    The Games "The Witcher 3", "Elden Ring" and "Hades" have data for testin(guides and achievements).
+    
+    There are 2 default users, you can use for testing the website:
+    - Username: test, Password: test
+    - Username: sa, Password: sa
+
 Testing:
-    Use the start-test.sh (opens separate terminals) or use "npm run test" (one terminal) to start the tests.
-    For .sh script: The Code Coverage will be displayed in the console windows separately for frontend and backend.
-    For npm script: The Code Coverage will be displayed in the console windows combined for frontend and backend.
-    The database will be reseted when using the test scripts. 
+    Use the start-test.sh to start the tests.
+    The Code Coverage will be displayed in the console windows separately for frontend and backend.
+    The database will be reseted when using the test scripts before tests are executed. 
 
     Use start-e2e.sh to start the end-to-end tests. This will reset the database, start the frontend
     and backend, and open the Cypress overlay. Click on “E2E Testing”, then select “Start E2E Testing 
     in Electron.” From there, you can run the different tests by clicking on them.
 
-General Important Hints:
-    The Games "The Witcher 3", "Elden Ring" and "Hades" have a lot of test data (guides and achievements).
-    Use the reset-db.sh to reset the database. (If you used the website logout before you do this)
-    There are 2 default users, you can use for testing the website:
-    - Username: test, Password: test
-    - Username: sa, Password: sa
 
 Components:
 
