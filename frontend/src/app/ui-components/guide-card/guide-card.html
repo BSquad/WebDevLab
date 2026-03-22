@@ -1,32 +1,30 @@
 <div class="guide-item">
-    <div class="guide-header">
-        <div class="guide-left">
-            <div class="guide-title">{{ guide.title }}</div>
+    <div class="guide-left">
+        <div class="guide-title">{{ guide.title }}</div>
 
-            <div class="guide-meta">
-                @if (guide.game) {
-                <span class="guide-game"> {{ guide.game.title }} </span>
-                }
-                <app-user-tooltip [userId]="guide.userId">
-                    <span class="guide-author">by {{ guide.author }}</span>
-                </app-user-tooltip>
-
-                <span class="guide-date"> {{ guide.createdAt | date:'mediumDate' }} </span>
-
-                @if (guide.avgRating) {
-                <span class="guide-rating"> ⭐ {{ guide.avgRating | number:'1.1-1' }} </span>
-                }
-            </div>
-
-            <div class="guide-content">{{ guide.content }}</div>
-        </div>
-
-        <div class="guide-actions">
-            @if (user()?.id === guide.userId) {
-            <button class="normal-button" [routerLink]="['/edit-guide', guide.id]">Edit</button>
+        <div class="guide-meta">
+            @if (guide.game) {
+            <span class="guide-game"> {{ guide.game.title }} </span>
             }
+            <app-user-tooltip [userId]="guide.userId">
+                <span class="guide-author">by {{ guide.author }}</span>
+            </app-user-tooltip>
 
-            <button class="normal-button" [routerLink]="['/read-guide', guide.id]">Read</button>
+            <span class="guide-date"> {{ guide.createdAt | date:'mediumDate' }} </span>
+
+            @if (guide.avgRating) {
+            <span class="guide-rating"> ⭐ {{ guide.avgRating | number:'1.1-1' }} </span>
+            }
         </div>
+
+        <div class="guide-content">{{ guide.content }}</div>
+    </div>
+
+    <div class="guide-actions">
+        @if (user()?.id === guide.userId) {
+        <button class="normal-button" [routerLink]="['/edit-guide', guide.id]">Edit</button>
+        }
+
+        <button class="normal-button" [routerLink]="['/read-guide', guide.id]">Read</button>
     </div>
 </div>

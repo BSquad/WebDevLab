@@ -4,7 +4,7 @@
     padding: 0.8rem 1rem;
     margin-bottom: 0.6rem;
 
-    height: 140px;
+    min-height: 140px;
 
     border-radius: g.$radius-small;
     background: g.$gradient;
@@ -14,7 +14,6 @@
     display: flex;
 
     position: relative;
-
     overflow: visible;
 
     transition:
@@ -27,28 +26,18 @@
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
 }
 
-.guide-header {
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
-
-    height: 100%;
-}
-
 .guide-left {
     flex: 1;
     min-width: 0;
-    flex-direction: column;
-    padding-right: 60px;
-}
-.guide-actions {
-    position: absolute;
-
-    right: 10px;
-    bottom: 10px;
 
     display: flex;
     flex-direction: column;
+}
+
+.guide-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     gap: 0.4rem;
 }
 
@@ -102,11 +91,13 @@
     margin-top: 6px;
     color: #aaa;
     line-height: 1.4;
-    display: -webkit-box;
 
+    display: -webkit-box;
     -webkit-box-orient: vertical;
+
     -webkit-line-clamp: 3;
     line-clamp: 3;
+
     overflow: hidden;
 }
 
