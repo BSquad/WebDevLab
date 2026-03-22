@@ -165,4 +165,48 @@ describe('App', () => {
         expect(authServiceMock.logout).toHaveBeenCalled();
         expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
     });
+
+    it('should toggle profile dropdown when toggleProfileDropdown() is called', () => {
+        expect(component.profileDropdownOpen).toBe(false);
+
+        component.toggleProfileDropdown();
+        expect(component.profileDropdownOpen).toBe(true);
+
+        component.toggleProfileDropdown();
+        expect(component.profileDropdownOpen).toBe(false);
+    });
+
+    it('should return default avatar URL when getProfileImageUrl is called with null', () => {
+        const result = component.getProfileImageUrl(null);
+        expect(result).toBe('assets/pictures/default-avatar.jpg');
+    });
+
+    it('should return full avatar URL when getProfileImageUrl is called with path', () => {
+        const testPath = '/uploads/avatars/test.jpg';
+        const expectedUrl = `http://localhost:3000${testPath}`;
+
+        const result = component.getProfileImageUrl(testPath);
+        expect(result).toBe(expectedUrl);
+    });
+
+    it('should navigate to game list when goToGameList() is called', () => {
+        component.goToGameList();
+        expect(routerMock.navigate).toHaveBeenCalledWith(['/games']);
+    });
+
+    it('should navigate to user page when goToUserPage() is called', () => {
+        component.goToUserPage();
+        expect(routerMock.navigate).toHaveBeenCalledWith(['/user']);
+    });
+
+    it('should navigate to login when goToLogin() is called', () => {
+        component.goToLogin();
+        expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
+    });
+
+    it('should logout and navigate to login when logout() is called', () => {
+        component.logout();
+        expect(authServiceMock.logout).toHaveBeenCalled();
+        expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
+    });
 });

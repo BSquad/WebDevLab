@@ -123,4 +123,51 @@ describe('GuideApi', () => {
         const result = await promise;
         expect(result.length).toBe(1);
     });
+
+    it('should upload screenshot', async () => {
+        const mockFile = new File(['test'], 'screenshot.png', { type: 'image/png' });
+        const promise = service.uploadScreenshot(1, mockFile);
+
+        const req = httpMock.expectOne('http://localhost:3000/guides/1/upload');
+        expect(req.request.method).toBe('POST');
+
+        // Check FormData content
+        const formData = req.request.body as FormData;
+        expect(formData.get('uploadType')).toBe('guides');
+        expect(formData.get('image')).toBe(mockFile);
+
+        req.flush({ path: '/uploads/guides/screenshot.png' });
+
+        const result = await promise;
+        expect(result.path).toBe('/uploads/guides/screenshot.png');
+    });
+
+    it('should delete screenshot', async () => {
+        const filePath = '/uploads/guides/screenshot.png';
+        const promise = service.deleteScreenshot(1, filePath);
+
+        const req = httpMock.expectOne('http://localhost:3000/guides/1/screenshot');
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.body).toEqual({ filePath });
+
+        req.flush({ message: 'Screenshot deleted successfully' });
+
+        const result = await promise;
+        expect(result.message).toBe('Screenshot deleted successfully');
+    });
+
+    it('should download pdf', async () => {
+        const mockBlob = new Blob(['test pdf content'], { type: 'application/pdf' });
+        const promise = service.downloadPdf(1);
+
+        const req = httpMock.expectOne('http://localhost:3000/guides/1/pdf');
+        expect(req.request.method).toBe('GET');
+        expect(req.request.responseType).toBe('blob');
+
+        req.flush(mockBlob);
+
+        const result = await promise;
+        expect(result).toBeInstanceOf(Blob);
+        expect(result.type).toBe('application/pdf');
+    });
 });
