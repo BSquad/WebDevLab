@@ -15,18 +15,6 @@ export class UserController {
         return userId;
     }
 
-    private checkIfSameUser(req: Request, userId: number): void {
-        const currentUserId = Number(req.body?.userId);
-
-        if (Number.isNaN(currentUserId)) {
-            throw createError(400, 'userId missing');
-        }
-
-        if (currentUserId !== userId) {
-            throw createError(403, 'Unauthorized');
-        }
-    }
-
     private getOrThrowNotFound<T>(value: T | null, message: string): T {
         if (!value) throw createError(404, message);
         return value;
@@ -53,7 +41,6 @@ export class UserController {
 
     updateUser = async (req: Request, res: Response): Promise<void> => {
         const userId = this.getUserIdOrThrow(req);
-        this.checkIfSameUser(req, userId);
 
         const { name, email } = this.checkUserUpdateInput(req.body);
 
@@ -75,7 +62,6 @@ export class UserController {
 
     updateLayout = async (req: Request, res: Response): Promise<void> => {
         const userId = this.getUserIdOrThrow(req);
-        this.checkIfSameUser(req, userId);
 
         const { order } = req.body;
         if (!Array.isArray(order)) {
@@ -89,7 +75,6 @@ export class UserController {
 
     deleteUser = async (req: Request, res: Response): Promise<void> => {
         const userId = this.getUserIdOrThrow(req);
-        this.checkIfSameUser(req, userId);
 
         this.getOrThrowNotFound(
             await this.userService.getUserById(userId),
@@ -146,10 +131,14 @@ export class UserController {
 
     startUserAnalysis = async (req: Request, res: Response): Promise<void> => {
         const userId = Number(req.body?.userId);
-        if (Number.isNaN(userId) || !userId)
+        if (Number.isNaN(userId) || !userId) {
             throw createError(400, 'Valid userId required in body');
+        }
 
         try {
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+            res.setHeader('Transfer-Encoding', 'chunked');
+
             await this.streamAnalysisProgress(res);
             await this.sendFinalAnalysisData(res, userId);
         } catch (err) {

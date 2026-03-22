@@ -74,6 +74,7 @@ export class UserPage {
                 const profile = await this.userService.getUserProfile(params.id);
                 console.log(profile);
                 if (profile?.dashboardLayout) {
+                    // needs to be parsed as sqlite saves this as a string
                     const parsedLayout =
                         typeof profile.dashboardLayout === 'string'
                             ? JSON.parse(profile.dashboardLayout)
@@ -136,6 +137,7 @@ export class UserPage {
                     formData.append('email', updatedData.email);
 
                     if (updatedData.file) {
+                        // must match the name in the backend routes
                         formData.append('uploadType', 'user');
                         formData.append('profilePic', updatedData.file);
                     }

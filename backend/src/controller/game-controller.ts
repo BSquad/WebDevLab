@@ -43,16 +43,18 @@ export class GameController {
     };
 
     getGameById = async (req: Request, res: Response): Promise<void> => {
-        const gameId = this.parseId(req.params.gameId, 'gameId');
-        const userId = this.parseOptionalId(req.query.userId, 'userId');
+        try {
+            const gameId = this.parseId(req.params.gameId, 'gameId');
+            const userId = this.parseOptionalId(req.query.userId, 'userId');
 
-        const game = await this.gameService.getGameById(gameId, userId);
+            const game = await this.gameService.getGameById(gameId, userId);
+            if (!game) throw createError(404, 'Game not found');
 
-        if (!game) {
+            res.status(200).json(game);
+        } catch (err: any) {
+            if (err.status) throw err;
             throw createError(404, 'Game not found');
         }
-
-        res.status(200).json(game);
     };
 
     getPopularGames = async (_req: Request, res: Response): Promise<void> => {
@@ -111,6 +113,10 @@ export class GameController {
         try {
             const gameId = this.parseId(req.params.gameId, 'gameId');
             const userId = this.parseId(req.query.userId, 'userId');
+
+            if (typeof req.body.isTracked !== 'boolean') {
+                throw createError(400, 'isTracked must be a boolean');
+            }
 
             await this.gameService.toggleTrackGame(
                 gameId,

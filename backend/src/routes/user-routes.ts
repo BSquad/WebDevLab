@@ -15,7 +15,7 @@ router.get('/:id/guides', userController.getGuides);
 
 router.get('/:id', userController.getUser);
 router.put('/:id', upload.single('profilePic'), userController.updateUser);
-router.patch('/:id/layout', userController.updateLayout);
+router.put('/:id/layout', userController.updateLayout);
 router.delete('/:id', userController.deleteUser);
 
 export { router as userRouter };

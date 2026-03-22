@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "tsc",
+        "build": "tsc --project tsconfig.build.json",
         "start:prod": "node dist/backend/src/start-server.js",
         "start:dev": "tsx watch src/start-server.ts",
         "reset-db": "tsx src/reset-db.ts",

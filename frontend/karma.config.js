@@ -25,6 +25,15 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
+        // --- WSL ---
+        customLaunchers: {
+            ChromeHeadlessWSL: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox', '--disable-gpu'],
+            },
+        },
+        browsers: ['ChromeHeadlessWSL'],
+        // ---------
         browsers: ['ChromeHeadless'],
         singleRun: false,
         restartOnFileChange: true,
