@@ -40,7 +40,7 @@ export class UserApi extends BaseApi {
 
     async updateLayout(userId: number, order: string[]): Promise<void> {
         const url = `${this.userUrl}/${userId}/layout`;
-        return await this.request(this.http.patch<void>(url, { order }));
+        return await this.request(this.http.put<void>(url, { order }));
     }
 
     async getGames(userId: number): Promise<Game[]> {
