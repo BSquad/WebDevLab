@@ -11,8 +11,8 @@ describe('Favorites API – Modul B', () => {
             gameId: testGameId,
         });
 
-        expect(response.status).toBe(201); // 🔥 FIX
-        expect(response.body.message).toBeDefined(); // 🔥 FIX
+        expect(response.status).toBe(201);
+        expect(response.body.message).toBeDefined();
     });
 
     it('should return user favorites', async () => {
@@ -28,7 +28,7 @@ describe('Favorites API – Modul B', () => {
         );
 
         expect(response.status).toBe(200);
-        expect(response.body.message).toBeDefined(); // 🔥 FIX
+        expect(response.body.message).toBeDefined();
     });
 
     it('should return empty list after removal', async () => {

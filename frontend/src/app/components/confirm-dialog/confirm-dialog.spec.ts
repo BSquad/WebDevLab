@@ -11,7 +11,7 @@ describe('ConfirmDialog', () => {
             imports: [ConfirmDialog],
             providers: [
                 { provide: MatDialogRef, useValue: {} },
-                { provide: MAT_DIALOG_DATA, useValue: {} }, // 🔥 das fehlte
+                { provide: MAT_DIALOG_DATA, useValue: {} },
             ],
         }).compileComponents();
 
