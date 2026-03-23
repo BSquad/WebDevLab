@@ -1,9 +1,13 @@
+VM User data:
+    user: osboxes
+    password: osboxes.org
+
 Starting:
     Use the start-project.sh (opens separate terminals) to start the frontend and backend.
     Run reset-db.sh after testing. 
     Open http://localhost:4200/ in your browser.
 
-    The Games "The Witcher 3", "Elden Ring" and "Hades" have data for testin(guides and achievements).
+    The Games "The Witcher 3", "Elden Ring" and "Hades" have data for testing (guides and achievements).
     
     There are 2 default users, you can use for testing the website:
     - Username: test, Password: test
@@ -68,12 +72,12 @@ Profile Page:
     - the games you have added to your favorites
     - your achievements
     - your created guides
-    - the number of tracked games, favorite genre and achievement completin rate after starting the analysis (need to stay on the page)
+    - the number of tracked games, favorite genre and achievement completing rate after starting the analysis (need to stay on the page)
 
     You can do:
     - edit your user information (username, email & picture)
     - you can start the achievement analysis
-    - you can change the order of the games, analysis and guides by dragging it at the marked area on the top right of each box
+    - you can change the order of the games, analysis and guides cards by dragging it at the marked area on the top right of each card
 
 Guide Creation Page:
     You can create a new guide for a game.
