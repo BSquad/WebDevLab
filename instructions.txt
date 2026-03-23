@@ -3,8 +3,9 @@ VM User data:
     password: osboxes.org
 
 Starting:
-    Use the start-project.sh (opens separate terminals) to start the frontend and backend.
-    Run reset-db.sh after testing. 
+    There are Desktop Icons to: start the project (GameTracker), run the tests, run the e2e test and reset the db
+    If there are any problems run the .sh scripts directly inside the WebDevLab folder ("./start-project.sh" to start the frontend and backend, ...)
+    Run "reset-db" after testing. 
     Open http://localhost:4200/ in your browser.
 
     The Games "The Witcher 3", "Elden Ring" and "Hades" have data for testing (guides and achievements).
