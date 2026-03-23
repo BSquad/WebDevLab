@@ -7,10 +7,8 @@ cd "$(dirname "$0")"
 
 npm run reset-db
 
-cd backend && npm run start:dev &
-cd ..
+(cd backend && npm run start:dev) &
 
-cd frontend && npm start &
-cd ..
+(cd frontend && npm start) &
 
 cd frontend && npm run cy:open
