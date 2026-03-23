@@ -561,6 +561,18 @@ export class Db {
               '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08' --test
             );
 
+          -- =========================
+          -- USER FAVORITE GAMES
+          -- =========================
+          INSERT OR IGNORE INTO user_games (userId, gameId, isFavorite)
+          VALUES
+            ((SELECT id FROM users WHERE name = 'test'), (SELECT id FROM games WHERE title = 'Elden Ring'), 1),
+            ((SELECT id FROM users WHERE name = 'test'), (SELECT id FROM games WHERE title = 'The Witcher 3'), 1),
+            ((SELECT id FROM users WHERE name = 'test'), (SELECT id FROM games WHERE title = 'Hades'), 1),
+            ((SELECT id FROM users WHERE name = 'test'), (SELECT id FROM games WHERE title = 'Minecraft'), 1),
+            ((SELECT id FROM users WHERE name = 'test'), (SELECT id FROM games WHERE title = 'Cyberpunk 2077'), 1),
+            ((SELECT id FROM users WHERE name = 'test'), (SELECT id FROM games WHERE title = 'God of War'), 1);
+
           
             -- =========================
             -- GUIDES
